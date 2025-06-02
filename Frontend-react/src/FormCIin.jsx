@@ -1,31 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Tabla from "./TablaCorrespodencia";
-import Header from "./Header";
-import CPInput from "./hooks/CPInput";
+import useDireccionPorCP from "./hooks/CPInput";
 
 const FormIn = () => {
 
   const [cp, setCp] = useState("");
-  const [alcaldia, setAlcaldia] = useState("");
-  const [colonia, setColonia] = useState("");
+const {
+  colonias,
+  colonia,
+  setColonia,
+  loading,
+  alcaldia,
+  setAlcaldia,
+} = useDireccionPorCP(cp);
+
+  
+  useEffect(() => {
+    if (colonias.length === 1) {
+      const unica = colonias[0];
+      if (colonia !== unica.Colonia) {
+        setColonia(unica.Colonia);
+      }
+      if (alcaldia !== unica.Alcaldia) {
+        setAlcaldia(unica.Alcaldia);
+      }
+    }
+  }, [colonias, colonia, alcaldia]);
+
+  useEffect(() => {
+    if (!cp) {
+      setColonia("");
+      setAlcaldia("");
+    }
+  }, [cp]);
+
+  const [form, setForm] = useState({
+    oficio: "",
+    descripcion: "",
+    calle: ""
+
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value.toUpperCase(),
+    }));
+  };
 
   return (
 
     <div className="form-container">
-      <Header />
       <div className="form-card">
         <h2>Correspondencia Interna Entrada</h2>
         <form>
           <div className="input-row">
             <label htmlFor="name">#DVSC:</label>
-            <input type="number" id="NumDVSC" name="NumDVSC" />
+            <input type="number" id="NumDVSC" name="NumDVSC"/>
 
             <label htmlFor="date">Fecha de Recepción:</label>
             <input type="date" id="date" name="date" />
 
             <label htmlFor="Oficio">Oficio:</label>
-            <input type="text" id="Oficio" name="Oficio" />
+            <input type="text" id="Oficio" name="oficio"  value={form.oficio} onChange={handleChange}/>
           </div>
 
           <div className="input-row">
@@ -46,7 +85,7 @@ const FormIn = () => {
 
           <div className="input-row">
             <label htmlFor="Descripcion">Descripción:</label>
-            <textarea id="Descripcion" name="Descripcion"/>
+            <textarea id="Descripcion" name="descripcion" value={form.descripcion} onChange={handleChange}/>
 
             <label htmlFor="Motivo">Motivo:</label>
             <select id="Motivo" name="Motivo">
@@ -67,35 +106,57 @@ const FormIn = () => {
           </div>
 
           <div className="input-row">
-            <CPInput
-              cp={cp}
-              setCp={setCp}
-              setAlcaldia={setAlcaldia}
-              setColonia={setColonia}
-            />
+          <label htmlFor="CP">Código Postal:</label>
+          <input
+            type="text"
+            id="CP"
+            name="CP"
+            value={cp}
+            onChange={(e) => setCp(e.target.value)}
+          />
 
-            <label htmlFor="Alcaldia">Alcaldía:</label>
-            <input
-              type="text"
-              id="Alcaldia"
-              name="Alcaldia"
-              value={alcaldia}
-              readOnly
-              className="mi-estilo"
-            />
-
-            <label htmlFor="Colonia">Colonia:</label>
+          <label htmlFor="Colonia">Colonia:</label>
+          {colonias.length > 0 ? (
+            <select
+              id="Colonia"
+              name="Colonia"
+              value={colonia}
+              onChange={(e) => {
+                const selectedColonia = colonias.find(c => c.Colonia === e.target.value);
+                setColonia(selectedColonia?.Colonia || "");
+                setAlcaldia(selectedColonia?.Alcaldia || ""); // <-- Aquí actualizas la Alcaldía
+              }}
+            >
+              <option value="">-- Selecciona colonia --</option>
+              {colonias.map((c) => (
+                <option key={c.Pk_IDAdress} value={c.Colonia}>
+                  {c.Colonia}
+                </option>
+              ))}
+            </select>
+          ) : (
             <input
               type="text"
               id="Colonia"
               name="Colonia"
               value={colonia}
               readOnly
-              className="mi-estilo"
             />
+          )}
+
+          {loading && <p>Cargando colonias...</p>}
+
+          <label htmlFor="Alcaldia">Alcaldía:</label>
+          <input
+            type="text"
+            id="Alcaldia"
+            name="Alcaldia"
+            value={alcaldia}
+            readOnly
+          />
 
             <label htmlFor="Calle">Calle:</label>
-            <input type="text" id="Calle" name="Calle" />
+            <input type="text" id="Calle" name="calle" value={form.calle} onChange={handleChange}/>
             
             <label htmlFor="NumC">#:</label>
             <input type="number" id="NumC" name="NumC" />

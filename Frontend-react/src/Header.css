@@ -4,12 +4,14 @@
   left: 0;
   width: 100%;
   z-index: 1000; /* Asegura que quede encima de otros elementos */
-  background-color: hsl(246, 67%, 18%); /* Fondo del encabezado */
   padding: 1rem;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  border-bottom: 8px solid #9F2241;
+  padding-bottom: 5px;
 }
+
 .logo{
-  width: 50px;
+  width: 300px;
 }
 
 

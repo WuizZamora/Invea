@@ -1,6 +1,6 @@
 import React from "react";
 import useCorrespondencia from "./hooks/useCorrespondencia";
-import "./Tabla.css"; // Estilos separados
+import "./Tabla.css";
 
 const Tabla = () => {
   const { datos, loading } = useCorrespondencia();
