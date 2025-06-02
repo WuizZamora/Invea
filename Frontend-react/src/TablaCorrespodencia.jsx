@@ -1,7 +1,11 @@
 import React from "react";
+import useCorrespondencia from "./hooks/useCorrespondencia";
 import "./Tabla.css"; // Estilos separados
 
 const Tabla = () => {
+  const { datos, loading } = useCorrespondencia();
+
+  if (loading) return <p>Cargando datos...</p>;
 
   return (
     <div className="form-card">
@@ -13,19 +17,26 @@ const Tabla = () => {
             <th>Oficio</th>
             <th>Remitente</th>
             <th>Motivo</th>
-            <th>CP</th>
             <th>Dirección</th>
             <th>Soporte documental</th>
           </tr>
         </thead>
         <tbody>
-              <td style={{ width: '80px' }}>    dvsc</td>
-              <td>                              oficio</td>
-              <td>                              remitente</td>
-              <td>                              motivo</td>
-              <td style={{ width: '80px' }}>    cp</td>
-              <td>                              direccion</td>
-              <td style={{ width: '80px' }}>    soporte</td>
+          {datos.map((item) => (
+            <tr>
+              <td>{item.NumDVSC}</td>
+              <td>{item.Oficio}</td>
+              <td>{item.Remitente}</td>
+              <td>{item.Motivo}</td>
+              <td>{item.Direccion}</td>
+              <td>
+                {item.SoporteDocumental
+                  ? item.SoporteDocumental
+                  : <button onClick={() => handleUpload()}>Subir Documento</button>
+                }
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

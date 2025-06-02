@@ -5,7 +5,7 @@ import "./Header.css";
 const Header = () => {
   return (
     <header className="header">
-      <img src="/INVEAlogo.png" alt="Logo" class="logo"/>
+      <img src="/INVEAlogo.png" alt="Logo" className="logo"/>
       {/* <nav className="nav">
         <Link to="/entrada">Entrada</Link>
         <Link to="/salida">Salida</Link>

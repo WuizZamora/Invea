@@ -1,8 +1,15 @@
 import express from 'express';
+import cors from 'cors';
 import userRoutes from './routes/user.routes';
+
+
 
 const app = express();
 const PORT = 3000;
+
+app.use(cors({
+  origin: 'http://localhost:5173' // permite peticiones desde tu frontend
+}));
 
 app.use(express.json());
 
@@ -15,6 +22,7 @@ app.use((req, res) => {
 
 });
 
+// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

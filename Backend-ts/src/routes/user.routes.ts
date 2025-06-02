@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { db } from '../config/db';
 
+
 const router = Router();
 
 router.get('/', (req, res) => {
@@ -32,7 +33,7 @@ router.get('/Direccion', async (req, res) => {
 router.get('/Entrada', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM Correspondencia_Interna_In');
-    res.json(rows);
+    res.json({ data: rows });
   } catch (error) {
     res.status(500).json({ error: 'Error en la base de datos' });
   }
@@ -41,7 +42,7 @@ router.get('/Entrada', async (req, res) => {
 router.get('/ObtenerCorrespondenciaInterna', async (req, res) => {
   try {
     const [rows] = await db.query('CALL ObtenerCorrespondenciaInterna()');
-    res.json(rows);
+    res.json({ data: rows });
   } catch (error) {
     res.status(500).json({ error: 'Error en la base de datos' });
   }
@@ -52,7 +53,7 @@ router.get('/ObtenerDireccion/:cp', async (req, res) => {
   try {
     const cp = req.params.cp;
     const [rows] = await db.query('SELECT Pk_IDAdress, Colonia, Alcaldia FROM Direccion WHERE CP = ?', [cp]);
-    res.json(rows);
+    res.json({ data: rows });
   } catch (error) {
     res.status(500).json({ error: 'Error en la base de datos' });
   }
