@@ -1,0 +1,33 @@
+.form-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px;
+  color: white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.tabla-registro {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tabla-registro th,
+.tabla-registro td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+  border-radius: 5px;
+}
+
+.tabla-registro th {
+  background-color: #173474;
+  color: white;
+  border: 0;
+}
+
+.tabla-registro tr:nth-child(even) {
+  background-color: #34495e;
+}

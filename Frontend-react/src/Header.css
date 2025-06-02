@@ -1,0 +1,34 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Asegura que quede encima de otros elementos */
+  background-color: hsl(246, 67%, 18%); /* Fondo del encabezado */
+  padding: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.logo{
+  width: 50px;
+}
+
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav button {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.nav button:hover {
+  background-color: white;
+  color: #001f3f;
+}
