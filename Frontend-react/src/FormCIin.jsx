@@ -7,13 +7,14 @@ import { handleFormSubmit } from "./hooks/formSubmit";
 const FormIn = () => {
 
   const [cp, setCp] = useState("");
-const {
-  colonias,
-  colonia,
-  setColonia,
-  loading,
-  alcaldia,
+const { 
+  colonias, 
+  colonia, 
+  setColonia, 
+  loading, 
+  alcaldia, 
   setAlcaldia,
+  direccionID 
 } = useDireccionPorCP(cp);
 
   
@@ -50,8 +51,6 @@ const [form, setForm] = useState({
     Fk_Personal_Turnado: ""
   });
 
-  const { direccionID } = useDireccionPorCP(form.cp);
-
   const onSubmit = async (e) => {
     e.preventDefault();
     const { success, result, error } = await handleFormSubmit(form, direccionID);
@@ -61,7 +60,6 @@ const [form, setForm] = useState({
       alert("Error al enviar");
     }
   };
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -98,6 +96,7 @@ const [form, setForm] = useState({
 
             <label htmlFor="Asunto">Asunto:</label>
             <select id="Asunto" name="Asunto" value={form.Asunto} onChange={handleChange}>
+              <option></option>
               <option value="REMITE INFORMACIÓN">REMITE INFORMACIÓN</option>
               <option value="SOLICITA INSPECCIÓN OCULAR">SOLICITA INSPECCIÓN OCULAR</option>
               <option value="SOLICITA VISITA DE VERIFICACIÓN">SOLICITA VISITA DE VERIFICACIÓN</option>
@@ -111,6 +110,7 @@ const [form, setForm] = useState({
 
             <label htmlFor="Motivo">Motivo:</label>
             <select id="Motivo" name="Motivo"value={form.Motivo} onChange={handleChange}>
+              <option></option>
               <option value="ATENCIÓN CIUDADANA">ATENCIÓN CIUDADANA</option>
               <option value="AUDIENCIA CIUDADANA">AUDIENCIA CIUDADANA</option>
               <option value="CASA X CASA">CASA X CASA</option>
@@ -122,6 +122,7 @@ const [form, setForm] = useState({
 
             <label htmlFor="Caracter">Caracter:</label>
             <select id="Caracter" name="Caracter" value={form.Caracter} onChange={handleChange}>
+              <option></option>
               <option value="ORDINARIO">ORDINARIO</option>
               <option value="URGENTE">URGENTE</option>
             </select>
@@ -186,7 +187,8 @@ const [form, setForm] = useState({
 
           <div className="input-row">
             <label htmlFor="Turnado">Turnado</label>
-            <select id="Turnado" name="Turnado" value={form.Fk_Personal_Turnado} onChange={handleChange}>
+            <select id="Turnado" name="Fk_Personal_Turnado" value={form.Fk_Personal_Turnado} onChange={handleChange}>
+              <option></option>
                <option value="619">CLAUDIA YVETTE MOLINA SÁNCHEZ</option>
             </select>
           </div>

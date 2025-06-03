@@ -49,7 +49,7 @@ const useDireccionPorCP = (cp) => {
     fetchDireccion();
   }, [cp]);
 
-  return { colonias, alcaldia, colonia, setColonia, setAlcaldia, loading };
+  return { colonias, alcaldia, colonia, setColonia, setAlcaldia, loading, direccionID};
 };
 
 export default useDireccionPorCP;

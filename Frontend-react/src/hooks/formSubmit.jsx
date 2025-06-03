@@ -12,16 +12,16 @@ export const handleFormSubmit = async (form, direccionID) => {
     Caracter: form.Caracter,
     Fk_Direccion_IDAdress: direccionID,
     Calle: form.calle,
-    NumCalle: form.NumC,
+    NumCalle: parseInt(form.NumC),
     Fk_Personal_Turnado: parseInt(form.Fk_Personal_Turnado),
     SoporteDocumental: ""
   };
 
-  console.log(payload);
+  console.log("Payload a enviar:", payload);
 
   try {
     const response = await fetch(
-          `${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PUERTO}${process.env.REACT_APP_DIRECCION}/correspondencia/guardar-correspondencia`, {
+          `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/guardar-correspondencia`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
