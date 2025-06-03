@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import userRoutes from './routes/user.routes';
 import path from 'path';
 import devaRoutes from './routes/deva';  // Importa el grupo de rutas de DEVA
 // import inveaRoutes from './routes/invea';  // Para futuros proyectos

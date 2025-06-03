@@ -6,10 +6,12 @@ const useCorrespondencia = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/ObtenerCorrespondenciaInterna")
+    const url = `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/obtener-correspondencia`;
+
+    fetch(url)
       .then((res) => res.json())
       .then((res) => {
-        setDatos(res.data[0]); // <- Asegúrate que `res.data` es el array con tus datos
+        setDatos(res.data[0]);
         setLoading(false);
       })
       .catch((err) => {
@@ -17,7 +19,6 @@ const useCorrespondencia = () => {
         setLoading(false);
       });
   }, []);
-
   return { datos, loading };
 };
 

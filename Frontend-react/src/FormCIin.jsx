@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Tabla from "./TablaCorrespodencia";
 import useDireccionPorCP from "./hooks/CPInput";
+import { handleFormSubmit } from "./hooks/formSubmit";
 
 const FormIn = () => {
 
@@ -35,12 +36,32 @@ const {
     }
   }, [cp]);
 
-  const [form, setForm] = useState({
+const [form, setForm] = useState({
+    NumDVSC: "",
+    date: "",
     oficio: "",
+    Fk_Personal_Remitente: "",
     descripcion: "",
-    calle: ""
-
+    calle: "",
+    NumC: "",
+    Asunto: "",
+    Motivo: "",
+    Caracter: "",
+    Fk_Personal_Turnado: ""
   });
+
+  const { direccionID } = useDireccionPorCP(form.cp);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const { success, result, error } = await handleFormSubmit(form, direccionID);
+    if (success) {
+      alert("Enviado correctamente");
+    } else {
+      alert("Error al enviar");
+    }
+  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,13 +76,14 @@ const {
     <div className="form-container">
       <div className="form-card">
         <h2>Correspondencia Interna Entrada</h2>
-        <form>
+        <form onSubmit={onSubmit}>
           <div className="input-row">
-            <label htmlFor="name">#DVSC:</label>
-            <input type="number" id="NumDVSC" name="NumDVSC"/>
+            <label htmlFor="NumDVSC">#DVSC:</label>
+            <input type="number" id="NumDVSC" name="NumDVSC" value={form.NumDVSC} 
+            onChange={handleChange}/>
 
             <label htmlFor="date">Fecha de Recepción:</label>
-            <input type="date" id="date" name="date" />
+            <input type="date" id="date" name="date" value={form.date} onChange={handleChange}/>
 
             <label htmlFor="Oficio">Oficio:</label>
             <input type="text" id="Oficio" name="oficio"  value={form.oficio} onChange={handleChange}/>
@@ -69,16 +91,16 @@ const {
 
           <div className="input-row">
             <label htmlFor="Nombre">Remitente:</label>
-            <input type="text" id="Nombre" name="Nombre" />
+            <input type="text" id="Nombre" name="Fk_Personal_Remitente" value={form.Fk_Personal_Remitente} onChange={handleChange}/>
 
             <label htmlFor="Cargo">Cargo:</label>
             <input type="text" id="Cargo" name="Cargo" />
 
             <label htmlFor="Asunto">Asunto:</label>
-            <select id="Asunto" name="Asunto">
-              <option value="">REMITE INFORMACIÓN</option>
-              <option value="">SOLICITA INSPECCIÓN OCULAR</option>
-              <option value="">SOLICITA VISITA DE VERIFICACIÓN</option>
+            <select id="Asunto" name="Asunto" value={form.Asunto} onChange={handleChange}>
+              <option value="REMITE INFORMACIÓN">REMITE INFORMACIÓN</option>
+              <option value="SOLICITA INSPECCIÓN OCULAR">SOLICITA INSPECCIÓN OCULAR</option>
+              <option value="SOLICITA VISITA DE VERIFICACIÓN">SOLICITA VISITA DE VERIFICACIÓN</option>
             </select>
 
           </div>
@@ -88,20 +110,20 @@ const {
             <textarea id="Descripcion" name="descripcion" value={form.descripcion} onChange={handleChange}/>
 
             <label htmlFor="Motivo">Motivo:</label>
-            <select id="Motivo" name="Motivo">
-              <option value="">ATENCIÓN CIUDADANA</option>
-              <option value="">AUDIENCIA CIUDADANA</option>
-              <option value="">CASA X CASA</option>
-              <option value="">INTERNOS</option>
-              <option value="">REMITE INFORMACIÓN</option>
-              <option value="">MEDIOS DIGITALES</option>
-              <option value="">OFICIALIA DE PARTES</option>
+            <select id="Motivo" name="Motivo"value={form.Motivo} onChange={handleChange}>
+              <option value="ATENCIÓN CIUDADANA">ATENCIÓN CIUDADANA</option>
+              <option value="AUDIENCIA CIUDADANA">AUDIENCIA CIUDADANA</option>
+              <option value="CASA X CASA">CASA X CASA</option>
+              <option value="INTERNOS">INTERNOS</option>
+              <option value="REMITE INFORMACIÓN">REMITE INFORMACIÓN</option>
+              <option value="MEDIOS DIGITALES">MEDIOS DIGITALES</option>
+              <option value="OFICIALIA DE PARTES">OFICIALIA DE PARTES</option>
             </select>
 
             <label htmlFor="Caracter">Caracter:</label>
-            <select id="Caracter" name="Caracter">
-              <option value="">ORDINARIO</option>
-              <option value="">URGENTE</option>
+            <select id="Caracter" name="Caracter" value={form.Caracter} onChange={handleChange}>
+              <option value="ORDINARIO">ORDINARIO</option>
+              <option value="URGENTE">URGENTE</option>
             </select>
           </div>
 
@@ -159,16 +181,31 @@ const {
             <input type="text" id="Calle" name="calle" value={form.calle} onChange={handleChange}/>
             
             <label htmlFor="NumC">#:</label>
-            <input type="number" id="NumC" name="NumC" />
+            <input type="number" id="NumC" name="NumC" value={form.NumC} onChange={handleChange}/>
           </div>
 
           <div className="input-row">
             <label htmlFor="Turnado">Turnado</label>
-            <select id="Turnado" name="Turnado">
+            <select id="Turnado" name="Turnado" value={form.Fk_Personal_Turnado} onChange={handleChange}>
+               <option value="619">CLAUDIA YVETTE MOLINA SÁNCHEZ</option>
             </select>
           </div>
 
-          <button type="submit">Guardar</button>
+          <button type="submit"
+            // disabled={
+            //   !form.NumDVSC ||
+            //   !form.date ||
+            //   !form.oficio ||
+            //   !form.descripcion ||
+            //   !form.Asunto ||
+            //   !form.Motivo ||
+            //   !form.Caracter ||
+            //   !form.calle ||
+            //   !form.NumC ||
+            //   !form.Fk_Personal_Remitente ||
+            //   !form.Fk_Personal_Turnado
+            // }
+          >Guardar</button>
         </form>
       </div>
       <Tabla />

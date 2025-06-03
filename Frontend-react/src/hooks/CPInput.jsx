@@ -5,9 +5,10 @@ const useDireccionPorCP = (cp) => {
   const [alcaldia, setAlcaldia] = useState("");
   const [colonia, setColonia] = useState("");
   const [loading, setLoading] = useState(false);
+  const [direccionID, setDireccionID] = useState(null);
 
   useEffect(() => {
-    if (cp.length !== 5) {
+    if (!cp || cp.length !== 5) {
       setColonias([]);
       setAlcaldia("");
       setColonia("");
@@ -17,12 +18,13 @@ const useDireccionPorCP = (cp) => {
     const fetchDireccion = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:3000/ObtenerDireccion/${cp}`);
+        const res = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/direccion/${cp}`);
         const result = await res.json();
         const data = result.data;
 
         if (data.length === 1) {
-          setColonias(data); // ⚠️ Mantenemos la colonia en el array
+          setDireccionID(data[0].Pk_IDAdress);
+          setColonias(data);
           setColonia(data[0].Colonia);
           setAlcaldia(data[0].Alcaldia);
         } else if (data.length > 1) {
