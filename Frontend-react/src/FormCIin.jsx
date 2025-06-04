@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
+import "./White.css";
 import Tabla from "./TablaCorrespodencia";
 import useDireccionPorCP from "./hooks/CPInput";
 import { handleFormSubmit } from "./hooks/formSubmit";
@@ -77,7 +77,7 @@ const [form, setForm] = useState({
         <form onSubmit={onSubmit}>
           <div className="input-row">
             <label htmlFor="NumDVSC">#DVSC:</label>
-            <input type="number" id="NumDVSC" name="NumDVSC" value={form.NumDVSC} 
+            <input type="number" id="NumDVSC" name="NumDVSC" className="form-item" value={form.NumDVSC} 
             onChange={handleChange}/>
 
             <label htmlFor="date">Fecha de Recepción:</label>

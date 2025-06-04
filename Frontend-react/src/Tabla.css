@@ -1,17 +1,20 @@
 .form-card {
-  background-color: rgba(255, 255, 255, 0.05);
   padding: 20px;
   border-radius: 15px;
   margin: 20px;
-  color: white;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  
 }
 
-.tabla-registro {
+.tabla-registro table{
   border-collapse: separate;
   border-spacing: 0;
   border-radius: 12px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .tabla-registro th,
@@ -46,4 +49,50 @@ form button {
 
 form button:hover {
   background-color: #7c142e;
+}
+
+/* Estilos para el filtro */
+.filtro-container {
+  margin: 20px 0;
+  width: 100%;
+}
+
+.filtro-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Estilos para la tabla y su contenedor */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tabla-registro {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.tabla-registro th, .tabla-registro td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.tabla-registro th {
+  background-color: #9F2241;
+  position: sticky;
+  top: 0;
+}
+
+.tabla-registro tr:nth-child(even) {
+  background-color: #9f22412a;
+}
+
+.tabla-registro tr:hover {
+  background-color: #f1f1f1;
 }

@@ -2,9 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  /* background: linear-gradient(to bottom right, #444, #001f3f);
-  color: white; */
-  background: white;
+  color: rgb(0, 0, 0);
 }
 
 .form-container {
@@ -14,18 +12,16 @@ body {
   padding: 2rem;
 }
 
-.form-card {
-
-  border: 1px solid black;
+.form-card input{
   backdrop-filter: blur(10px);
   border-radius: 1rem;
   padding: 2rem;
   width: 90vw;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.795);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color:black;
+  color: black;
 }
 
 
@@ -38,36 +34,34 @@ form label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: bold;
-  color: black;
 }
 
 form input,
-form textarea{
+form textarea, form{
   flex: 1;
   width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
-  /* border: none; */
+  border: none;
   border-radius: 0.5rem;
-  /* background-color: #ffffff22;
-  color: white; */
-  background-color: white;
   font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 form select, form option{
   border-radius: 0.5rem;
-  /* background-color: #ffffff22; */
-  background-color: white;
-  color: black
+  color: black;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
+
 #NumDVSC, #CP, #NumC, #date{
-  flex: 0.3;
+  flex: 0.25;
 }
 
 form input::placeholder,
 form textarea::placeholder {
-  /* color: #cccccc; */
+  color: black;
 }
 
 .input-row {
@@ -81,24 +75,23 @@ form textarea::placeholder {
   flex: 1; /* Para que se repartan el espacio por igual */
   padding: 0.75rem;
   border-radius: 0.5rem;
-  /* border: none; */
-  /* background-color: #ffffff22;
-  color: white; */
+  border: none;
+  color: black;
 }
 
 
-form button {
+button {
   width: 100%;
   padding: 0.75rem;
   border: none;
   border-radius: 0.5rem;
-  background-color: #0074D9;
+  background-color: #9f224188;
   color: white;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-form button:hover {
-  background-color: #005fa3;
+button:hover {
+  background-color: #7c142e;
 }
