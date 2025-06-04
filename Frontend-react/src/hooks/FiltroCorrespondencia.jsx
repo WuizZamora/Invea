@@ -1,35 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const FiltroCorrespondencia = ({ datos, onFiltrar }) => {
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
 
-  useEffect(() => {
-    if (!terminoBusqueda) {
-      onFiltrar(datos);
-      return;
-    }
-
-    const terminos = terminoBusqueda.split(',').map(t => t.trim().toLowerCase());
-    
+  // Función de filtrado memoizada
+  const filtrarDatos = useCallback((terminos, datos) => {
     let resultados = [...datos];
     
-    // Aplicar cada término como un filtro adicional
     terminos.forEach(termino => {
       if (!termino) return;
       
       resultados = resultados.filter(item => {
+        const normalize = (text) => 
+          text?.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        
+        const terminoNormalizado = normalize(termino);
+        
         return (
-          (item.NumDVSC?.toString().toLowerCase().includes(termino)) ||
-          (item.Oficio?.toLowerCase().includes(termino)) ||
-          (item.Remitente?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(termino.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))) ||
-          (item.Motivo?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(termino.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))) ||
-          (item.Direccion?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(termino.normalize("NFD").replace(/[\u0300-\u036f]/g, "")))
+          normalize(item.NumDVSC).includes(terminoNormalizado) ||
+          normalize(item.Oficio).includes(terminoNormalizado) ||
+          normalize(item.Remitente).includes(terminoNormalizado) ||
+          normalize(item.Motivo).includes(terminoNormalizado) ||
+          normalize(item.Direccion).includes(terminoNormalizado)
         );
       });
     });
+    
+    return resultados;
+  }, []);
 
-    onFiltrar(resultados);
-  }, [terminoBusqueda, datos, onFiltrar]);
+  useEffect(() => {
+    // No ejecutar filtro si no hay término de búsqueda
+  if (!terminoBusqueda.trim()) {
+    onFiltrar(null); // <- BUENO: se interpreta como "sin filtro"
+    return;
+  }
+
+    const terminos = terminoBusqueda
+    .split(/[\s,]+/) // divide por comas o espacios
+    .map(t => t.trim().toLowerCase())
+    .filter(Boolean);
+
+    const resultadosFiltrados = filtrarDatos(terminos, datos);
+    onFiltrar(resultadosFiltrados);
+    
+  }, [terminoBusqueda, datos, filtrarDatos]);
 
   return (
     <div className="filtro-container">
@@ -40,12 +55,11 @@ const FiltroCorrespondencia = ({ datos, onFiltrar }) => {
         onChange={(e) => setTerminoBusqueda(e.target.value)}
         className="filtro-input"
       />
-     {terminoBusqueda.includes(',') && (
-     <div className="filtro-info">
-        Filtros aplicados: {terminoBusqueda.split(',').filter(t => t.trim()).length}
-     </div>
-  )}
-
+      {terminoBusqueda.includes(',') && (
+        <div className="filtro-info">
+          Filtros aplicados: {terminoBusqueda.split(',').filter(t => t.trim()).length}
+        </div>
+      )}
     </div>
   );
 };
