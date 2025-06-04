@@ -35,3 +35,9 @@
   background-color: white;
   color: #001f3f;
 }
+
+.filtro-info {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 5px;
+}

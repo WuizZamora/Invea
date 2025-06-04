@@ -11,11 +11,13 @@ const FiltroCorrespondencia = ({ datos, onFiltrar }) => {
 
     const terminos = terminoBusqueda.split(',').map(t => t.trim().toLowerCase());
     
-    const datosFiltrados = datos.filter(item => {
-      // Verificar si alguno de los términos coincide con algún campo
-      return terminos.some(termino => {
-        if (!termino) return false;
-        
+    let resultados = [...datos];
+    
+    // Aplicar cada término como un filtro adicional
+    terminos.forEach(termino => {
+      if (!termino) return;
+      
+      resultados = resultados.filter(item => {
         return (
           (item.NumDVSC?.toString().toLowerCase().includes(termino)) ||
           (item.Oficio?.toLowerCase().includes(termino)) ||
@@ -26,18 +28,24 @@ const FiltroCorrespondencia = ({ datos, onFiltrar }) => {
       });
     });
 
-    onFiltrar(datosFiltrados);
+    onFiltrar(resultados);
   }, [terminoBusqueda, datos, onFiltrar]);
 
   return (
     <div className="filtro-container">
       <input
         type="text"
-        placeholder="Buscar... (puedes usar comas para múltiples criterios)"
+        placeholder="Buscar... (usa comas para agregar más criterios de busqueda)"
         value={terminoBusqueda}
         onChange={(e) => setTerminoBusqueda(e.target.value)}
         className="filtro-input"
       />
+     {terminoBusqueda.includes(',') && (
+     <div className="filtro-info">
+        Filtros aplicados: {terminoBusqueda.split(',').filter(t => t.trim()).length}
+     </div>
+  )}
+
     </div>
   );
 };

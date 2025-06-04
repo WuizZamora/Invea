@@ -96,3 +96,54 @@ form button:hover {
 .tabla-registro tr:hover {
   background-color: #f1f1f1;
 }
+
+/* Estilos para la paginación */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 5px;
+  flex-wrap: nowrap; /* Esto evita que los botones se envuelvan a otra línea */
+  overflow-x: auto; /* Permite scroll horizontal si hay muchos botones */
+  padding: 10px 0;
+  width: 100%;
+}
+
+.paginacion button {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  color: #9F2241;
+  background-color: #f8f8f8;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 1.5%;
+  justify-content: center;
+
+}
+.paginacion button:first-child,
+.paginacion button:last-child {
+  min-width: 80px; /* Más anchos para texto */
+}
+
+.paginacion button:hover:not(:disabled) {
+  background-color: #9f22412a;
+}
+
+.paginacion button.active {
+  background-color: #9F2241;
+  color: white;
+  border-color: #9F2241;
+}
+
+.paginacion button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.contador-resultados {
+  text-align: center;
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+}
