@@ -5,6 +5,9 @@
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
   
 }
+.table-card{
+  margin: 0 2rem 0 2rem;
+}
 
 .tabla-registro table{
   border-collapse: separate;
@@ -36,10 +39,11 @@
   background-color: #9f22412a;
 }
 
-form button {
-  width: 100%;
-  padding: 0.1rem;
+.button-table {
+  width: 7rem;
+  padding: 0.7rem;
   border: none;
+  margin: 0 0 0 0.5rem;
   border-radius: 0.5rem;
   background-color: #9F2241;
   color: white;
@@ -48,14 +52,18 @@ form button {
   transition: background-color 0.3s ease;
 }
 
+.pdf{
+  margin: 0 0 0 0.3rem;
+}
+
 form button:hover {
   background-color: #7c142e;
 }
 
 /* Estilos para el filtro */
 .filtro-container {
-  margin: 20px 0;
-  width: 100%;
+  margin: 0 1rem 0 1rem;
+  width: 50rem
 }
 
 .filtro-input {
