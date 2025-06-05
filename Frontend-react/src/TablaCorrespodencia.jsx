@@ -76,7 +76,7 @@ const Tabla = () => {
                   <td>{item.Direccion}</td>
                   <td>
                     {item.SoporteDocumental ? (
-                      <a href=${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}{item.SoporteDocumental} target="_blank" rel="noopener noreferrer">
+                      <a href={`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${item.SoporteDocumental}`} target="_blank" rel="noopener noreferrer">
                         <img
                           src="/PDF.png"
                           alt="Ver PDF"

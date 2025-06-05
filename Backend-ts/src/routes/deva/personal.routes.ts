@@ -7,7 +7,7 @@ const router = Router();
 router.get('/', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM Personal');
-    res.json({ status: "OK", data: rows });
+    res.json({data: rows });
   } catch (error) {
     res.status(500).json({ error: 'Error en la base de datos' });
   }
