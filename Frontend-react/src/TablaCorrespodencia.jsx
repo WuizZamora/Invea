@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import useCorrespondencia from "./hooks/useCorrespondencia";
 import FiltroCorrespondencia from "./hooks/FiltroCorrespondencia";
 import UploadPDFButton from "./hooks/UploadPDFButton";
+import DeletePDFButton from "./hooks/DeletePDFButton";
 import "./Tabla.css";
 
 const Tabla = () => {
@@ -76,13 +77,19 @@ const Tabla = () => {
                   <td>{item.Direccion}</td>
                   <td>
                     {item.SoporteDocumental ? (
-                      <a href=${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}{item.SoporteDocumental} target="_blank" rel="noopener noreferrer">
-                        <img
-                          src="/PDF.png"
-                          alt="Ver PDF"
-                          style={{ width: "24px", cursor: "pointer" }}
-                        />
-                      </a>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <a href={`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${item.SoporteDocumental}`} target="_blank" rel="noopener noreferrer">
+                          <img
+                            src="/PDF.png"
+                            alt="Ver PDF"
+                            style={{ width: "24px", cursor: "pointer" }}
+                          />
+                        </a>
+                          <DeletePDFButton
+                            id={item.Pk_IDCorrespondenciaIn}
+                            onDeleteSuccess={() => window.location.reload()} // o actualizar estado
+                          />
+                      </div>
                     ) : (
                       <UploadPDFButton
                         id={item.Pk_IDCorrespondenciaIn}
