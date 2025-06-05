@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useCorrespondencia from "./hooks/useCorrespondencia";
 import FiltroCorrespondencia from "./hooks/FiltroCorrespondencia";
+import UploadPDFButton from "./hooks/UploadPDFButton";
 import "./Tabla.css";
 
 const Tabla = () => {
@@ -67,17 +68,27 @@ const Tabla = () => {
             </thead>
             <tbody>
               {datosPagina.map((item, index) => (
-                <tr key={`${item.NumDVSC}-${index}`}>
+                <tr key={`${item.Pk_IDCorrespondenciaIn}-${index}`}>
                   <td>{item.NumDVSC}</td>
                   <td>{item.Oficio}</td>
                   <td>{item.Remitente}</td>
                   <td>{item.Motivo}</td>
                   <td>{item.Direccion}</td>
                   <td>
-                    {item.SoporteDocumental
-                      ? item.SoporteDocumental
-                      : <button onClick={() => handleUpload()}>Subir Documento</button>
-                    }
+                    {item.SoporteDocumental ? (
+                      <a href=${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}{item.SoporteDocumental} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src="/PDF.png"
+                          alt="Ver PDF"
+                          style={{ width: "24px", cursor: "pointer" }}
+                        />
+                      </a>
+                    ) : (
+                      <UploadPDFButton
+                        id={item.Pk_IDCorrespondenciaIn}
+                        onUploadSuccess={() => window.location.reload()} // o actualizar estado
+                      />
+                    )}
                   </td>
                 </tr>
               ))}
