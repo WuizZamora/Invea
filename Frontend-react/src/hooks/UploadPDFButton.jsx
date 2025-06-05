@@ -32,12 +32,15 @@ const UploadPDFButton = ({ id, onUploadSuccess }) => {
   };
 
   return (
-    <input
-      type="file"
-      accept="application/pdf"
-      onChange={handleUpload}
-      style={{ cursor: "pointer" }}
-    />
+    <label className="upload-label">
+      📎 Subir PDF
+      <input
+        type="file"
+        accept="application/pdf"
+        onChange={handleUpload}
+        style={{ display: "none" }}
+      />
+    </label>
   );
 };
 
