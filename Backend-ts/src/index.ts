@@ -2,15 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import devaRoutes from './routes/deva';  // Importa el grupo de rutas de DEVA
-// import inveaRoutes from './routes/invea';  // Para futuros proyectos
-
-
+// import inveaRoutes from './routes/invea';  // Para futuros proyecto
 
 const app = express();
 const PORT = process.env.PORT;
 
 app.use(cors({
-  origin: 'http://localhost:5173' // permite peticiones desde tu frontend
+  origin: process.env.HOST_FRONT,
 }));
 
 app.use(express.json());

@@ -14,11 +14,11 @@ router.get('/', async (req, res) => {
 });
 
 // GET por CP
-router.get('/:cp', async (req, res) => {
+router.get('/:alcaldia', async (req, res) => {
   try {
-    const cp = req.params.cp;
+    const cp = req.params.alcaldia;
     const [rows] = await db.query(
-      'SELECT Pk_IDAdress, Colonia, Alcaldia FROM Direccion WHERE CP = ?', 
+      'SELECT Pk_IDAdress, Colonia, Alcaldia FROM Direccion WHERE Alcaldia = ?', 
       [cp]
     );
     res.json({ data: rows });
