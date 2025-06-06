@@ -41,6 +41,17 @@ router.get('/obtener-correspondencia', async (req, res) => {
   }
 });
 
+router.get('/obtener-correspondencia-id/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const [rows] = await db.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]); 
+    res.json({ data: rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error en la base de datos' });
+  }
+});
+
 router.post('/guardar-correspondencia', async (req, res) => {
   try {
     const {
