@@ -42,7 +42,7 @@ const Tabla = () => {
   if (loading) return <p>Cargando datos...</p>;
 
   return (
-    <div className="form-card">
+    <div className="table-card">
       <h2>Tabla de Registros</h2>
       
       <FiltroCorrespondencia 
@@ -82,6 +82,7 @@ const Tabla = () => {
                           <img
                             src="/PDF.png"
                             alt="Ver PDF"
+                            className="pdf"
                             style={{ width: "24px", cursor: "pointer" }}
                           />
                         </a>
