@@ -47,14 +47,17 @@ form textarea{
   font-size: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
-form select, form option{
+.select-remitente, select, form option{
   border-radius: 0.5rem;
   color: black;
   border: none;
   height: 70%;
+  width: 30rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
-
+.select-alcaldia{
+  width: 20rem;
+}
 
 #NumDVSC, #CP, #NumC, #date{
   flex: 0.25;

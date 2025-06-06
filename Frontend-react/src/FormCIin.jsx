@@ -1,44 +1,38 @@
 import React, { useState, useEffect } from "react";
 import "./White.css";
 import Tabla from "./TablaCorrespodencia";
-import useDireccionPorCP from "./hooks/CPInput";
-import useSelectObtenerPersonal from "./hooks/SelectObtenerPersonal"; // Corregido
-import Select from 'react-select'; // Importar Select
+import useSelectObtenerPersonal from "./hooks/SelectObtenerPersonal";
+import Select from 'react-select';
 import { handleFormSubmit } from "./hooks/formSubmit";
+import useDireccionPorAlcaldia from "./hooks/AlcaldiaIinput";
 
 const FormIn = () => {
   // Obtener opciones de personal
   const { opcionesPersonal, loading: loadingPersonal } = useSelectObtenerPersonal();
-  const [cp, setCp] = useState("");
+  
+  // Usar solo el hook de alcaldía
   const {
+    alcaldias,
     colonias,
-    colonia,
-    setColonia,
+    cp,
+    selectedAlcaldia,
+    setSelectedAlcaldia,
+    selectedColonia,
+    setSelectedColonia,
     loading,
-    alcaldia,
-    setAlcaldia,
     direccionID
-  } = useDireccionPorCP(cp);
+  } = useDireccionPorAlcaldia();
 
+  // Convertir a formato para react-select
+  const opcionesAlcaldias = alcaldias.map(alcaldia => ({
+    value: alcaldia,
+    label: alcaldia
+  }));
 
-  useEffect(() => {
-    if (colonias.length === 1) {
-      const unica = colonias[0];
-      if (colonia !== unica.Colonia) {
-        setColonia(unica.Colonia);
-      }
-      if (alcaldia !== unica.Alcaldia) {
-        setAlcaldia(unica.Alcaldia);
-      }
-    }
-  }, [colonias, colonia, alcaldia]);
-
-  useEffect(() => {
-    if (!cp) {
-      setColonia("");
-      setAlcaldia("");
-    }
-  }, [cp]);
+  const opcionesColonias = colonias.map(colonia => ({
+    value: colonia,
+    label: colonia
+  }));
 
   const [form, setForm] = useState({
     NumDVSC: "",
@@ -59,6 +53,9 @@ const FormIn = () => {
     const { success, result, error } = await handleFormSubmit(form, direccionID);
     if (success) {
       alert("Enviado correctamente");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);      
     } else {
       alert("Error al enviar");
     }
@@ -105,7 +102,7 @@ const FormIn = () => {
               isLoading={loadingPersonal}
               placeholder="Buscar remitente..."
               isSearchable
-              className="react-select-container"
+              className="select-remitente"
               classNamePrefix="react-select"
             />
 
@@ -115,6 +112,8 @@ const FormIn = () => {
               <option value="REMITE INFORMACIÓN">REMITE INFORMACIÓN</option>
               <option value="SOLICITA INSPECCIÓN OCULAR">SOLICITA INSPECCIÓN OCULAR</option>
               <option value="SOLICITA VISITA DE VERIFICACIÓN">SOLICITA VISITA DE VERIFICACIÓN</option>
+              <option value="REPOSICIÓN DE SELLOS DE CLAUSURA">REPOSICIÓN DE SELLOS CLAUSURA</option>
+              <option value="REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES">REPOSICIÓN DE SELLOS MEDIDAS CAUTELARES</option>
             </select>
 
           </div>
@@ -128,7 +127,7 @@ const FormIn = () => {
               <option></option>
               <option value="ATENCIÓN CIUDADANA">ATENCIÓN CIUDADANA</option>
               <option value="AUDIENCIA CIUDADANA">AUDIENCIA CIUDADANA</option>
-              <option value="CASA X CASA">CASA X CASA</option>
+              <option value="CASA POR CASA">CASA POR CASA</option>
               <option value="INTERNOS">INTERNOS</option>
               <option value="REMITE INFORMACIÓN">REMITE INFORMACIÓN</option>
               <option value="MEDIOS DIGITALES">MEDIOS DIGITALES</option>
@@ -144,68 +143,77 @@ const FormIn = () => {
           </div>
 
           <div className="input-row">
+            <label htmlFor="Alcaldia">Alcaldía:</label>
+            <Select
+              id="Alcaldia"
+              name="Alcaldia"
+              options={opcionesAlcaldias}
+              value={opcionesAlcaldias.find(op => op.value === selectedAlcaldia)}
+              onChange={(selected) => {
+                setSelectedAlcaldia(selected ? selected.value : "");
+                setSelectedColonia(""); // Resetear colonia al cambiar alcaldía
+              }}
+              placeholder="Buscar alcaldía..."
+              isSearchable
+              isLoading={loading}
+              noOptionsMessage={() => "No se encontraron alcaldías"}
+              className="react-select-container"
+              classNamePrefix="react-select"
+            />
+
+            <label htmlFor="Colonia">Colonia:</label>
+            <Select
+              id="Colonia"
+              name="Colonia"
+              options={opcionesColonias}
+              value={opcionesColonias.find(op => op.value === selectedColonia)}
+              onChange={(selected) => {
+                setSelectedColonia(selected ? selected.value : "");
+              }}
+              placeholder={selectedAlcaldia ? "Buscar colonia..." : "Primero selecciona alcaldía"}
+              isSearchable
+              isLoading={loading}
+              isDisabled={!selectedAlcaldia}
+              noOptionsMessage={() => "No se encontraron colonias"}
+              className="react-select-container"
+              classNamePrefix="react-select"
+            />
+
             <label htmlFor="CP">Código Postal:</label>
             <input
               type="text"
               id="CP"
               name="CP"
               value={cp}
-              onChange={(e) => setCp(e.target.value)}
-            />
-
-            <label htmlFor="Colonia">Colonia:</label>
-            {colonias.length > 0 ? (
-              <select
-                id="Colonia"
-                name="Colonia"
-                value={colonia}
-                onChange={(e) => {
-                  const selectedColonia = colonias.find(c => c.Colonia === e.target.value);
-                  setColonia(selectedColonia?.Colonia || "");
-                  setAlcaldia(selectedColonia?.Alcaldia || ""); // <-- Aquí actualizas la Alcaldía
-                }}
-              >
-                <option value="">-- Selecciona colonia --</option>
-                {colonias.map((c) => (
-                  <option key={c.Pk_IDAdress} value={c.Colonia}>
-                    {c.Colonia}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <input
-                type="text"
-                id="Colonia"
-                name="Colonia"
-                value={colonia}
-                readOnly
-              />
-            )}
-
-            {loading && <p>Cargando colonias...</p>}
-
-            <label htmlFor="Alcaldia">Alcaldía:</label>
-            <input
-              type="text"
-              id="Alcaldia"
-              name="Alcaldia"
-              value={alcaldia}
               readOnly
             />
 
-            <label htmlFor="Calle">Calle:</label>
-            <input type="text" id="Calle" name="calle" value={form.calle} onChange={handleChange} />
+            {loading && <p>Cargando datos...</p>}
 
+            <label htmlFor="Calle">Calle:</label>
+            <input type="text" id="Calle" name="calle" value={form.calle} onChange={handleChange}/>
+            
             <label htmlFor="NumC">#:</label>
-            <input type="number" id="NumC" name="NumC" value={form.NumC} onChange={handleChange} />
+            <input type="number" id="NumC" name="NumC" value={form.NumC} onChange={handleChange}/>
           </div>
 
           <div className="input-row">
-            <label htmlFor="Turnado">Turnado</label>
-            <select id="Turnado" name="Fk_Personal_Turnado" value={form.Fk_Personal_Turnado} onChange={handleChange}>
-              <option></option>
-              <option value="619">CLAUDIA YVETTE MOLINA SÁNCHEZ</option>
-            </select>
+            <label>Turnado:</label>
+            <Select
+              options={opcionesPersonal}
+              value={opcionesPersonal.find(op => op.value === form.Fk_Personal_Turnado)}
+              onChange={(selected) =>
+                setForm(prev => ({
+                  ...prev,
+                  Fk_Personal_Turnado: selected ? selected.value : ""
+                }))
+              }
+              isLoading={loadingPersonal}
+              placeholder="Buscar turnado..."
+              isSearchable
+              className="select-remitente"
+              classNamePrefix="react-select"
+            />
           </div>
 
           <button type="submit"
