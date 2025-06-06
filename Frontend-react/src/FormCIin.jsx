@@ -218,19 +218,19 @@ const FormIn = () => {
 
           <button type="submit"
             className="save-button"
-          // disabled={
-          //   !form.NumDVSC ||
-          //   !form.date ||
-          //   !form.oficio ||
-          //   !form.descripcion ||
-          //   !form.Asunto ||
-          //   !form.Motivo ||
-          //   !form.Caracter ||
-          //   !form.calle ||
-          //   !form.NumC ||
-          //   !form.Fk_Personal_Remitente ||
-          //   !form.Fk_Personal_Turnado
-          // }
+            disabled={
+            !form.NumDVSC ||
+            !form.date ||
+            !form.oficio ||
+            !form.descripcion ||
+            !form.Asunto ||
+            !form.Motivo ||
+            !form.Caracter ||
+            !form.calle ||
+            !form.NumC ||
+            !form.Fk_Personal_Remitente ||
+            !form.Fk_Personal_Turnado
+           }
           >Guardar</button>
         </form>
       </div>
