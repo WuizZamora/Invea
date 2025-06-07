@@ -4,6 +4,8 @@ import FiltroCorrespondencia from "./hooks/FiltroCorrespondencia";
 import UploadPDFButton from "./hooks/UploadPDFButton";
 import DeletePDFButton from "./hooks/DeletePDFButton";
 import "./Tabla.css";
+import  ModalDetalle from "./Modals/ModalDetalle";
+import useDetalleOficio from "./hooks/useDetalleOficio";
 
 const Tabla = () => {
   const { datos: datosOriginales, loading } = useCorrespondencia();
@@ -21,6 +23,14 @@ const Tabla = () => {
   const indiceInicial = (paginaActual - 1) * resultadosPorPagina;
   const indiceFinal = indiceInicial + resultadosPorPagina;
   const datosPagina = datosMostrar.slice(indiceInicial, indiceFinal);
+  {}
+  const {
+    detalle,
+    loading: loadingDetalle,
+    error,
+    obtenerDetalle,
+    limpiarDetalle
+  } = useDetalleOficio();
 
   const cambiarPagina = (nuevaPagina) => {
   setPaginaActual(nuevaPagina);
@@ -71,7 +81,12 @@ const Tabla = () => {
               {datosPagina.map((item, index) => (
                 <tr key={`${item.Pk_IDCorrespondenciaIn}-${index}`}>
                   <td>{item.NumDVSC}</td>
-                  <td>{item.Oficio}</td>
+                  <td
+                    style={{ cursor: "pointer", color: "#1976d2", textDecoration: "underline" }}
+                    onClick={() => obtenerDetalle(item.Pk_IDCorrespondenciaIn)}
+                  >
+                    {item.Oficio}
+                  </td>
                   <td>{item.Remitente}</td>
                   <td>{item.Motivo}</td>
                   <td>{item.Direccion}</td>
@@ -140,6 +155,16 @@ const Tabla = () => {
           Mostrando {indiceInicial + 1}-{Math.min(indiceFinal, datosMostrar.length)} de {datosMostrar.length} resultados
         </div>
       )}
+      {/* Muestra el Modal de Detallos de Oficio */}
+      {detalle && (
+        <ModalDetalle
+          item={detalle}
+          onClose={limpiarDetalle}
+          loading={loading}
+          error={error}
+        />
+      )}
+
     </div>
   );
 };
