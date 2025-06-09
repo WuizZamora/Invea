@@ -3,6 +3,7 @@ import "./Detalle.css";
 import useSelectObtenerPersonal from "../hooks/SelectObtenerPersonal";
 import DetalleVisual from "./DetalleVIsual";
 import DetalleEditar from "./DetalleEditar";
+import { updateCorrespondencia } from "../hooks/updateCorrespondencia";
 
 const ModalDetalle = ({ item, loading, error, onClose }) => {
   const [editMode, setEditMode] = useState(false);
@@ -14,6 +15,26 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
   const camposSelectPersonal = ["Remitente", "Turnado"];
 
   const { opcionesPersonal, loading: loadingPersonal } = useSelectObtenerPersonal();
+
+  const handleGuardar = async () => {
+    const confirmar = window.confirm("¿Estás seguro de que deseas actualizar los datos?");
+    if (!confirmar) return;
+
+    const id = item.Pk_IDCorrespondenciaIn;
+
+    const { success, result, error } = await updateCorrespondencia(id, formData);
+
+    if (success) {
+      setMensaje("Correspondencia actualizada correctamente");
+      setTipoMensaje("success");
+      setEditMode(false);
+    } else {
+      setMensaje("Error al actualizar: " + error.message);
+      setTipoMensaje("error");
+    }
+
+
+  };
 
   const [calle, numCalle] = item.Direccion
   ? item.Direccion.split("#")[0].trim() && item.Direccion.split("#")[1]?.split(",")[0].trim()
@@ -55,11 +76,6 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
 
   const handleChange = (clave, value) => {
     setFormData((prev) => ({ ...prev, [clave]: value }));
-  };
-
-  const handleGuardar = () => {
-    console.log("Datos guardados:", formData);
-    setEditMode(false);
   };
 
   const handleCancelar = () => {
