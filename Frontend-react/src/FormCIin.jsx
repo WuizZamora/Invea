@@ -36,7 +36,7 @@ const FormIn = () => {
 
   const [form, setForm] = useState({
     NumDVSC: "",
-    date: "",
+    date: new Date().toISOString().slice(0, 16),
     oficio: "",
     Fk_Personal_Remitente: "",
     descripcion: "",
@@ -81,7 +81,7 @@ const FormIn = () => {
               onChange={handleChange} />
 
             <label htmlFor="date">Fecha de Recepción:</label>
-            <input type="date" id="date" name="date" value={form.date} onChange={handleChange} />
+            <input type="datetime-local" id="date" name="date" value={form.date} onChange={handleChange} />
 
             <label htmlFor="Oficio">Oficio:</label>
             <input type="text" id="Oficio" name="oficio" value={form.oficio} onChange={handleChange} />
