@@ -3,6 +3,8 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { db } from '../../config/db';
+import { Console } from 'console';
+import { isConditionalExpression } from 'typescript';
 
 const router = express.Router();
 
@@ -160,7 +162,7 @@ router.delete('/borrar-soporte/:id', async (req: Request, res: Response) => {
 
 router.put('/actualizar-correspondencia/:id', async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = +req.params.id;
     const{
       NumDVSC,
       FechaIn,
@@ -174,6 +176,7 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       NumCalle, 
       Fk_Personal_Turnado
     }=req.body;
+    console.log(req.body);
     const query='CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values= [
       id,
@@ -189,6 +192,7 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       NumCalle, 
       Fk_Personal_Turnado
     ];
+    console.log(values);
     await db.query(query, values);
     res.status(201).json({ message: 'Correspondencia actualizada correctamente' });
   } catch (error) {
