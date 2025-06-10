@@ -158,4 +158,43 @@ router.delete('/borrar-soporte/:id', async (req: Request, res: Response) => {
   }
 });
 
+router.put('/actualizar-correspondencia/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const{
+      NumDVSC,
+      FechaIn,
+      Oficio,
+      Fk_Personal_Remitente,
+      Asunto,
+      Descripcion,
+      Motivo,
+      Caracter,
+      Calle, 
+      NumCalle, 
+      Fk_Personal_Turnado
+    }=req.body;
+    const query='CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const values= [
+      id,
+      NumDVSC,
+      FechaIn,
+      Oficio,
+      Fk_Personal_Remitente,
+      Asunto,
+      Descripcion,
+      Motivo,
+      Caracter,
+      Calle, 
+      NumCalle, 
+      Fk_Personal_Turnado
+    ];
+    await db.query(query, values);
+    res.status(201).json({ message: 'Correspondencia actualizada correctamente' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar la correspondencia' });
+  }
+});
+
 export default router;
