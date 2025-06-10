@@ -17,7 +17,7 @@ const DetalleEditar = ({
   return (
     <ul>
       {Object.entries(formData).map(([clave, valor]) => {
-        if (camposOcultos.includes(clave) || clave === "Direccion") return null;
+        if (camposOcultos.includes(clave) || clave === "Direccion" || clave === "Cargo") return null;
 
         return (
           <li key={clave}>

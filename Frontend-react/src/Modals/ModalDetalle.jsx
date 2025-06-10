@@ -8,6 +8,7 @@ import { updateCorrespondencia } from "../hooks/updateCorrespondencia";
 const ModalDetalle = ({ item, loading, error, onClose }) => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({ ...item });
+  const [TipoMensaje, setTipoMensaje] = useState("");
 
   const camposOcultos = ["Pk_IDCorrespondenciaIn", "Dependencia", "SoporteDocumental",""];
   const camposNoEditables = ["Alcaldia", "Colonia", "CodigoPostal"];
@@ -25,7 +26,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
     const { success, result, error } = await updateCorrespondencia(id, formData);
 
     if (success) {
-      setMensaje("Correspondencia actualizada correctamente");
+      alert("Correspondencia actualizada correctamente");
       setTipoMensaje("success");
       setEditMode(false);
     } else {

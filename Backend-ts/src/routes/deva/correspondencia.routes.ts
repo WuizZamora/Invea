@@ -174,10 +174,11 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Caracter,
       Calle, 
       NumCalle, 
+      OP,
       Fk_Personal_Turnado
     }=req.body;
     console.log(req.body);
-    const query='CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query='CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values= [
       id,
       NumDVSC,
@@ -190,7 +191,8 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Caracter,
       Calle, 
       NumCalle, 
-      Fk_Personal_Turnado
+      Fk_Personal_Turnado,
+      OP
     ];
     console.log(values);
     await db.query(query, values);

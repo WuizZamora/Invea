@@ -74,6 +74,7 @@ const Tabla = () => {
                 <th>Remitente</th>
                 <th>Motivo</th>
                 <th>Dirección</th>
+                <th>OP</th>
                 <th>Soporte documental</th>
               </tr>
             </thead>
@@ -90,6 +91,7 @@ const Tabla = () => {
                   <td>{item.Remitente}</td>
                   <td>{item.Motivo}</td>
                   <td>{item.Direccion}</td>
+                  <td>{item.OP ? (item.OP):("S/OP")}</td>
                   <td>
                     {item.SoporteDocumental ? (
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
