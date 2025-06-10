@@ -28,7 +28,9 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
     if (success) {
       alert("Correspondencia actualizada correctamente");
       setTipoMensaje("success");
-      setEditMode(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);  
     } else {
       setMensaje("Error al actualizar: " + error.message);
       setTipoMensaje("error");

@@ -17,8 +17,6 @@ export const handleFormSubmit = async (form, direccionID) => {
     SoporteDocumental: ""
   };
 
-  console.log("Payload a enviar:", payload);
-
   try {
     const response = await fetch(
           `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/guardar-correspondencia`, {
