@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "./White.css";
+import { Link } from "react-router-dom";
+import "../css/White.css";
 import Tabla from "./TablaCorrespodencia";
-import useSelectObtenerPersonal from "./hooks/SelectObtenerPersonal";
+import useSelectObtenerPersonal from "../hooks/SelectObtenerPersonal";
 import Select from 'react-select';
-import { handleFormSubmit } from "./hooks/formSubmit";
-import useDireccionPorAlcaldia from "./hooks/AlcaldiaIinput";
+import { handleFormSubmit } from "../hooks/formSubmit";
+import useDireccionPorAlcaldia from "../hooks/AlcaldiaIinput";
 
 const FormIn = () => {
   // Obtener opciones de personal

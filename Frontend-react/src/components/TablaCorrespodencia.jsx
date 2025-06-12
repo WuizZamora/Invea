@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import useCorrespondencia from "./hooks/useCorrespondencia";
-import FiltroCorrespondencia from "./hooks/FiltroCorrespondencia";
-import UploadPDFButton from "./hooks/UploadPDFButton";
-import DeletePDFButton from "./hooks/DeletePDFButton";
-import "./Tabla.css";
-import  ModalDetalle from "./Modals/ModalDetalle";
-import useDetalleOficio from "./hooks/useDetalleOficio";
+import useCorrespondencia from "../hooks/useCorrespondencia";
+import FiltroCorrespondencia from "../hooks/FiltroCorrespondencia";
+import UploadPDFButton from "../hooks/UploadPDFButton";
+import DeletePDFButton from "../hooks/DeletePDFButton";
+import "../css/Tabla.css";
+import  ModalDetalle from "../Modals/ModalDetalle";
+import useDetalleOficio from "../hooks/useDetalleOficio";
 
 const Tabla = () => {
   const { datos: datosOriginales, loading } = useCorrespondencia();
