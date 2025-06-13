@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { db } from '../../config/db';
+import { devaPool } from '../../config/db';
 
 const router = Router();
 
 // GET Todos los registros
 router.get('/', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM Personal');
+    const [rows] = await devaPool.query('SELECT * FROM Personal');
     res.json({data: rows });
   } catch (error) {
     res.status(500).json({ error: 'Error en la base de datos' });
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 router.get('/:NumEmpleado', async (req, res) => {
   try {
     const NumEmpleado = req.params.NumEmpleado;
-    const [rows] = await db.query(
+    const [rows] = await devaPool.query(
       'SELECT Pk_IDPersona, Nombre FROM Personal WHERE Pk_IDPersona = ?', 
       [NumEmpleado]
     );
