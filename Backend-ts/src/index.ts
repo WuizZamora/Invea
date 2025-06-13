@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import devaRoutes from './routes/deva';  // Importa el grupo de rutas de DEVA
-// import inveaRoutes from './routes/invea';  // Para futuros proyecto
+import dvscRoutes from './routes/dvsc';  // Para futuros proyecto
 
 const app = express();
 const PORT = process.env.PORT;
@@ -18,8 +18,8 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 // Monta todas las rutas de DEVA bajo /deva
 app.use('/deva', devaRoutes);
 
-//Agregar más proyectos aquí:
-// app.use('/invea', inveaRoutes);
+// Agregar más proyectos aquí:
+app.use('/dvsc', dvscRoutes);
 
 // Ruta raíz (opcional)
 app.get('/', (req, res) => {

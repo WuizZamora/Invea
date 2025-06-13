@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { db } from '../../config/db';
+import { devaPool } from '../../config/db';
 
 const router = Router();
 
 // GET Todas las direcciones
 router.get('/', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM Direccion');
+    const [rows] = await devaPool.query('SELECT * FROM Direccion');
     res.json(rows);
   } catch (error) {
     res.status(500).json({ error: 'Error en la base de datos' });
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 router.get('/:alcaldia', async (req, res) => {
   try {
     const cp = req.params.alcaldia;
-    const [rows] = await db.query(
+    const [rows] = await devaPool.query(
       'SELECT Pk_IDAdress, Colonia, Alcaldia FROM Direccion WHERE Alcaldia = ?', 
       [cp]
     );
@@ -26,6 +26,24 @@ router.get('/:alcaldia', async (req, res) => {
     res.status(500).json({ error: 'Error en la base de datos' });
   }
 });
+
+router.get('/a/:alcaldia/:colonia', async (req, res) => {
+  try {
+    const { alcaldia, colonia } = req.params;
+
+    const [rows] = await devaPool.query(
+      'SELECT * FROM `Direccion` WHERE Alcaldia LIKE ? AND Colonia LIKE ?;',
+      [`%${alcaldia}%`, `%${colonia}%`] // si quieres búsqueda parcial
+    );
+
+    res.json({ data: rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error en la base de datos' });
+  }
+});
+
+
 
 // POST Insertar nueva dirección
 // router.post('/', async (req, res) => {

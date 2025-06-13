@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { db } from '../../config/db';
+import { devaPool } from '../../config/db';
 import { Console } from 'console';
 import { isConditionalExpression } from 'typescript';
 
@@ -26,7 +26,7 @@ const upload = multer({ storage });
 // Entradas CONSULTA GENERAL Y TEST
 router.get('/entrada', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM Correspondencia_Interna_In');
+    const [rows] = await devaPool.query('SELECT * FROM Correspondencia_Interna_In');
     res.json({ data: rows });
   } catch (error) {
     res.status(500).json({ error: 'Error en la base de datos' });
@@ -36,7 +36,7 @@ router.get('/entrada', async (req, res) => {
 // Procedimiento almacenado
 router.get('/obtener-correspondencia', async (req, res) => {
   try {
-    const [rows] = await db.query('CALL ObtenerCorrespondenciaInterna()');
+    const [rows] = await devaPool.query('CALL ObtenerCorrespondenciaInterna()');
     res.json({ data: rows });
   } catch (error) {
     res.status(500).json({ error: 'Error en la base de datos' });
@@ -46,7 +46,7 @@ router.get('/obtener-correspondencia', async (req, res) => {
 router.get('/obtener-correspondencia-id/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const [rows] = await db.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]); 
+    const [rows] = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]); 
     res.json({ data: rows });
   } catch (error) {
     console.error(error);
@@ -89,7 +89,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
       SoporteDocumental
     ];
 
-    await db.query(query, values);
+    await devaPool.query(query, values);
     res.status(201).json({ message: 'Correspondencia guardada correctamente' });
   } catch (error) {
     console.error(error);
@@ -110,7 +110,7 @@ router.post('/subir-soporte/:id', upload.single('archivo'), async (req: Request,
     const filePath = `/uploads/correspondencia/${file.filename}`;
 
     const query = 'UPDATE Correspondencia_Interna_In SET SoporteDocumental = ? WHERE Pk_IDCorrespondenciaIn = ?';
-    await db.query(query, [filePath, id]);
+    await devaPool.query(query, [filePath, id]);
 
     res.json({ message: 'Archivo subido y ruta actualizada correctamente', path: filePath });
   } catch (error) {
@@ -124,7 +124,7 @@ router.delete('/borrar-soporte/:id', async (req: Request, res: Response) => {
     const id = req.params.id;
 
     // Obtener la ruta del archivo desde la base de datos
-    const [rows]: any = await db.query(
+    const [rows]: any = await devaPool.query(
       'SELECT SoporteDocumental FROM Correspondencia_Interna_In WHERE Pk_IDCorrespondenciaIn = ?',
       [id]
     );
@@ -148,7 +148,7 @@ router.delete('/borrar-soporte/:id', async (req: Request, res: Response) => {
     }
 
     // Actualizar el campo SoporteDocumental a NULL en la base de datos
-    await db.query(
+    await devaPool.query(
       'UPDATE Correspondencia_Interna_In SET SoporteDocumental = NULL WHERE Pk_IDCorrespondenciaIn = ?',
       [id]
     );
@@ -195,7 +195,7 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       OP
     ];
     console.log(values);
-    await db.query(query, values);
+    await devaPool.query(query, values);
     res.status(201).json({ message: 'Correspondencia actualizada correctamente' });
   } catch (error) {
     console.error(error);
