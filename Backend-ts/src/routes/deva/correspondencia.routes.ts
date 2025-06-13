@@ -5,6 +5,7 @@ import fs from 'fs';
 import { devaPool} from '../../config/db';
 import { Console } from 'console';
 import { isConditionalExpression } from 'typescript';
+import { ResultSetHeader } from 'mysql2';
 
 const router = express.Router();
 
@@ -57,11 +58,15 @@ router.get('/obtener-correspondencia-id/:id', async (req, res) => {
 
 router.post('/guardar-correspondencia', async (req, res) => {
   try {
-    const {
+    console.log(req.body);
+    let {
       NumDVSC,
       FechaIn,
       Oficio,
       Fk_Personal_Remitente,
+      Nombre,
+      Cargo,
+      Dependencia,
       Asunto,
       Descripcion,
       Motivo,
@@ -73,6 +78,18 @@ router.post('/guardar-correspondencia', async (req, res) => {
       SoporteDocumental
     } = req.body;
 
+    // Si el remitente es 0, insertamos en la tabla Personal
+    if (Fk_Personal_Remitente == 0) {
+      const insertQuery = `
+        INSERT INTO Personal (Nombre, Cargo, Dependencia)
+        VALUES (?, ?, ?)
+      `;
+
+   const [insertResult] = await devaPool.query<ResultSetHeader>(insertQuery, [Nombre, Cargo, Dependencia]);
+    Fk_Personal_Remitente = insertResult.insertId;
+    }
+
+    // Ahora llamamos al procedimiento almacenado con el remitente ya resuelto
     const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       NumDVSC,
@@ -91,6 +108,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
     ];
 
     await devaPool.query(query, values);
+
     res.status(201).json({ message: 'Correspondencia guardada correctamente' });
   } catch (error) {
     console.error(error);

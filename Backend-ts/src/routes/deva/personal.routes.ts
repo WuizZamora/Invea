@@ -13,6 +13,17 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET Todos los registros
+router.get('/personal-turnado', async (req, res) => {
+  try {
+    const [rows] = await devaPool.query('SELECT * FROM Personal_Turnado');
+    res.json({data: rows });
+  } catch (error) {
+    res.status(500).json({ error: 'Error en la base de datos' });
+  }
+});
+
+
 // GET por ID
 router.get('/:NumEmpleado', async (req, res) => {
   try {
