@@ -8,10 +8,12 @@ import useSelectObtenerPersonal from "../hooks/SelectObtenerPersonal";
 import Select from 'react-select';
 import { handleFormSubmit } from "../hooks/formSubmit";
 import useDireccionPorAlcaldia from "../hooks/AlcaldiaIinput";
+import useSelectPersonalTurnado from "../hooks/SelectPersonalTurnado";
 
 const FormIn = () => {
   // Obtener opciones de personal
   const { opcionesPersonal, loading: loadingPersonal } = useSelectObtenerPersonal();
+  const { opcionesTurnado, loading: loadingTurnado } = useSelectPersonalTurnado();
   
   const [Otro, setOtro] = useState(false);
   const opcionesConOtro = [...opcionesPersonal, {label: "OTRO", value: "0"}]
@@ -308,18 +310,18 @@ const FormIn = () => {
               <label htmlFor="Descripcion">Descripción:</label>
               <textarea id="Descripcion" name="descripcion" value={form.descripcion} onChange={handleChange} />
             </div>
-                        <div className="col-md-5">
+            <div className="col-md-5">
               <label>Turnado:</label>
               <Select
-                options={opcionesPersonal}
-                value={opcionesPersonal.find(op => op.value === form.Fk_Personal_Turnado)}
+                options={opcionesTurnado}
+                value={opcionesTurnado.find(op => op.value === form.Fk_Personal_Turnado)}
                 onChange={(selected) =>
                   setForm(prev => ({
                     ...prev,
                     Fk_Personal_Turnado: selected ? selected.value : ""
                   }))
                 }
-                isLoading={loadingPersonal}
+                isLoading={loadingTurnado}
                 placeholder="Buscar turnado..."
                 isSearchable
                 className="select-remitente"

@@ -15,7 +15,7 @@ export const handleFormSubmit = async (form, direccionID) => {
     Caracter: form.Caracter,
     Fk_Direccion_IDAdress: direccionID,
     Calle: form.calle,
-    NumCalle: parseInt(form.NumC),
+    NumCalle: form.NumC,
     Fk_Personal_Turnado: parseInt(form.Fk_Personal_Turnado)
   };
 

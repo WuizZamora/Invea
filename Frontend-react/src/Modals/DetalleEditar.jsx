@@ -21,17 +21,22 @@ const DetalleEditar = ({
 
         return (
           <li key={clave}>
-            <strong>{mostrarNombreCampo(clave)}:</strong>{" "}
+            <div className="col-sm-2">
+            <strong>{mostrarNombreCampo(clave)}:</strong>
+            </div>
+            {" "}
             {camposNoEditables.includes(clave) ? (
               <span>{valor}</span>
             ) : clave === "FechaIn" ? (
-              <input
-                type="datetime-local"
-                value={
-                  valor ? new Date(valor).toISOString().slice(0, 16) : ""
-                }
-                onChange={(e) => handleChange(clave, e.target.value)}
-              />
+              <div className="col-sm-2">
+                <input
+                  type="datetime-local"
+                  value={
+                    valor ? new Date(valor).toISOString().slice(0, 16) : ""
+                  }
+                  onChange={(e) => handleChange(clave, e.target.value)}
+                />
+              </div>
             ) : camposSelectPersonal.includes(clave) ? (
               loadingPersonal ? (
                 <span>Cargando opciones...</span>
