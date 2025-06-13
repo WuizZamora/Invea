@@ -1,6 +1,5 @@
 body {
-  margin: 0;
-  padding: 0%;
+  padding-top: 4rem;
   font-family: sans-serif;
   color: rgb(0, 0, 0);
 }
@@ -12,21 +11,9 @@ body {
   padding: 0.1rem;
 }
 
-.form-card input{
-  backdrop-filter: blur(10px);
-  border-radius: 1rem;
-  padding: 1em;
-  width: 30vw;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  color: black;
-}
 
-
-.form-card h2 {
-  margin-bottom: 1.5rem;
+.form-card h4 {
+  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -38,55 +25,40 @@ form label {
 
 form input,
 form textarea{
-  flex: 1;
   width: 100%;
   padding: 0.75rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   border: none;
   border-radius: 0.5rem;
   font-size: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
+
+form textarea{
+  height: rem;
+}
 .select-remitente, select, form option{
   border-radius: 0.5rem;
   color: black;
   border: none;
-  height: 70%;
-  width: 30rem;
+  padding: 0.3rem;
+  margin-bottom: 0.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 .select-alcaldia{
   width: 20rem;
 }
 
-#NumDVSC, #CP, #NumC, #date{
-  flex: 0.25;
-}
 
 form input::placeholder,
 form textarea::placeholder {
   color: black;
 }
 
-.input-row {
-  display: flex;
-  gap: 10px; /* Espacio entre los inputs */
-  margin-bottom: 10px;
-  height: 60px;
-}
-
-.input-row input {
-  flex: 1; /* Para que se repartan el espacio por igual */
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  border: none;
-  color: black;
-}
-
 
 .save-button {
   width: 10rem;
-  padding: 0.75rem;
+  padding: 1rem;
   border: none;
   border-radius: 0.5rem;
   background-color: #9f2241;
@@ -104,4 +76,10 @@ form textarea::placeholder {
 
 button:hover {
   background-color: #7c142e;
+}
+
+.save{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }

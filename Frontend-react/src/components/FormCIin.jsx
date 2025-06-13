@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/White.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; 
 import Tabla from "./TablaCorrespodencia";
 import useSelectObtenerPersonal from "../hooks/SelectObtenerPersonal";
 import Select from 'react-select';
@@ -10,6 +12,9 @@ import useDireccionPorAlcaldia from "../hooks/AlcaldiaIinput";
 const FormIn = () => {
   // Obtener opciones de personal
   const { opcionesPersonal, loading: loadingPersonal } = useSelectObtenerPersonal();
+  
+  const [Otro, setOtro] = useState(false);
+  const opcionesConOtro = [...opcionesPersonal, {label: "OTRO", value: "0"}]
   
   // Usar solo el hook de alcaldía
   const {
@@ -35,11 +40,40 @@ const FormIn = () => {
     label: colonia
   }));
 
+  const opcionesAsunto = [
+    { value: "REMITE INFORMACIÓN", label: "REMITE INFORMACIÓN" },
+    { value: "SOLICITA INSPECCIÓN OCULAR", label: "SOLICITA INSPECCIÓN OCULAR" },
+    { value: "SOLICITA VISITA DE VERIFICACIÓN", label: "SOLICITA VISITA DE VERIFICACIÓN" },
+    { value: "REPOSICIÓN DE SELLOS DE CLAUSURA", label: "REPOSICIÓN DE SELLOS CLAUSURA" },
+    { value: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES", label: "REPOSICIÓN DE SELLOS MEDIDAS CAUTELARES" },
+  ];
+
+  const opcionesMotivo = [
+    { value: "ATENCIÓN CIUDADANA", label: "ATENCIÓN CIUDADANA" },
+    { value: "ANUNCIOS", label: "ANUNCIOS" },
+    { value: "AUDIENCIA CIUDADANA", label: "AUDIENCIA CIUDADANA" },
+    { value: "CASA POR CASA", label: "CASA POR CASA" },
+    { value: "INTERNOS", label: "INTERNOS" },
+    { value: "REMITE INFORMACIÓN", label: "REMITE INFORMACIÓN" },
+    { value: "MEDIOS DIGITALES", label: "MEDIOS DIGITALES" },
+    { value: "OFICIALIA DE PARTES", label: "OFICIALIA DE PARTES" },
+    { value: "PAOT", label: "PAOT" },
+  ];
+
+  const opcionesCaracter = [
+    { value: "ORDINARIO", label: "ORDINARIO" },
+    { value: "URGENTE", label: "URGENTE" },
+  ];
+
+
   const [form, setForm] = useState({
     NumDVSC: "",
     date: new Date().toISOString().slice(0, 16),
     oficio: "",
     Fk_Personal_Remitente: "",
+    Nombre: "",
+    Cargo:"",
+    Dependencia: "",
     descripcion: "",
     calle: "",
     NumC: "",
@@ -74,165 +108,253 @@ const FormIn = () => {
 
     <div className="form-container">
       <div className="form-card">
-        <h2>Correspondencia Interna Entrada</h2>
+        <h4>Captura de Correspondencia Interna</h4>
         <form onSubmit={onSubmit}>
-          <div className="input-row">
-            <label htmlFor="NumDVSC">#DVSC:</label>
-            <input type="number" id="NumDVSC" name="NumDVSC" className="form-item" value={form.NumDVSC}
-              onChange={handleChange} />
 
-            <label htmlFor="date">Fecha de Recepción:</label>
-            <input type="datetime-local" id="date" name="date" value={form.date} onChange={handleChange} />
+          <div className="row">
+            <div className="col-md-1">
+              <label htmlFor="NumDVSC">#DVSC:</label>
+              <input type="number" id="NumDVSC" name="NumDVSC" className="form-item" value={form.NumDVSC}
+                onChange={handleChange} />
+            </div>
 
-            <label htmlFor="Oficio">Oficio:</label>
-            <input type="text" id="Oficio" name="oficio" value={form.oficio} onChange={handleChange} />
+            <div className="col-md-3">
+              <label htmlFor="date">Fecha de Captura:</label>
+              <input type="datetime-local" id="date" name="date" value={form.date} onChange={handleChange} />
+            </div>
+
+            <div className="col-md-5">
+              <label htmlFor="Oficio">Oficio:</label>
+              <input type="text" id="Oficio" name="oficio" value={form.oficio} onChange={handleChange} />
+            </div>
+            <div className="col-md-3">
+              <label>Remitente:</label>
+              <Select
+                options={opcionesConOtro}
+                value={opcionesConOtro.find(op => op.value === form.Fk_Personal_Remitente)}
+                onChange={(selected) => {
+                  const value = selected ? selected.value : "";
+                  setForm(prev => ({
+                    ...prev,
+                    Fk_Personal_Remitente: value,
+                    ...(value !== "0" && {
+                      Nombre: "",
+                      Cargo: "",
+                      Dependencia: ""
+                    })
+                  }));
+                  setOtro(value === "0");
+                }}
+                isLoading={loadingPersonal}
+                placeholder="Buscar remitente..."
+                isSearchable
+                className="select-remitente"
+              />
+            </div>
           </div>
 
           {/* CAMPO REMITENTE (REEMPLAZAR) */}
-          <div className="input-row">
-            <label>Remitente:</label>
-            <Select
-              options={opcionesPersonal}
-              value={opcionesPersonal.find(op => op.value === form.Fk_Personal_Remitente)}
-              onChange={(selected) =>
-                setForm(prev => ({
-                  ...prev,
-                  Fk_Personal_Remitente: selected ? selected.value : ""
-                }))
-              }
-              isLoading={loadingPersonal}
-              placeholder="Buscar remitente..."
-              isSearchable
-              className="select-remitente"
-              classNamePrefix="react-select"
-            />
+          <div className="row">
+            
+            {Otro && (
+              <>
+                <div className="col-md-3">
+                  <label htmlFor="Nombre">Nombre:</label>
+                  <input
+                    type="text"
+                    id="Nombre"
+                    name="Nombre"
+                    value={form.Nombre}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-3">
+                  <label htmlFor="Cargo">Cargo:</label>
+                  <input
+                    type="text"
+                    id="Cargo"
+                    name="Cargo"
+                    value={form.Cargo}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-2">
+                  <label htmlFor="Dependencia">Dependencia:</label>
+                  <input
+                    type="text"
+                    id="Dependencia"
+                    name="Dependencia"
+                    value={form.Dependencia}
+                    onChange={handleChange}
+                  />
+                </div>
+              </>
 
-            <label htmlFor="Asunto">Asunto:</label>
-            <select id="Asunto" name="Asunto" value={form.Asunto} onChange={handleChange}>
-              <option></option>
-              <option value="REMITE INFORMACIÓN">REMITE INFORMACIÓN</option>
-              <option value="SOLICITA INSPECCIÓN OCULAR">SOLICITA INSPECCIÓN OCULAR</option>
-              <option value="SOLICITA VISITA DE VERIFICACIÓN">SOLICITA VISITA DE VERIFICACIÓN</option>
-              <option value="REPOSICIÓN DE SELLOS DE CLAUSURA">REPOSICIÓN DE SELLOS CLAUSURA</option>
-              <option value="REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES">REPOSICIÓN DE SELLOS MEDIDAS CAUTELARES</option>
-            </select>
-
+            )}
           </div>
-
-          <div className="input-row">
-            <label htmlFor="Descripcion">Descripción:</label>
-            <textarea id="Descripcion" name="descripcion" value={form.descripcion} onChange={handleChange} />
-
-            <label htmlFor="Motivo">Motivo:</label>
-            <select id="Motivo" name="Motivo" value={form.Motivo} onChange={handleChange}>
-              <option></option>
-              <option value="ATENCIÓN CIUDADANA">ATENCIÓN CIUDADANA</option>
-              <option value="AUDIENCIA CIUDADANA">AUDIENCIA CIUDADANA</option>
-              <option value="CASA POR CASA">CASA POR CASA</option>
-              <option value="INTERNOS">INTERNOS</option>
-              <option value="REMITE INFORMACIÓN">REMITE INFORMACIÓN</option>
-              <option value="MEDIOS DIGITALES">MEDIOS DIGITALES</option>
-              <option value="OFICIALIA DE PARTES">OFICIALIA DE PARTES</option>
-            </select>
-
-            <label htmlFor="Caracter">Caracter:</label>
-            <select id="Caracter" name="Caracter" value={form.Caracter} onChange={handleChange}>
-              <option></option>
-              <option value="ORDINARIO">ORDINARIO</option>
-              <option value="URGENTE">URGENTE</option>
-            </select>
+          
+          <div className="row">
+            <div className="col-md-3">
+              <label>Asunto:</label>
+              <Select
+                options={opcionesAsunto}
+                value={opcionesAsunto.find(op => op.value === form.Asunto)}
+                onChange={(selected) =>
+                  setForm(prev => ({
+                    ...prev,
+                    Asunto: selected ? selected.value : ""
+                  }))
+                }
+                placeholder="Selecciona un asunto"
+                className="select-remitente"
+                classNamePrefix="react-select"
+              />
+            </div>
+            <div className="col-md-4">
+              <label>Motivo:</label>
+              <Select
+                options={opcionesMotivo}
+                value={opcionesMotivo.find(op => op.value === form.Motivo)}
+                onChange={(selected) =>
+                  setForm(prev => ({
+                    ...prev,
+                    Motivo: selected ? selected.value : ""
+                  }))
+                }
+                placeholder="Selecciona un motivo"
+                className="select-remitente"
+                classNamePrefix="react-select"
+              />
+            </div>
+            <div className="col-md-4">
+              <label>Caracter:</label>
+              <Select
+                options={opcionesCaracter}
+                value={opcionesCaracter.find(op => op.value === form.Caracter)}
+                onChange={(selected) =>
+                  setForm(prev => ({
+                    ...prev,
+                    Caracter: selected ? selected.value : ""
+                  }))
+                }
+                placeholder="Selecciona un caracter"
+                className="select-remitente"
+                classNamePrefix="react-select"
+              />
+            </div>
           </div>
-
-          <div className="input-row">
-            <label htmlFor="Alcaldia">Alcaldía:</label>
-            <Select
-              id="Alcaldia"
-              name="Alcaldia"
-              options={opcionesAlcaldias}
-              value={opcionesAlcaldias.find(op => op.value === selectedAlcaldia)}
-              onChange={(selected) => {
-                setSelectedAlcaldia(selected ? selected.value : "");
-                setSelectedColonia(""); // Resetear colonia al cambiar alcaldía
-              }}
-              placeholder="Buscar alcaldía..."
-              isSearchable
-              isLoading={loading}
-              noOptionsMessage={() => "No se encontraron alcaldías"}
-              className="react-select-container"
-              classNamePrefix="react-select"
-            />
-
-            <label htmlFor="Colonia">Colonia:</label>
-            <Select
-              id="Colonia"
-              name="Colonia"
-              options={opcionesColonias}
-              value={opcionesColonias.find(op => op.value === selectedColonia)}
-              onChange={(selected) => {
-                setSelectedColonia(selected ? selected.value : "");
-              }}
-              placeholder={selectedAlcaldia ? "Buscar colonia..." : "Primero selecciona alcaldía"}
-              isSearchable
-              isLoading={loading}
-              isDisabled={!selectedAlcaldia}
-              noOptionsMessage={() => "No se encontraron colonias"}
-              className="react-select-container"
-              classNamePrefix="react-select"
-            />
-
-            <label htmlFor="CP">Código Postal:</label>
-            <input
-              type="text"
-              id="CP"
-              name="CP"
-              value={cp}
-              readOnly
-            />
+          <div className="row">
+            <div className="col-md-3">
+              <label htmlFor="Alcaldia">Alcaldía:</label>
+              <Select
+                id="Alcaldia"
+                name="Alcaldia"
+                options={opcionesAlcaldias}
+                value={opcionesAlcaldias.find(op => op.value === selectedAlcaldia)}
+                onChange={(selected) => {
+                  setSelectedAlcaldia(selected ? selected.value : "");
+                  setSelectedColonia(""); // Resetear colonia al cambiar alcaldía
+                }}
+                placeholder="Buscar alcaldía..."
+                isSearchable
+                isLoading={loading}
+                noOptionsMessage={() => "No se encontraron alcaldías"}
+                className="select-remitente"
+              />
+            </div>
+            <div className="col-md-3">
+              <label htmlFor="Colonia">Colonia:</label>
+              <Select
+                id="Colonia"
+                name="Colonia"
+                options={opcionesColonias}
+                value={opcionesColonias.find(op => op.value === selectedColonia)}
+                onChange={(selected) => {
+                  setSelectedColonia(selected ? selected.value : "");
+                }}
+                placeholder={selectedAlcaldia ? "Buscar colonia..." : "Primero selecciona alcaldía"}
+                isSearchable
+                isLoading={loading}
+                isDisabled={!selectedAlcaldia}
+                noOptionsMessage={() => "No se encontraron colonias"}
+                className="select-remitente"
+              />
+            </div>
+            <div className="col-md-2">
+              <label htmlFor="CP">Código Postal:</label>
+              <input
+                type="text"
+                id="CP"
+                name="CP"
+                value={cp}
+                readOnly
+              />
+            </div>
 
             {loading && <p>Cargando datos...</p>}
 
-            <label htmlFor="Calle">Calle:</label>
-            <input type="text" id="Calle" name="calle" value={form.calle} onChange={handleChange}/>
-            
-            <label htmlFor="NumC">#:</label>
-            <input type="number" id="NumC" name="NumC" value={form.NumC} onChange={handleChange}/>
+            <div className="col-md-3">
+              <label htmlFor="Calle">Calle:</label>
+              <input type="text" id="Calle" name="calle" value={form.calle} onChange={handleChange}/>
+            </div>
+
+            <div className="col-md-1">
+              <label htmlFor="NumC">#:</label>
+              <input type="text" id="NumC" name="NumC" value={form.NumC} onChange={handleChange}/>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-7">
+              <label htmlFor="Descripcion">Descripción:</label>
+              <textarea id="Descripcion" name="descripcion" value={form.descripcion} onChange={handleChange} />
+            </div>
+                        <div className="col-md-5">
+              <label>Turnado:</label>
+              <Select
+                options={opcionesPersonal}
+                value={opcionesPersonal.find(op => op.value === form.Fk_Personal_Turnado)}
+                onChange={(selected) =>
+                  setForm(prev => ({
+                    ...prev,
+                    Fk_Personal_Turnado: selected ? selected.value : ""
+                  }))
+                }
+                isLoading={loadingPersonal}
+                placeholder="Buscar turnado..."
+                isSearchable
+                className="select-remitente"
+                classNamePrefix="react-select"
+              />
+            </div>
           </div>
 
-          <div className="input-row">
-            <label>Turnado:</label>
-            <Select
-              options={opcionesPersonal}
-              value={opcionesPersonal.find(op => op.value === form.Fk_Personal_Turnado)}
-              onChange={(selected) =>
-                setForm(prev => ({
-                  ...prev,
-                  Fk_Personal_Turnado: selected ? selected.value : ""
-                }))
+          <div className="row">
+
+            <div className="save">
+              <button type="submit"
+                className="save-button"
+                disabled={
+                !form.NumDVSC ||
+                !form.date ||
+                !form.oficio ||
+                !form.descripcion ||
+                !form.Asunto ||
+                !form.Motivo ||
+                !form.Caracter ||
+                !form.calle ||
+                !form.NumC ||
+                !form.Fk_Personal_Remitente ||
+                !form.Fk_Personal_Turnado ||
+                (Otro && (
+                  !form.Nombre ||
+                  !form.Cargo ||
+                  !form.Dependencia
+                ))
               }
-              isLoading={loadingPersonal}
-              placeholder="Buscar turnado..."
-              isSearchable
-              className="select-remitente"
-              classNamePrefix="react-select"
-            />
-          </div>
+              >Guardar</button>
+            </div>
 
-          <button type="submit"
-            className="save-button"
-            disabled={
-            !form.NumDVSC ||
-            !form.date ||
-            !form.oficio ||
-            !form.descripcion ||
-            !form.Asunto ||
-            !form.Motivo ||
-            !form.Caracter ||
-            !form.calle ||
-            !form.NumC ||
-            !form.Fk_Personal_Remitente ||
-            !form.Fk_Personal_Turnado
-           }
-          >Guardar</button>
+          </div>
         </form>
       </div>
       <Tabla />

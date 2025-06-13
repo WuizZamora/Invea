@@ -6,6 +6,9 @@ export const handleFormSubmit = async (form, direccionID) => {
     FechaIn: new Date(form.date).toISOString().slice(0, 19).replace("T", " "),
     Oficio: form.oficio,
     Fk_Personal_Remitente: parseInt(form.Fk_Personal_Remitente),
+    Nombre: form.Nombre,
+    Cargo: form.Cargo,
+    Dependencia: form.Dependencia,
     Asunto: form.Asunto,
     Descripcion: form.descripcion,
     Motivo: form.Motivo,
@@ -13,8 +16,7 @@ export const handleFormSubmit = async (form, direccionID) => {
     Fk_Direccion_IDAdress: direccionID,
     Calle: form.calle,
     NumCalle: parseInt(form.NumC),
-    Fk_Personal_Turnado: parseInt(form.Fk_Personal_Turnado),
-    SoporteDocumental: ""
+    Fk_Personal_Turnado: parseInt(form.Fk_Personal_Turnado)
   };
 
   try {

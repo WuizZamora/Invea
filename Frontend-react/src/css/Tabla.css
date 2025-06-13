@@ -60,11 +60,7 @@ form button:hover {
   background-color: #7c142e;
 }
 
-/* Estilos para el filtro */
-.filtro-container {
-  margin: 0 1rem 0 1rem;
-  width: 50rem
-}
+
 
 .filtro-input {
   width: 100%;
@@ -178,4 +174,11 @@ form button:hover {
   max-height: 80%;
   overflow-y: auto;
   width: 400px;
+}
+
+.contenedor-filas-por-pagina {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.6rem;
 }

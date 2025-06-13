@@ -11,7 +11,7 @@ const Tabla = () => {
   const { datos: datosOriginales, loading } = useCorrespondencia();
   const [datosFiltrados, setDatosFiltrados] = useState(null);
   const [paginaActual, setPaginaActual] = useState(1);
-  const resultadosPorPagina = 10;
+  const [resultadosPorPagina, setResultadosPorPagina] = useState(10);
 
   // Datos a mostrar - importante el orden de las condiciones
   const datosMostrar = datosFiltrados === null ? datosOriginales : 
@@ -53,12 +53,33 @@ const Tabla = () => {
 
   return (
     <div className="table-card">
-      <h2>Tabla de Registros</h2>
-      
-      <FiltroCorrespondencia 
-        datos={datosOriginales} 
-        onFiltrar={handleFiltrar} 
-      />
+      <h4>Tabla de Registros</h4>
+      <div className="row">
+        <div className="col-md-7">
+          <FiltroCorrespondencia 
+            datos={datosOriginales} 
+            onFiltrar={handleFiltrar} 
+          />
+        </div>
+          <div className="col-md-5">
+          <div className="contenedor-filas-por-pagina">
+            <label htmlFor="filasPorPagina">Filas por página:</label>
+            <select
+              id="filasPorPagina"
+              value={resultadosPorPagina}
+              onChange={(e) => {
+                setResultadosPorPagina(parseInt(e.target.value));
+                setPaginaActual(1); // reinicia la paginación
+              }}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={15}>15</option>
+              <option value={20}>20</option>
+            </select>
+          </div>
+        </div>
+      </div>
       
       <div className="table-container">
         {datosMostrar.length === 0 ? (
@@ -132,16 +153,26 @@ const Tabla = () => {
             Anterior
           </button>
           
-          {Array.from({ length: totalPaginas }, (_, i) => i + 1).map(num => (
-            <button
-              key={num}
-              onClick={() => cambiarPagina(num)}
-              className={paginaActual === num ? 'active' : ''}
-            >
-              {num}
-            </button>
-          ))}
-          
+        {Array.from({ length: totalPaginas }, (_, i) => i + 1)
+          .filter(num => 
+            num === 1 || 
+            num === totalPaginas || 
+            Math.abs(num - paginaActual) <= 2
+          )
+          .map((num, i, arr) => {
+            const prevNum = arr[i - 1];
+            return (
+              <React.Fragment key={num}>
+                {prevNum && num - prevNum > 1 && <span className="ellipsis">...</span>}
+                <button
+                  onClick={() => cambiarPagina(num)}
+                  className={paginaActual === num ? 'active' : ''}
+                >
+                  {num}
+                </button>
+              </React.Fragment>
+            );
+          })}
           <button 
             onClick={() => cambiarPagina(paginaActual + 1)} 
             disabled={paginaActual === totalPaginas}
