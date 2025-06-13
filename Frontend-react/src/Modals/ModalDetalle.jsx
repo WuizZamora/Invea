@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Detalle.css";
 import useSelectObtenerPersonal from "../hooks/SelectObtenerPersonal";
+import useSelectPersonalTurnado from "../hooks/SelectPersonalTurnado";
 import DetalleVisual from "./DetalleVIsual";
 import DetalleEditar from "./DetalleEditar";
 import { updateCorrespondencia } from "../hooks/updateCorrespondencia";
@@ -16,6 +17,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
   const camposSelectPersonal = ["Remitente", "Turnado"];
 
   const { opcionesPersonal, loading: loadingPersonal } = useSelectObtenerPersonal();
+  const { opcionesTurnado, loading: loadingTurnado } = useSelectPersonalTurnado();
 
   const handleGuardar = async () => {
     const confirmar = window.confirm("¿Estás seguro de que deseas actualizar los datos?");
@@ -49,9 +51,9 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
   : ["", ""];
 
   useEffect(() => {
-    if (editMode && opcionesPersonal.length > 0) {
-      const findIdByName = (nombre) => {
-        const match = opcionesPersonal.find(p => p.label === nombre);
+    if (editMode && opcionesPersonal.length > 0 && opcionesTurnado.length > 0) {
+      const findIdByName = (nombre, opciones) => {
+        const match = opciones.find(p => p.label === nombre);
         return match ? match.value : "";
       };
 
@@ -59,11 +61,11 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
         ...item,
         Calle: calle,
         NumCalle: numCalle,
-        Remitente: findIdByName(item.Remitente),
-        Turnado: findIdByName(item.Turnado),
+        Remitente: findIdByName(item.Remitente, opcionesPersonal),
+        Turnado: findIdByName(item.Turnado, opcionesTurnado),
       });
     }
-  }, [editMode, item, opcionesPersonal]);
+  }, [editMode, item, opcionesPersonal, opcionesTurnado]);
 
   const opcionesSelect = {
     Asunto: [
@@ -108,6 +110,8 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
             opcionesSelect={opcionesSelect}
             opcionesPersonal={opcionesPersonal}
             loadingPersonal={loadingPersonal}
+            opcionesTurnado={opcionesTurnado}
+            loadingTurnado={loadingTurnado}
             mostrarNombreCampo={mostrarNombreCampo}
           />
         ) : (

@@ -314,7 +314,7 @@ const FormIn = () => {
               <label>Turnado:</label>
               <Select
                 options={opcionesTurnado}
-                value={opcionesTurnado.find(op => op.value === form.Fk_Personal_Turnado)}
+                value={opcionesTurnado?.find(op => op.value === form.Fk_Personal_Turnado)}
                 onChange={(selected) =>
                   setForm(prev => ({
                     ...prev,

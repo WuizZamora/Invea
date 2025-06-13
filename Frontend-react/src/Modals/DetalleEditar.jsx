@@ -12,13 +12,14 @@ const DetalleEditar = ({
   opcionesSelect,
   opcionesPersonal,
   loadingPersonal,
+  opcionesTurnado,
+  loadingTurnado,
   mostrarNombreCampo
 }) => {
   return (
     <ul>
       {Object.entries(formData).map(([clave, valor]) => {
         if (camposOcultos.includes(clave) || clave === "Direccion" || clave === "Cargo") return null;
-
         return (
           <li key={clave}>
             <div className="col-sm-2">
@@ -38,22 +39,36 @@ const DetalleEditar = ({
                 />
               </div>
             ) : camposSelectPersonal.includes(clave) ? (
-              loadingPersonal ? (
-                <span>Cargando opciones...</span>
-              ) : (
-                <Select
-                  value={
-                    opcionesPersonal.find(opt => opt.value === valor) || null
-                  }
-                  onChange={(selected) =>
-                    handleChange(clave, selected ? selected.value : "")
-                  }
-                  options={opcionesPersonal}
-                  placeholder="Seleccione una persona..."
-                  isClearable
-                />
-              )
-            ) : camposSelect.includes(clave) ? (
+              clave === "Remitente" ? (
+                loadingPersonal ? (
+                  <span>Cargando opciones...</span>
+                ) : (
+                  <Select
+                    value={opcionesPersonal.find(opt => opt.value === valor) || null}
+                    onChange={(selected) =>
+                      handleChange(clave, selected ? selected.value : "")
+                    }
+                    options={opcionesPersonal}
+                    placeholder="Seleccione un remitente..."
+                    isClearable
+                  />
+                )
+              ) : clave === "Turnado" ? (
+                loadingTurnado ? (
+                  <span>Cargando opciones...</span>
+                ) : (
+                  <Select
+                    value={opcionesTurnado.find(opt => opt.value === valor) || null}
+                    onChange={(selected) =>
+                      handleChange(clave, selected ? selected.value : "")
+                    }
+                    options={opcionesTurnado}
+                    placeholder="Seleccione un turnado..."
+                    isClearable
+                  />
+                )
+              ) : null
+            ): camposSelect.includes(clave) ? (
               <Select
                 className="mi-select"
                 classNamePrefix="mi-select"

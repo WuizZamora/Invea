@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const useSelectPersonalTurnado = () => {
-    const [opcionesPersonal, setOpcionesPersonal] = useState([]);
+    const [opcionesTurnado, setOpcionesTurnado] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -23,13 +23,13 @@ const useSelectPersonalTurnado = () => {
                 // Mapea los datos usando las propiedades correctas
                 const opciones = result.data.map(persona => ({
                     value: persona.Pk_IDPersonalTurnado,
-                    label: `${persona.Iniciales} - ${persona.Lcp}`,
+                    label: `${persona.Iniciales}-${persona.Lcp}`,
                 }));
 
-                setOpcionesPersonal(opciones);
+                setOpcionesTurnado(opciones);
             } catch (error) {
                 console.error("Error fetching personal:", error);
-                setOpcionesPersonal([]);
+                setOpcionesTurnado([]);
             } finally {
                 setLoading(false);
             }
@@ -38,7 +38,7 @@ const useSelectPersonalTurnado = () => {
         fetchPersonal();
     }, []);
 
-    return { opcionesPersonal, loading };
+    return { opcionesTurnado, loading };
 };
 
 export default useSelectPersonalTurnado;
