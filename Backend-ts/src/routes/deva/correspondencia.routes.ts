@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { devaPool } from '../../config/db';
+import { devaPool} from '../../config/db';
 import { Console } from 'console';
 import { isConditionalExpression } from 'typescript';
 
@@ -30,6 +30,7 @@ router.get('/entrada', async (req, res) => {
     res.json({ data: rows });
   } catch (error) {
     res.status(500).json({ error: 'Error en la base de datos' });
+    console.log(error)
   }
 });
 
