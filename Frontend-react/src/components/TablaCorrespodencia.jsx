@@ -8,7 +8,7 @@ import  ModalDetalle from "../Modals/ModalDetalle";
 import useDetalleOficio from "../hooks/useDetalleOficio";
 
 const Tabla = () => {
-  const { datos: datosOriginales, loading } = useCorrespondencia();
+  const { datos: datosOriginales, loading, refetch } = useCorrespondencia();
   const [datosFiltrados, setDatosFiltrados] = useState(null);
   const [paginaActual, setPaginaActual] = useState(1);
   const [resultadosPorPagina, setResultadosPorPagina] = useState(10);
@@ -126,13 +126,13 @@ const Tabla = () => {
                         </a>
                           <DeletePDFButton
                             id={item.Pk_IDCorrespondenciaIn}
-                            onDeleteSuccess={() => window.location.reload()} // o actualizar estado
+                            onDeleteSuccess={refetch}
                           />
                       </div>
                     ) : (
                       <UploadPDFButton
                         id={item.Pk_IDCorrespondenciaIn}
-                        onUploadSuccess={() => window.location.reload()} // o actualizar estado
+                        onUploadSuccess={refetch}
                       />
                     )}
                   </td>

@@ -123,6 +123,7 @@ form button:hover {
   cursor: pointer;
   border-radius: 4px;
   width: 1.5%;
+  display: flex;
   justify-content: center;
 
 }

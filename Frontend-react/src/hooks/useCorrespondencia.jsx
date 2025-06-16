@@ -1,25 +1,30 @@
-// src/hooks/useCorrespondencia.js
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const useCorrespondencia = () => {
   const [datos, setDatos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const url = `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/obtener-correspondencia`;
+  const fetchDatos = useCallback(async () => {
+    setLoading(true);
+    try {
+      const url = `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/obtener-correspondencia`;
 
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        setDatos(res.data[0]);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error al obtener correspondencia:", err);
-        setLoading(false);
-      });
+      const res = await fetch(url);
+      const json = await res.json();
+      setDatos(json.data[0]);
+    } catch (err) {
+      console.error("Error al obtener correspondencia:", err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
-  return { datos, loading };
+
+  // Cargar al montar el componente
+  useEffect(() => {
+    fetchDatos();
+  }, [fetchDatos]);
+
+  return { datos, loading, refetch: fetchDatos };
 };
 
 export default useCorrespondencia;

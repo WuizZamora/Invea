@@ -3,19 +3,21 @@ import React, { useState, useEffect, useCallback } from "react";
 const FiltroCorrespondencia = ({ datos, onFiltrar }) => {
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
 
-  // Función de filtrado memoizada
+    // Función de filtrado memoizada
   const filtrarDatos = useCallback((terminos, datos) => {
+    if (!Array.isArray(datos)) return []; // ← Previene errores si datos no es array
+    
+    const normalize = (text) => 
+      (text || "").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
     let resultados = [...datos];
     
     terminos.forEach(termino => {
       if (!termino) return;
       
       resultados = resultados.filter(item => {
-        const normalize = (text) => 
-          text?.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        
         const terminoNormalizado = normalize(termino);
-        
+          
         return (
           normalize(item.NumDVSC).includes(terminoNormalizado) ||
           normalize(item.Oficio).includes(terminoNormalizado) ||
@@ -26,6 +28,7 @@ const FiltroCorrespondencia = ({ datos, onFiltrar }) => {
           normalize(item.Descripcion).includes(terminoNormalizado) 
         );
       });
+      console.log("Resultados parciales:", resultados);
     });
     
     return resultados;

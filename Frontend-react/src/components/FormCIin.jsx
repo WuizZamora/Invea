@@ -9,6 +9,8 @@ import Select from 'react-select';
 import { handleFormSubmit } from "../hooks/formSubmit";
 import useDireccionPorAlcaldia from "../hooks/AlcaldiaIinput";
 import useSelectPersonalTurnado from "../hooks/SelectPersonalTurnado";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const FormIn = () => {
   // Obtener opciones de personal
@@ -360,6 +362,18 @@ const FormIn = () => {
         </form>
       </div>
       <Tabla />
+      <ToastContainer 
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 };

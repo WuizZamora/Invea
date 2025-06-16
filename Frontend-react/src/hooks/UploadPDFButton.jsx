@@ -1,10 +1,10 @@
-import React from "react";
+import { toast } from "react-toastify";
 
 const UploadPDFButton = ({ id, onUploadSuccess }) => {
   const handleUpload = async (e) => {
     const file = e.target.files[0];
     if (!file || file.type !== "application/pdf") {
-      alert("Por favor selecciona un archivo PDF válido.");
+      toast.error("Por favor selecciona un archivo PDF válido.");
       return;
     }
 
@@ -20,14 +20,14 @@ const UploadPDFButton = ({ id, onUploadSuccess }) => {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Archivo subido exitosamente");
-        onUploadSuccess?.(); // Notifica al padre
+        toast.success("Archivo subido exitosamente");
+        onUploadSuccess?.(); // <- aquí se hace el refetch
       } else {
-        alert("Error: " + data.error);
+        toast.error("Error: " + data.error);
       }
     } catch (err) {
       console.error(err);
-      alert("Error al subir el archivo");
+      toast.error("Error al subir el archivo");
     }
   };
 

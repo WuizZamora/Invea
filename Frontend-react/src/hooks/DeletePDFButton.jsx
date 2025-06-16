@@ -1,29 +1,27 @@
-import React from "react";
+import { toast } from "react-toastify";
 
 const DeletePDFButton = ({ id, onDeleteSuccess }) => {
   const handleDelete = async () => {
-    const confirmacion = confirm("¿Estás seguro de que quieres eliminar el archivo PDF?");
+    const confirmacion = window.confirm("¿Estás seguro de que quieres eliminar el archivo PDF?");
     if (!confirmacion) return;
 
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/borrar-soporte/${id}`,
-        {
-          method: "DELETE",
-        }
+        { method: "DELETE" }
       );
 
       const data = await res.json();
 
       if (res.ok) {
-        alert("Archivo eliminado exitosamente");
-        onDeleteSuccess?.(); // Notifica al padre para refrescar
+        toast.success("Archivo eliminado exitosamente");
+        onDeleteSuccess?.(); // <- aquí se hace el refetch
       } else {
-        alert("Error: " + data.error);
+        toast.error("Error: " + data.error);
       }
     } catch (err) {
       console.error(err);
-      alert("Error al eliminar el archivo");
+      toast.error("Error al eliminar el archivo");
     }
   };
 
@@ -33,5 +31,4 @@ const DeletePDFButton = ({ id, onDeleteSuccess }) => {
     </button>
   );
 };
-
 export default DeletePDFButton;
