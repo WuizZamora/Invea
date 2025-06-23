@@ -19,7 +19,7 @@ const FormIn = () => {
   const [Otro, setOtro] = useState(false);
   const opcionesConOtro = [...opcionesPersonal, {label: "OTRO", value: "0"}]
  // Cantidad de caracteres para la Descripciòn
-  const DESCRIPCION_MAX = 450;
+  const DESCRIPCION_MAX = 255;
   
   // Usar solo el hook de alcaldía
   const {
@@ -180,7 +180,7 @@ const FormIn = () => {
               <input type="datetime-local" id="date" name="date" value={form.date} onChange={handleChange} />
             </div>
 
-            <div className="col-md-5">
+            <div className="col-md-4">
               <label htmlFor="Oficio">Oficio:</label>
               <input type="text" id="Oficio" name="oficio" value={form.oficio} maxLength={45} onChange={handleChange} />
             </div>

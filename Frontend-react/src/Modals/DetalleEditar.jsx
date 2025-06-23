@@ -22,20 +22,44 @@ const DetalleEditar = ({
         if (camposOcultos.includes(clave) || clave === "Direccion" || clave === "Cargo") return null;
         return (
           <li key={clave}>
-            <div className="col-sm-2">
+            <div>
             <strong>{mostrarNombreCampo(clave)}:</strong>
             </div>
             {" "}
             {camposNoEditables.includes(clave) ? (
               <span>{valor}</span>
             ) : clave === "FechaIn" ? (
-              <div className="col-sm-2">
+              <div>
                 <input
                   type="datetime-local"
                   value={
                     valor ? new Date(valor).toISOString().slice(0, 16) : ""
                   }
                   onChange={(e) => handleChange(clave, e.target.value)}
+                />
+              </div>
+            ):clave === "NumDVSC" && valor ? (
+              <div>
+                <input
+                  type="text"
+                  maxLength={7}
+                  value={valor ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    handleChange(clave, value);
+                  }}
+                />
+              </div>
+            ) : clave === "NumDEVA" && valor ? (
+              <div>
+                <input
+                  type="text"
+                  maxLength={7}
+                  value={valor ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    handleChange(clave, value);
+                  }}
                 />
               </div>
             ) : camposSelectPersonal.includes(clave) ? (
