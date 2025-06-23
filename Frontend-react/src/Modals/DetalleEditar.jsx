@@ -22,8 +22,8 @@ const DetalleEditar = ({
         if (
           camposOcultos.includes(clave) ||
           clave === "Direccion" ||
-          clave === "Cargo" ||
-          ((clave === "NumDVSC" || clave === "NumDEVA") && !valor)
+          clave === "Cargo" 
+          // || ((clave === "NumDVSC" || clave === "NumDEVA") && !valor)
         ) return null;
         return (
           <li key={clave}>
@@ -43,7 +43,7 @@ const DetalleEditar = ({
                   onChange={(e) => handleChange(clave, e.target.value)}
                 />
               </div>
-            ):clave === "NumDVSC" && valor ? (
+            ):clave === "NumDVSC" ? (
               <div>
                 <input
                   type="text"
@@ -55,7 +55,7 @@ const DetalleEditar = ({
                   }}
                 />
               </div>
-            ) : clave === "NumDEVA" && valor ? (
+            ) : clave === "NumDEVA" ? (
               <div>
                 <input
                   type="text"
