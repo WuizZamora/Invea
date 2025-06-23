@@ -18,8 +18,8 @@ const FormIn = () => {
   
   const [Otro, setOtro] = useState(false);
   const opcionesConOtro = [...opcionesPersonal, {label: "OTRO", value: "0"}]
-
-  const DESCRIPCION_MAX = 200;
+ // Cantidad de caracteres para la Descripciòn
+  const DESCRIPCION_MAX = 450;
   
   // Usar solo el hook de alcaldía
   const {
@@ -73,6 +73,7 @@ const FormIn = () => {
 
   const [form, setForm] = useState({
     NumDVSC: "",
+    Num: 1,
     date: new Date().toISOString().slice(0, 16),
     oficio: "",
     Fk_Personal_Remitente: "",
@@ -88,6 +89,17 @@ const FormIn = () => {
     Fk_Personal_Turnado: ""
   });
 
+  //Funcion para controlar el estado de Radio
+  const handleRadioChange = (e) => {
+    const valor = parseInt(e.target.value);
+    setForm(prev => ({
+      ...prev,
+      Num: valor
+    }));
+  };
+
+
+//Funcion para enviar el formulario al Back
   const onSubmit = async (e) => {
     e.preventDefault();
     const { success, result, error } = await handleFormSubmit(form, direccionID);
@@ -101,6 +113,7 @@ const FormIn = () => {
     }
   };
 
+// Funcion para convertir a Mayusculas
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({
@@ -118,7 +131,31 @@ const FormIn = () => {
 
           <div className="row">
             <div className="col-md-1">
-              <label htmlFor="NumDVSC">#DVSC:</label>
+              <label>
+                <input
+                  type="radio"
+                  name="tipo"
+                  value={1}
+                  checked={form.Num === 1}
+                  onChange={handleRadioChange}
+                />
+                DVSC
+              </label>
+            </div>
+            <div className="col-md-1">
+              <label>
+                <input
+                  type="radio"
+                  name="tipo"
+                  value={2}
+                  checked={form.Num === 2}
+                  onChange={handleRadioChange}
+                />
+                DEVA
+              </label>
+            </div>
+            <div className="col-md-1">
+              <label htmlFor="NumDVSC">#{form.Num === 1 ? "DVSC" : "DEVA"}:</label>
               <input type="text" id="NumDVSC" name="NumDVSC" className="form-item" value={form.NumDVSC}
                 maxLength={7}
                 onChange={(e) => {
