@@ -12,7 +12,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
   const [formData, setFormData] = useState({ ...item });
   const [TipoMensaje, setTipoMensaje] = useState("");
 
-  const camposOcultos = ["Pk_IDCorrespondenciaIn", "Dependencia", "SoporteDocumental",""];
+  const camposOcultos = ["Pk_IDCorrespondenciaIn", "Dependencia", "SoporteDocumental", ""];
   const camposNoEditables = ["Alcaldia", "Colonia", "CodigoPostal"];
   const camposSelect = ["Asunto", "Motivo", "Caracter"];
   const camposSelectPersonal = ["Remitente", "Turnado"];
@@ -38,7 +38,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
       setTipoMensaje("success");
       setTimeout(() => {
         window.location.reload();
-      }, 1000);  
+      }, 1000);
     } else {
       showError("Error: " + (data.error || "No se pudo actualizar"));
       setTipoMensaje("error");
@@ -48,13 +48,13 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
   };
 
   const [calle, numCalle] = item.Direccion
-  ? item.Direccion.split("#")[0].trim() && item.Direccion.split("#")[1]?.split(",")[0].trim()
-    ? [
+    ? item.Direccion.split("#")[0].trim() && item.Direccion.split("#")[1]?.split(",")[0].trim()
+      ? [
         item.Direccion.split("#")[0].trim(),
         item.Direccion.split("#")[1]?.split(",")[0].trim()
       ]
-    : ["", ""]
-  : ["", ""];
+      : ["", ""]
+    : ["", ""];
 
   useEffect(() => {
     if (editMode && opcionesPersonal.length > 0 && opcionesTurnado.length > 0) {
@@ -76,11 +76,11 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
   const opcionesSelect = {
     Asunto: [
       "REMITE INFORMACIÓN", "SOLICITA INSPECCIÓN OCULAR", "SOLICITA VISITA DE VERIFICACIÓN",
-      "REPOSICIÓN DE SELLOS DE CLAUSURA", "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES"
+      "REPOSICIÓN DE SELLOS DE CLAUSURA", "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES", "SOLICITA INFORMACIÓN", "NOTIFICACIÓN", "AMPARO", "JUICIO DE NULIDAD"
     ],
     Motivo: [
-      "ATENCIÓN CIUDADANA", "AUDIENCIA CIUDADANA", "CASA POR CASA",
-      "INTERNOS", "REMITE INFORMACIÓN", "MEDIOS DIGITALES", "OFICIALIA DE PARTES"
+      "ATENCIÓN CIUDADANA", "AUDIENCIA CIUDADANA", "CASA POR CASA", "INTERNOS", "MEDIOS DIGITALES", "OFICIALIA DE PARTES", "ANUNCIOS", "PAOT", "CARPETA DE INVESTIGACIÓN", "REMITE INFORMACIÓN", "NOTIFICACIÓN CON SANCIÓN", "NOTIFICACIÓN SIN SANCIÓN"
+
     ],
     Caracter: ["ORDINARIO", "URGENTE"],
   };

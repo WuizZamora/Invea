@@ -75,10 +75,10 @@ router.post('/guardar-correspondencia', async (req, res) => {
       Calle,
       NumCalle,
       Fk_Personal_Turnado,
-      SoporteDocumental
+      SoporteDocumental, 
+      Num
     } = req.body;
-
-    // Si el remitente es 0, insertamos en la tabla Personal
+    
     if (Fk_Personal_Remitente == 0) {
       const insertQuery = `
         INSERT INTO Personal (Nombre, Cargo, Dependencia)
@@ -88,10 +88,11 @@ router.post('/guardar-correspondencia', async (req, res) => {
    const [insertResult] = await devaPool.query<ResultSetHeader>(insertQuery, [Nombre, Cargo, Dependencia]);
     Fk_Personal_Remitente = insertResult.insertId;
     }
-
+    
     // Ahora llamamos al procedimiento almacenado con el remitente ya resuelto
-    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
+      Num,
       NumDVSC,
       FechaIn,
       Oficio,
