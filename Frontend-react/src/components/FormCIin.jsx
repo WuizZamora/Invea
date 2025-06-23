@@ -9,8 +9,7 @@ import Select from 'react-select';
 import { handleFormSubmit } from "../hooks/formSubmit";
 import useDireccionPorAlcaldia from "../hooks/AlcaldiaIinput";
 import useSelectPersonalTurnado from "../hooks/SelectPersonalTurnado";
-import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { showSuccess, showError } from "../utils/alerts";
 
 const FormIn = () => {
   // Obtener opciones de personal
@@ -19,6 +18,8 @@ const FormIn = () => {
   
   const [Otro, setOtro] = useState(false);
   const opcionesConOtro = [...opcionesPersonal, {label: "OTRO", value: "0"}]
+
+  const DESCRIPCION_MAX = 200;
   
   // Usar solo el hook de alcaldía
   const {
@@ -91,12 +92,12 @@ const FormIn = () => {
     e.preventDefault();
     const { success, result, error } = await handleFormSubmit(form, direccionID);
     if (success) {
-      alert("Enviado correctamente");
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);      
+      showSuccess('Datos Guardados correctamente!');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);      
     } else {
-      alert("Error al enviar");
+      showError(error || 'Error al guardar los datos')
     }
   };
 
@@ -118,8 +119,16 @@ const FormIn = () => {
           <div className="row">
             <div className="col-md-1">
               <label htmlFor="NumDVSC">#DVSC:</label>
-              <input type="number" id="NumDVSC" name="NumDVSC" className="form-item" value={form.NumDVSC}
-                onChange={handleChange} />
+              <input type="text" id="NumDVSC" name="NumDVSC" className="form-item" value={form.NumDVSC}
+                maxLength={7}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, ""); // solo dígitos
+                  setForm(prev => ({
+                    ...prev,
+                    NumDVSC: value
+                  }));
+                }}
+              />
             </div>
 
             <div className="col-md-3">
@@ -129,7 +138,7 @@ const FormIn = () => {
 
             <div className="col-md-5">
               <label htmlFor="Oficio">Oficio:</label>
-              <input type="text" id="Oficio" name="oficio" value={form.oficio} onChange={handleChange} />
+              <input type="text" id="Oficio" name="oficio" value={form.oficio} maxLength={45} onChange={handleChange} />
             </div>
             <div className="col-md-3">
               <label>Remitente:</label>
@@ -299,18 +308,21 @@ const FormIn = () => {
 
             <div className="col-md-3">
               <label htmlFor="Calle">Calle:</label>
-              <input type="text" id="Calle" name="calle" value={form.calle} onChange={handleChange}/>
+              <input type="text" id="Calle" name="calle" value={form.calle} onChange={handleChange} maxLength={60}/>
             </div>
 
             <div className="col-md-1">
               <label htmlFor="NumC">#:</label>
-              <input type="text" id="NumC" name="NumC" value={form.NumC} onChange={handleChange}/>
+              <input type="text" id="NumC" name="NumC" value={form.NumC} onChange={handleChange} maxLength={10}/>
             </div>
           </div>
           <div className="row">
             <div className="col-md-7">
               <label htmlFor="Descripcion">Descripción:</label>
-              <textarea id="Descripcion" name="descripcion" value={form.descripcion} onChange={handleChange} />
+              <textarea id="Descripcion" name="descripcion" value={form.descripcion} onChange={handleChange} maxLength={DESCRIPCION_MAX}/>
+              <div style={{textAlign: "right", fontSize: "0.8rem", color: "#555"}}>
+                {form.descripcion.length}/{DESCRIPCION_MAX}
+              </div>
             </div>
             <div className="col-md-5">
               <label>Turnado:</label>
@@ -362,18 +374,6 @@ const FormIn = () => {
         </form>
       </div>
       <Tabla />
-      <ToastContainer 
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
     </div>
   );
 };
