@@ -50,6 +50,7 @@ const FormIn = () => {
     { value: "SOLICITA VISITA DE VERIFICACIÓN", label: "SOLICITA VISITA DE VERIFICACIÓN" },
     { value: "REPOSICIÓN DE SELLOS DE CLAUSURA", label: "REPOSICIÓN DE SELLOS CLAUSURA" },
     { value: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES", label: "REPOSICIÓN DE SELLOS MEDIDAS CAUTELARES" },
+    { value: "SOLICITA INFORMACIÓN", label: "SOLICITA INFORMACIÓN" }
   ];
 
   const opcionesMotivo = [
@@ -62,6 +63,7 @@ const FormIn = () => {
     { value: "MEDIOS DIGITALES", label: "MEDIOS DIGITALES" },
     { value: "OFICIALIA DE PARTES", label: "OFICIALIA DE PARTES" },
     { value: "PAOT", label: "PAOT" },
+    { value: "CARPETA DE INVESTIGACIÓN", label: "CARPETA DE INVESTIGACIÓN" }
   ];
 
   const opcionesCaracter = [
