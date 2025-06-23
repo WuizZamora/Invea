@@ -175,7 +175,7 @@ const FormIn = () => {
               />
             </div>
 
-            <div className="col-md-3">
+            <div className="col-md-2">
               <label htmlFor="date">Fecha de Captura:</label>
               <input type="datetime-local" id="date" name="date" value={form.date} onChange={handleChange} />
             </div>

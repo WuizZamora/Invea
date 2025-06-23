@@ -23,7 +23,7 @@ form label {
   font-weight: bold;
 }
 
-form input,
+form input:no([type=radio]),
 form textarea{
   width: 100%;
   padding: 0.75rem;
@@ -32,9 +32,6 @@ form textarea{
   border-radius: 0.5rem;
   font-size: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-}
-form input{
-
 }
 
 form textarea{
