@@ -11,7 +11,12 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
       <div className="detalle-visual-izquierda card">
         <ul>
             {Object.entries(item).map(([clave, valor]) => {
-                if (camposOcultos.includes(clave)) return null;
+                if (camposOcultos.includes(clave) ||
+                    valor === null ||
+                    valor === undefined ||
+                    valor === ""
+                
+                ) return null;
 
                 return (
                 <li key={clave} className="detalle-campo">

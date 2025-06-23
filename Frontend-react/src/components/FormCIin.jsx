@@ -182,7 +182,7 @@ const FormIn = () => {
 
             <div className="col-md-4">
               <label htmlFor="Oficio">Oficio:</label>
-              <input type="text" id="Oficio" name="oficio" value={form.oficio} maxLength={45} onChange={handleChange} />
+              <input type="text" id="Oficio" name="oficio" value={form.oficio} maxLength={55} onChange={handleChange} />
             </div>
             <div className="col-md-3">
               <label>Remitente:</label>

@@ -185,6 +185,7 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
     const id = +req.params.id;
     const{
       NumDVSC,
+      NumDEVA,
       FechaIn,
       Oficio,
       Fk_Personal_Remitente,
@@ -198,10 +199,11 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Fk_Personal_Turnado
     }=req.body;
     console.log(req.body);
-    const query='CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query='CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values= [
       id,
       NumDVSC,
+      NumDEVA,
       FechaIn,
       Oficio,
       Fk_Personal_Remitente,

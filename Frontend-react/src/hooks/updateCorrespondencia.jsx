@@ -2,6 +2,7 @@ export const updateCorrespondencia = async (id, data) => {
   const url = `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/actualizar-correspondencia/${id}`;
   const body = {
     NumDVSC: parseInt(data.NumDVSC),
+    NumDEVA: parseInt(data.NumDVSC),
     FechaIn: new Date(data.FechaIn).toISOString().slice(0, 19).replace("T", " "),
     Oficio: data.Oficio,
     Fk_Personal_Remitente: parseInt(data.Remitente),
