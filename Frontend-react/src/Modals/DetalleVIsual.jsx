@@ -14,8 +14,7 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
                 if (camposOcultos.includes(clave) ||
                     valor === null ||
                     valor === undefined ||
-                    valor === ""
-                
+                    valor === ""                
                 ) return null;
 
                 return (
