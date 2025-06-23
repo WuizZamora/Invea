@@ -1,8 +1,13 @@
-import { toast } from "react-toastify";
+import { showConfirm, showSuccess, showError } from "../utils/alerts";
 
 const DeletePDFButton = ({ id, onDeleteSuccess }) => {
   const handleDelete = async () => {
-    const confirmacion = window.confirm("¿Estás seguro de que quieres eliminar el archivo PDF?");
+      const confirmacion = await showConfirm(
+        "¿Estás seguro de que quieres eliminar el archivo PDF?",
+        "Esta acción no se puede deshacer.",
+        "Sí, eliminar",
+        "Cancelar"
+      );
     if (!confirmacion) return;
 
     try {
@@ -14,14 +19,15 @@ const DeletePDFButton = ({ id, onDeleteSuccess }) => {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("Archivo eliminado exitosamente");
+        showSuccess("Archivo eliminado exitosamente");
+        setTimeout(1500); 
         onDeleteSuccess?.(); // <- aquí se hace el refetch
       } else {
-        toast.error("Error: " + data.error);
+        showError("Error: " + (data.error || "No se pudo eliminar el archivo"));
       }
     } catch (err) {
       console.error(err);
-      toast.error("Error al eliminar el archivo");
+      showError("Error al eliminar el archivo");
     }
   };
 

@@ -5,6 +5,7 @@ import useSelectPersonalTurnado from "../hooks/SelectPersonalTurnado";
 import DetalleVisual from "./DetalleVIsual";
 import DetalleEditar from "./DetalleEditar";
 import { updateCorrespondencia } from "../hooks/updateCorrespondencia";
+import { showSuccess, showError, showConfirm } from "../utils/alerts";
 
 const ModalDetalle = ({ item, loading, error, onClose }) => {
   const [editMode, setEditMode] = useState(false);
@@ -20,7 +21,12 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
   const { opcionesTurnado, loading: loadingTurnado } = useSelectPersonalTurnado();
 
   const handleGuardar = async () => {
-    const confirmar = window.confirm("¿Estás seguro de que deseas actualizar los datos?");
+    const confirmar = await showConfirm(
+      "¿Estás seguro de que quieres actualizar los datos?",
+      "Esta acción sobrescribirá los datos previamente guardados.",
+      "Sí, actualizar",
+      "Cancelar"
+    );
     if (!confirmar) return;
 
     const id = item.Pk_IDCorrespondenciaIn;
@@ -28,13 +34,13 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
     const { success, result, error } = await updateCorrespondencia(id, formData);
 
     if (success) {
-      alert("Correspondencia actualizada correctamente");
+      showSuccess("Correspondencia actualizada correctamente");
       setTipoMensaje("success");
       setTimeout(() => {
         window.location.reload();
       }, 1000);  
     } else {
-      setMensaje("Error al actualizar: " + error.message);
+      showError("Error: " + (data.error || "No se pudo actualizar"));
       setTipoMensaje("error");
     }
 

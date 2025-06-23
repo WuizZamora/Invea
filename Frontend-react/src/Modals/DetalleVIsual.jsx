@@ -1,4 +1,4 @@
-import React from "react";// Asegúrate de tener este archivo o inclúyelo en el global
+import React from "react";
 
 const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
   const soporte = item.SoporteDocumental;

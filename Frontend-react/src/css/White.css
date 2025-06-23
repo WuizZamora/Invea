@@ -83,3 +83,16 @@ button:hover {
   align-items: center;
   justify-content: flex-end;
 }
+
+input:invalid,
+select:invalid,
+textarea:invalid {
+  border: 2px solid #e74c3c;
+  background-color: #fdecea;
+}
+
+input:focus:invalid,
+textarea:focus:invalid {
+  outline: none;
+  box-shadow: 0 0 5px #e74c3c;
+}
