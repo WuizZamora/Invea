@@ -3,20 +3,31 @@ import cors from 'cors';
 import path from 'path';
 import devaRoutes from './routes/deva';  // Importa el grupo de rutas de DEVA
 import dvscRoutes from './routes/dvsc';  // Para futuros proyecto
-
+import { verificarSesion } from './auth/middleware';
+import session from 'express-session';
+import authRoutes from './auth/auth.routes';
 const app = express();
 const PORT = process.env.PORT;
 
+app.use(express.json());
+
 app.use(cors({
   origin: process.env.HOST_FRONT,
+  credentials: true
 }));
 
-app.use(express.json());
+app.use(session({
+  secret: process.env.CLAVE_SESSION!,
+  resave: false,
+  saveUninitialized: false,
+}));
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+app.use('/auth', authRoutes);
+
 // Monta todas las rutas de DEVA bajo /deva
-app.use('/deva', devaRoutes);
+app.use('/deva', verificarSesion, devaRoutes);
 
 // Agregar más proyectos aquí:
 app.use('/dvsc', dvscRoutes);
