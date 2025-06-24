@@ -142,7 +142,7 @@ router.post('/subir-soporte/:id', upload.single('archivo'), async (req: Request,
 router.delete('/borrar-soporte/:id', async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-
+    console.log(id);
     // Obtener la ruta del archivo desde la base de datos
     const [rows]: any = await devaPool.query(
       'SELECT SoporteDocumental FROM Correspondencia_Interna_In WHERE Pk_IDCorrespondenciaIn = ?',
