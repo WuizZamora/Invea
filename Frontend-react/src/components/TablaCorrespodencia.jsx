@@ -49,13 +49,13 @@ const Tabla = () => {
   }, [totalPaginas, paginaActual]);
 
   // Intervalo de actualizacion de datos
-  useEffect(() => {
-  const intervalId = setInterval(() => {
-    refetch();
-  }, 3000); // cada 3 segundos
+//   useEffect(() => {
+//   const intervalId = setInterval(() => {
+//     refetch();
+//   }, 3000); // cada 3 segundos
 
-  return () => clearInterval(intervalId); // limpiar al desmontar
-}, [refetch]);
+//   return () => clearInterval(intervalId); // limpiar al desmontar
+// }, [refetch]);
 
 
   return (

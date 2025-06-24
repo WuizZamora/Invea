@@ -1,14 +1,12 @@
 body {
-  padding-top: 4rem;
   font-family: sans-serif;
   color: rgb(0, 0, 0);
 }
 
 .form-container {
-
+  padding-top: 4rem;
   justify-content: center;
   align-items: center;
-  padding: 0.1rem;
 }
 
 

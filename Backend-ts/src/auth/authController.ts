@@ -22,3 +22,11 @@ export const logout = (req: Request, res: Response) => {
     res.json({ mensaje: 'Sesión cerrada' });
   });
 };
+
+export const checkSession = (req: Request, res: Response) => {
+  if ((req.session as any).usuario) {
+    res.json({ state: true });
+  } else {
+    res.status(401).json({ state: false });
+  }
+};

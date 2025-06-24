@@ -4,6 +4,7 @@ import { loginUser } from './hooks/authService';
 import './css/Login.css';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom'
+import { useUsuario } from './context/UserContext';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +17,7 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
   const navigate = useNavigate();
+  const { setUsuario } = useUsuario();
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -29,6 +31,7 @@ const Login = () => {
     if (result){
       Swal.fire({ icon: 'success', title: 'Bienvenido', text: 'Inicio de sesión exitoso', timer: 1500, showConfirmButton: false
       }).then(() => {
+        setUsuario({ username: formData.username, nivel: result.nivel });
         navigate('/captura');
       });
       
@@ -40,7 +43,7 @@ const Login = () => {
       <div className="row h-100">
         {/* Lado izquierdo: Logo */}
         <div className="col-md-6 bg-light d-flex justify-content-center align-items-center">
-          <img src="/logo-cdmx.jpg" alt="Logo" style={{ maxWidth: '60%' }} />
+          <img src="/logo-cdmx.png" alt="Logo" style={{ maxWidth: '60%' }} />
         </div>
 
         {/* Lado derecho: Formulario */}

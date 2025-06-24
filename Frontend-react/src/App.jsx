@@ -1,20 +1,45 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import FormCIin from "./components/FormCIin";
 import Consulta from "./components/Consulta";
 import Login from "./Login";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
     <Router>
-      <Header />
       <Routes>
+        {/* Ruta pública */}
         <Route path="/" element={<Login />} />
-        <Route path="/consulta" element={<Consulta />} />
-        <Route path="/captura" element={<FormCIin />} />
+
+        {/* Rutas protegidas */}
+        <Route
+          path="/captura"
+          element={
+            <PrivateRoute>
+              <>
+                <Header />
+                <FormCIin />
+              </>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/consulta"
+          element={
+            <PrivateRoute>
+              <>
+                <Header />
+                <Consulta />
+              </>
+            </PrivateRoute>
+          }
+        />
+
+        {/* Fallback: redirige a login */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
 }
-
 export default App;
