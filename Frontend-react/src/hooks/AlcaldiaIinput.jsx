@@ -15,7 +15,7 @@ const useDireccionPorAlcaldia = () => {
     const fetchDirecciones = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/direccion`);
+        const res = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/direccion`, {credentials: 'include'});
         const result = await res.json();
         setDirecciones(result);
         

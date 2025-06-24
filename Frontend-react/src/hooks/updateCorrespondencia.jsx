@@ -18,7 +18,8 @@ export const updateCorrespondencia = async (id, data) => {
 
   try {
     const response = await fetch(url, {
-      method: "PUT", // o PATCH según tu backend
+      credentials: 'include',
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },

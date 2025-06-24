@@ -13,6 +13,7 @@ const UploadPDFButton = ({ id, onUploadSuccess }) => {
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/subir-soporte/${id}`, {
+        credentials: 'include',
         method: "POST",
         body: formData,
       });

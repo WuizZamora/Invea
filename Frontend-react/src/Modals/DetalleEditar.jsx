@@ -67,6 +67,24 @@ const DetalleEditar = ({
                   }}
                 />
               </div>
+            ) :clave === "Oficio" ? (
+              <div>
+                <input
+                  type="text"
+                  value={valor ?? ""}
+                  maxLength={55}
+                  onChange={(e) => handleChange(clave, e.target.value)}
+                />
+              </div>
+            ) :clave === "Descripcion" ? (
+              <div>
+                <input
+                  type="text"
+                  value={valor ?? ""}
+                  maxLength={255}
+                  onChange={(e) => handleChange(clave, e.target.value)}
+                />
+              </div>
             ) : camposSelectPersonal.includes(clave) ? (
               clave === "Remitente" ? (
                 loadingPersonal ? (

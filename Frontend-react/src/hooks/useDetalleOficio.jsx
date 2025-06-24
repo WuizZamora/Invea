@@ -10,7 +10,8 @@ const useDetalleOficio = () => {
     setError(null);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/obtener-correspondencia-id/${id}`
+        `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/obtener-correspondencia-id/${id}`,
+         {credentials: 'include'}
       );
       const data = await res.json();
       const info = data.data?.[0]?.[0];

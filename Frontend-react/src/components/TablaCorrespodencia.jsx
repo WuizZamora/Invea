@@ -26,7 +26,6 @@ const Tabla = () => {
   {}
   const {
     detalle,
-    loading: loadingDetalle,
     error,
     obtenerDetalle,
     limpiarDetalle
@@ -49,7 +48,15 @@ const Tabla = () => {
     }
   }, [totalPaginas, paginaActual]);
 
-  if (loading) return <p>Cargando datos...</p>;
+  // Intervalo de actualizacion de datos
+  useEffect(() => {
+  const intervalId = setInterval(() => {
+    refetch();
+  }, 3000); // cada 3 segundos
+
+  return () => clearInterval(intervalId); // limpiar al desmontar
+}, [refetch]);
+
 
   return (
     <div className="table-card">

@@ -7,7 +7,7 @@ const useSelectObtenerPersonal = () => {
     useEffect(() => {
         const fetchPersonal = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/personal`);
+                const response = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/personal`, {credentials: 'include'});
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
