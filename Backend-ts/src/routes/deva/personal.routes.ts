@@ -7,7 +7,7 @@ const router = Router();
 router.get('/', async (req, res) => {
   try {
     const [rows] = await devaPool.query('SELECT * FROM Personal');
-    res.json({data: rows });
+    res.json({ data: rows });
   } catch (error) {
     res.status(500).json({ error: 'Error en la base de datos' });
   }
@@ -16,20 +16,24 @@ router.get('/', async (req, res) => {
 // GET Todos los registros
 router.get('/personal-turnado', async (req, res) => {
   try {
-    const [rows] = await devaPool.query('SELECT * FROM Personal_Turnado');
-    res.json({data: rows });
+    const [rows] = await devaPool.query(`
+      SELECT * 
+      FROM Personal_Turnado 
+      WHERE Iniciales NOT IN ('DEVA', 'DIRECCION');
+    `);
+    res.json({ data: rows });
   } catch (error) {
+    console.error(error); // Para depuración
     res.status(500).json({ error: 'Error en la base de datos' });
   }
 });
-
 
 // GET por ID
 router.get('/:NumEmpleado', async (req, res) => {
   try {
     const NumEmpleado = req.params.NumEmpleado;
     const [rows] = await devaPool.query(
-      'SELECT Pk_IDPersona, Nombre FROM Personal WHERE Pk_IDPersona = ?', 
+      'SELECT Pk_IDPersona, Nombre FROM Personal WHERE Pk_IDPersona = ?',
       [NumEmpleado]
     );
     res.json(rows);
