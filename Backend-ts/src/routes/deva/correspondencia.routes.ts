@@ -36,14 +36,35 @@ router.get('/entrada', async (req, res) => {
 });
 
 // Procedimiento almacenado
-router.get('/obtener-correspondencia', async (req, res) => {
+router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response): Promise<void> => {
+  const nivel = Number(req.params.nivel);
+  const turnado = Number(req.query.turnado);
+
   try {
-    const [rows] = await devaPool.query('CALL ObtenerCorrespondenciaInterna()');
+    let rows;
+
+    if (nivel === 1) {
+      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaInterna()');
+      rows = result;
+    } else if (nivel === 2) {
+      if (!turnado) {
+        res.status(400).json({ error: 'Falta el parámetro "turnado" para nivel 2' });
+        return;
+      }
+      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaPorTurnado(?)', [turnado]);
+      rows = result;
+    } else {
+      res.status(400).json({ error: 'Nivel no válido. Debe ser 1 o 2.' });
+      return;
+    }
+
     res.json({ data: rows });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Error en la base de datos' });
   }
 });
+
 
 router.get('/obtener-correspondencia-id/:id', async (req, res) => {
   try {
