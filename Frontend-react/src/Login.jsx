@@ -28,13 +28,28 @@ const Login = () => {
     e.preventDefault();
     const result = await loginUser(formData);
 
-    if (result){
-      Swal.fire({ icon: 'success', title: 'Bienvenido', text: 'Inicio de sesión exitoso', timer: 1500, showConfirmButton: false
+    if (result) {
+        setUsuario({
+          nombre: result.nombre,
+          username: result.usuario,
+          nivel: result.nivel,
+          id: result.id
+        });
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Bienvenido',
+        text: 'Inicio de sesión exitoso',
+        timer: 1500,
+        showConfirmButton: false
       }).then(() => {
-        setUsuario({ username: formData.username, nivel: result.nivel });
-        navigate('/captura');
+        const rutas = {
+          1: '/admin',
+          2: '/turnado',
+          3: '/consulta'
+        };
+        navigate(rutas[result.nivel] || '/123');
       });
-      
     }
   };
 

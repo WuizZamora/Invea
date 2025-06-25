@@ -4,6 +4,7 @@ import FormCIin from "./components/FormCIin";
 import Consulta from "./components/Consulta";
 import Login from "./Login";
 import PrivateRoute from "./components/PrivateRoute";
+import Turnado from "./components/Turnado";
 
 function App() {
   return (
@@ -31,6 +32,17 @@ function App() {
               <>
                 <Header />
                 <Consulta />
+              </>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/turnado"
+          element={
+            <PrivateRoute>
+              <>
+                <Header />
+                <Turnado />
               </>
             </PrivateRoute>
           }

@@ -6,24 +6,46 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
     soporte &&
     `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${soporte}`;
 
+
+    const formatearFecha = (fechaISO) => {
+        if (!fechaISO) return "";
+
+        const fecha = new Date(fechaISO);
+
+        const opciones = {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        };
+
+    return fecha.toLocaleString("es-MX", opciones);
+    };
+    
   return (
     <div className="detalle-visual-container">
       <div className="detalle-visual-izquierda card">
         <ul>
-            {Object.entries(item).map(([clave, valor]) => {
-                if (camposOcultos.includes(clave) ||
-                    valor === null ||
-                    valor === undefined ||
-                    valor === ""                
-                ) return null;
+          {Object.entries(item).map(([clave, valor]) => {
+            if (
+              camposOcultos.includes(clave) ||
+                valor === null ||
+                valor === undefined ||
+                valor === ""
+              )
+            return null;
 
-                return (
-                <li key={clave} className="detalle-campo">
-                    <strong>{mostrarNombreCampo(clave)}:</strong>{" "}
-                    {valor?.toString()}
-                </li>
-                );
-            })}
+            const esFecha = clave.toLowerCase().includes("fecha");
+            const valorFormateado = esFecha ? formatearFecha(valor) : valor.toString();
+
+            return (
+              <li key={clave} className="detalle-campo">
+                <strong>{mostrarNombreCampo(clave)}:</strong> {valorFormateado}
+              </li>
+            );
+          })}
         </ul>
       </div>
 

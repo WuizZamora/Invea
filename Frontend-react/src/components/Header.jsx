@@ -6,14 +6,14 @@ import { logoutUser } from "../hooks/authService";
 import "../css/Header.css";
 
 const Header = () => {
-  const { usuario, setUsuario } = useUsuario();
+  const { usuario, setUsuario, loading } = useUsuario();
   const navigate = useNavigate();
 
   const cerrarSesion = async () => {
-    const ok = await logoutUser(usuario.username); // llamas a tu función centralizada
+    const ok = await logoutUser(usuario?.username);
     if (ok) {
       setUsuario(null);
-      navigate('/');
+      navigate('/', { replace: true });
     }
   };
 
@@ -21,22 +21,21 @@ const Header = () => {
     <header className="header d-flex justify-content-between align-items-center px-4 py-2">
       <div className="d-flex align-items-center gap-3">
         <img src="/INVEAlogo.png" alt="Logo" className="logo" />
-
         <nav className="nav">
           <div className="dropdown">
             <span className="dropdown-title">DEVA</span>
             <div className="dropdown-content">
               <Link to="/consulta">Consulta</Link>
               <Link to="/captura">Captura</Link>
+              <Link to="/turnado">Turnado</Link>
             </div>
           </div>
         </nav>
       </div>
 
-      {/* Parte derecha: nombre del usuario */}
-      {usuario && (
+      {!loading && usuario && (
         <div className="d-flex align-items-center gap-3">
-          <span className="fw-semibold">👤 {usuario.username}</span>
+          <span className="fw-semibold">👤 {usuario.nombre}</span>
           <button
             onClick={cerrarSesion}
             style={{

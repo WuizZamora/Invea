@@ -93,6 +93,7 @@ const FormIn = () => {
     Asunto: "",
     Motivo: "",
     Caracter: "",
+    OP: "",
     Fk_Personal_Turnado: ""
   });
 
@@ -298,6 +299,10 @@ const FormIn = () => {
                 className="select-remitente"
                 classNamePrefix="react-select"
               />
+            </div>
+            <div className="col-md-1">
+              <label>OP:</label>
+              <input type="text" id="OP" name="OP" value={form.OP} maxLength={10} onChange={handleChange} placeholder="NoObligatorio"/>
             </div>
           </div>
           <div className="row">

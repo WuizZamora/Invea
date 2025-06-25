@@ -14,6 +14,7 @@ export const handleFormSubmit = async (form, direccionID) => {
     Descripcion: form.descripcion,
     Motivo: form.Motivo,
     Caracter: form.Caracter,
+    OP: form.OP,
     Fk_Direccion_IDAdress: direccionID,
     Calle: form.calle,
     NumCalle: form.NumC,

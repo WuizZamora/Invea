@@ -8,7 +8,8 @@ export const login = async (req: Request, res: Response) => {
     const [rows]: any = await devaPool.query(
       `SELECT  p.Pk_IDPersonalTurnado,
                u.Nivel,
-               p.Lcp  
+               p.Lcp,
+               u.Usuario  
        FROM Usuario u
        LEFT JOIN Personal_Turnado p
               ON p.Pk_IDPersonalTurnado = u.Fk_IDPersonalTurnado
@@ -17,13 +18,14 @@ export const login = async (req: Request, res: Response) => {
     );
 
     if (rows.length > 0) {
-      const { Pk_IDPersonalTurnado, Nivel, Lcp } = rows[0];
+      const { Pk_IDPersonalTurnado, Nivel, Lcp, Usuario } = rows[0];
       (req.session as any).usuario = {
         id: Pk_IDPersonalTurnado,
         nivel: Nivel,
-        lcp: Lcp
+        lcp: Lcp,
+        usuario: Usuario
       };
-      res.json({ state: true, usuario: Lcp, nivel: Nivel, id:Pk_IDPersonalTurnado});
+      res.json({ state: true, nombre: Lcp, nivel: Nivel, id:Pk_IDPersonalTurnado, usuario: Usuario});
     } else {
       res.status(401).json({ state: false, mensaje: 'Usuario o contraseña incorrectos' });
     }
@@ -46,8 +48,16 @@ export const logout = (req: Request, res: Response) => {
 };
 
 export const checkSession = (req: Request, res: Response) => {
-  if ((req.session as any).usuario) {
-    res.json({ state: true, usuario: (req.session as any).usuario });
+  const usuario = (req.session as any).usuario;
+
+  if (usuario) {
+    res.json({
+      state: true,
+      nombre: usuario.lcp, 
+      usuario: usuario.Usuario,
+      nivel: usuario.nivel,
+      id: usuario.id
+    });
   } else {
     res.status(401).json({ state: false, mensaje: 'No hay sesión activa' });
   }

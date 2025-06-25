@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import useCorrespondencia from "../hooks/useCorrespondencia";
+import {useCorrespondencia} from "../hooks/useCorrespondencia";
 import FiltroCorrespondencia from "../hooks/FiltroCorrespondencia";
 import UploadPDFButton from "../hooks/UploadPDFButton";
 import DeletePDFButton from "../hooks/DeletePDFButton";
