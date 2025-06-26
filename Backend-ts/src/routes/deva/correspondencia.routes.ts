@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { devaPool} from '../../config/db';
+import { devaPool } from '../../config/db';
 import { Console } from 'console';
 import { isConditionalExpression } from 'typescript';
 import { ResultSetHeader } from 'mysql2';
@@ -23,6 +23,20 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+const storageOut = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    const uploadDir = path.join(__dirname, '../../../uploads/correspondenciaOUT');
+    fs.mkdirSync(uploadDir, { recursive: true });
+    cb(null, uploadDir);
+  },
+  filename: (_req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
+  },
+});
+
+const uploadOut = multer({ storage: storageOut });
 
 // Entradas CONSULTA GENERAL Y TEST
 router.get('/entrada', async (req, res) => {
@@ -69,7 +83,7 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
 router.get('/obtener-correspondencia-id/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const [rows] = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]); 
+    const [rows] = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]);
     res.json({ data: rows });
   } catch (error) {
     console.error(error);
@@ -96,20 +110,20 @@ router.post('/guardar-correspondencia', async (req, res) => {
       Calle,
       NumCalle,
       Fk_Personal_Turnado,
-      SoporteDocumental, 
+      SoporteDocumental,
       Num
     } = req.body;
-    
+
     if (Fk_Personal_Remitente == 0) {
       const insertQuery = `
         INSERT INTO Personal (Nombre, Cargo, Dependencia)
         VALUES (?, ?, ?)
       `;
 
-   const [insertResult] = await devaPool.query<ResultSetHeader>(insertQuery, [Nombre, Cargo, Dependencia]);
-    Fk_Personal_Remitente = insertResult.insertId;
+      const [insertResult] = await devaPool.query<ResultSetHeader>(insertQuery, [Nombre, Cargo, Dependencia]);
+      Fk_Personal_Remitente = insertResult.insertId;
     }
-    
+
     // Ahora llamamos al procedimiento almacenado con el remitente ya resuelto
     const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
@@ -204,7 +218,7 @@ router.delete('/borrar-soporte/:id', async (req: Request, res: Response) => {
 router.put('/actualizar-correspondencia/:id', async (req, res) => {
   try {
     const id = +req.params.id;
-    const{
+    const {
       NumDVSC,
       NumDEVA,
       FechaIn,
@@ -214,14 +228,14 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Descripcion,
       Motivo,
       Caracter,
-      Calle, 
-      NumCalle, 
+      Calle,
+      NumCalle,
       OP,
       Fk_Personal_Turnado
-    }=req.body;
+    } = req.body;
     console.log(req.body);
-    const query='CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    const values= [
+    const query = 'CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const values = [
       id,
       NumDVSC,
       NumDEVA,
@@ -232,8 +246,8 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Descripcion,
       Motivo,
       Caracter,
-      Calle, 
-      NumCalle, 
+      Calle,
+      NumCalle,
       Fk_Personal_Turnado,
       OP
     ];
@@ -245,5 +259,79 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar la correspondencia' });
   }
 });
+
+
+router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), async (req: Request, res: Response): Promise<void> => {
+  try {
+    const fkId = Number(req.params.idIn);
+    const file = req.file;
+    if (!file) {
+      res.status(400).json({ error: 'No se ha subido ningún archivo.' });
+      return;             // ← devuelve void
+    }
+    const {
+      Accion,
+      Oficio,
+      Descripcion,
+      EstaTerminado,
+    } = req.body;
+
+    const estaTerminadoNum =
+      EstaTerminado === '1' || EstaTerminado === 1 || EstaTerminado === true
+        ? 1
+        : 0;
+
+    const filePath = `/uploads/correspondenciaOUT/${file.filename}`;
+
+    const sql = `
+        INSERT INTO Correspondencia_Interna_Out
+          (Fk_Correspondencia_Interna_In,
+           FechaOut,
+           Accion,
+           Oficio,
+           Descripcion,
+           SoporteDocumental,
+           EstaTerminado)
+        VALUES (?, NOW(), ?, ?, ?, ?, ?)
+      `;
+
+    await devaPool.query(sql, [
+      fkId,              
+      Accion,          
+      Oficio,          
+      Descripcion,     
+      filePath,        
+      estaTerminadoNum,
+    ]);
+
+    res.json({
+      message: 'Archivo OUT subido y registro creado correctamente',
+      path: filePath,
+    });
+  } catch (err) {
+    console.error('Error al subir OUT:', err);
+    res.status(500).json({
+      error: 'Error al subir el archivo o insertar en la base de datos',
+    });
+  }
+},
+);
+
+router.get('/obtener-correspondencia-out/:idIn', async (req, res) => {
+  try {
+    const fkId = Number(req.params.idIn);
+
+    const [rows] = await devaPool.query(
+      'SELECT * FROM Correspondencia_Interna_Out WHERE Fk_Correspondencia_Interna_In = ?',
+      [fkId]
+    );
+
+    res.json({ data: rows });
+  } catch (error) {
+    console.error(error); // Para depuración
+    res.status(500).json({ error: 'Error en la base de datos' });
+  }
+});
+
 
 export default router;
