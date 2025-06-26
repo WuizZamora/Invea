@@ -171,6 +171,10 @@ form button:hover {
   overflow-y: auto;
   width: 80rem;
 }
+.modal-edit{
+  width: 50rem;
+  display: flex;
+}
 
 .contenedor-filas-por-pagina {
   display: flex;
@@ -187,8 +191,36 @@ form button:hover {
   flex-wrap: wrap;
 }
 
-.detalle-campo strong {
+.detalle-bloque strong {
   font-weight: bold;
+}
+
+.detalle-visual-izquierda {
+  text-align: left;
+  padding: 1rem;
+  line-height: 1.5;
+}
+
+.detalle-bloque {
+  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+}
+
+.fila-arriba {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.fila-arriba span {
+  font-size: 0.9rem;
+  display: flex;
+}
+
+.detalle-visual-izquierda p {
+  margin: 0;
 }
 
 .animated-text {

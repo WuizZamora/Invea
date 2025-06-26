@@ -33,26 +33,37 @@ const ModalTurnado = ({ item, loading, error, onClose }) => {
             <div className="detalle-visual-container">
                 <div className="detalle-visual-izquierda card">
                     <h3 className="txt-izq">Detalles del registro</h3>
-                    <ul>
-                        {Object.entries(item).map(([clave, valor]) => {
-                        if (
-                            camposOcultos.includes(clave) ||
-                            valor === null ||
-                            valor === undefined ||
-                            valor === ""
-                        )
-                            return null;
+                    <div className="detalle-bloque">
+                        <div className="fila-arriba">
+                        <span>
+                            <strong>{item.NumDVSC ? "DVSC:" : "DEVA:"}</strong> {item.NumDVSC || item.NumDEVA}
+                        </span>
+                        <span>{formatearFecha(item.FechaIn)}</span>
+                        
+                        </div>
+                        <div className="fila-arriba">
+                        <span className={item.Caracter === "Urgente" ? "caracter-urgente" : "caracter-ordinario"}>
+                            {item.Caracter}
+                        </span>
+                        <span>{item.Oficio}</span>
+                        </div>
+                        <br/>
+                        <div className="fila-arriba">
+                            <span><strong>Asunto:</strong> {item.Asunto}</span>
+                            <span><strong>Motivo:</strong> {item.Motivo}</span>
+                        </div> 
+                        <div className="fila-arriba">
+                            <span><strong>Turnado a:</strong> {item.Turnado}</span>
+                        </div>      
+                        <br/> 
+                        <p><strong>Descripcion:</strong></p>
+                        <p>{item.Descripcion}</p>
+                        <br/>
+                        <p>{item.Direccion}</p>
 
-                        const esFecha = clave.toLowerCase().includes("fecha");
-                        const valorFormateado = esFecha ? formatearFecha(valor) : valor.toString();
-
-                        return (
-                            <li key={clave} className="detalle-campo">
-                            <strong>{mostrarNombreCampo(clave)}:</strong> {valorFormateado}
-                            </li>
-                        );
-                        })}
-                    </ul>
+                        <strong>{item.Remitente}</strong>
+                        <strong>{item.Cargo}</strong>
+                    </div>
                 </div>
                     <div className="detalle-visual-derecha">
                         <RespuestaTurnado />

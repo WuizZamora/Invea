@@ -11,7 +11,7 @@
 }
 
 .modal-edit{
-  width: 50rem;
+  width: 5rem;
 }
 
 
@@ -96,4 +96,24 @@ input{
   margin-bottom: 12px;
   font-size: 15px;
   line-height: 1.4;
+}
+
+.caracter-ordinario {
+  color: green;
+  font-weight: bold;
+}
+
+.caracter-urgente {
+  color: orange;
+  font-weight: bold;
+}
+
+.sin-soporte {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  font-style: italic;
 }

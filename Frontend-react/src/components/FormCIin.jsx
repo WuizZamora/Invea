@@ -138,8 +138,11 @@ const FormIn = () => {
         <form onSubmit={onSubmit}>
 
           <div className="row">
-            <div className="col-md-1">
               <label>
+                Num
+              </label>
+            <div className="col-md-1">
+              DVSC
                 <input
                   type="radio"
                   name="tipo"
@@ -147,11 +150,9 @@ const FormIn = () => {
                   checked={form.Num === 1}
                   onChange={handleRadioChange}
                 />
-                DVSC
-              </label>
             </div>
             <div className="col-md-1">
-              <label>
+              DEVA
                 <input
                   type="radio"
                   name="tipo"
@@ -159,8 +160,6 @@ const FormIn = () => {
                   checked={form.Num === 2}
                   onChange={handleRadioChange}
                 />
-                DEVA
-              </label>
             </div>
             <div className="col-md-1">
               <label htmlFor="NumDVSC">#{form.Num === 1 ? "DVSC" : "DEVA"}:</label>
@@ -306,6 +305,9 @@ const FormIn = () => {
             </div>
           </div>
           <div className="row">
+
+
+            
             <div className="col-md-3">
               <label htmlFor="Alcaldia">Alcaldía:</label>
               <Select

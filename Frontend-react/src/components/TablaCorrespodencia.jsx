@@ -35,6 +35,20 @@ const Tabla = () => {
   setPaginaActual(nuevaPagina);
   };
 
+      const formatearFecha = (fechaISO) => {
+        if (!fechaISO) return "";
+
+        const fecha = new Date(fechaISO);
+
+        const opciones = {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        };
+
+    return fecha.toLocaleString("es-MX", opciones);
+    };
+
   // Función de filtrado mejorada
   const handleFiltrar = useCallback((resultados) => {
     setDatosFiltrados(resultados);
@@ -81,8 +95,9 @@ const Tabla = () => {
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
-              <option value={15}>15</option>
-              <option value={20}>20</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
             </select>
           </div>
         </div>
@@ -97,10 +112,11 @@ const Tabla = () => {
           <table className="tabla-registro">
             <thead>
               <tr>
-                <th>#DVSC</th>
+                <th>Num</th>
                 <th>Oficio</th>
+                <th>Fecha</th>
                 <th>Remitente</th>
-                <th>Motivo</th>
+                <th>Asunto</th>
                 <th>Dirección</th>
                 <th>OP</th>
                 <th>Soporte documental</th>
@@ -116,8 +132,9 @@ const Tabla = () => {
                   >
                     {item.Oficio}
                   </td>
+                  <td>{formatearFecha(item.FechaIn)}</td>
                   <td>{item.Remitente}</td>
-                  <td>{item.Motivo}</td>
+                  <td>{item.Asunto}</td>
                   <td>{item.Direccion}</td>
                   <td>{item.OP ? (item.OP):("S/OP")}</td>
                   <td>
