@@ -25,6 +25,7 @@ const FiltroCorrespondencia = ({ datos, onFiltrar }) => {
           normalize(item.Motivo).includes(terminoNormalizado) ||
           normalize(item.Direccion).includes(terminoNormalizado) ||
           normalize(item.OP).includes(terminoNormalizado) ||
+          normalize(item.Estatus).includes(terminoNormalizado) ||
           normalize(item.Descripcion).includes(terminoNormalizado) 
         );
       });

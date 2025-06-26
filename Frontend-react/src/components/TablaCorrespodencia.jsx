@@ -82,7 +82,15 @@ const Tabla = () => {
             onFiltrar={handleFiltrar} 
           />
         </div>
-          <div className="col-md-5">
+        <div className="col-md-3 leyenda-estatus">
+          Estatus:
+          <div className="items-estatus">
+            <span><span className="color-circulo pendiente"></span> Pendiente</span>
+            <span><span className="color-circulo en-proceso"></span> En proceso</span>
+            <span><span className="color-circulo terminado"></span> Terminado</span>
+          </div>
+        </div>
+          <div className="col-md-2">
           <div className="contenedor-filas-por-pagina">
             <label htmlFor="filasPorPagina">Filas por página:</label>
             <select
@@ -125,7 +133,9 @@ const Tabla = () => {
             <tbody>
               {datosPagina.map((item, index) => (
                 <tr key={`${item.Pk_IDCorrespondenciaIn}-${index}`}>
-                  <td>{item.NumDVSC}</td>
+                  <td className={`estatus-${item.Estatus?.toLowerCase()}`}>
+                    {item.NumDVSC}
+                  </td>
                   <td
                     style={{ cursor: "pointer", color: "#1976d2", textDecoration: "underline" }}
                     onClick={() => obtenerDetalle(item.Pk_IDCorrespondenciaIn)}

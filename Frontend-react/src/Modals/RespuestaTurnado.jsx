@@ -76,6 +76,31 @@ const RespuestaTurnado = () => {
           required
         />
       </div>
+      <div className="mb-3">
+        <div className="d-flex gap-3 align-items-center">
+          <label className="form-label">Tipo de Respuesta:</label>
+          <div>
+            Parcial
+            <input
+              type="radio"
+              name="tipo"
+              value={1}
+              checked={formData.Estatus === 1}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            Definitiva
+            <input
+              type="radio"
+              name="tipo"
+              value={2}
+              checked={formData.Estatus === 2}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+      </div>
 
       <div className="mb-3">
         <label className="form-label">Acción</label>

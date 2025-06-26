@@ -183,3 +183,54 @@ form button:hover {
   align-items: center;
   gap: 0.6rem;
 }
+
+.estatus-pendiente {
+  color: orange;
+  font-weight: bold;
+}
+
+.estatus-en\ proceso {
+  color: goldenrod; /* o yellow si prefieres más brillante */
+  font-weight: bold;
+}
+
+.estatus-terminado {
+  color: green;
+  font-weight: bold;
+}
+
+.leyenda-estatus {
+  font-size: 0.95rem;
+}
+
+.items-estatus {
+  display: flex;
+  gap: 1.5rem; /* espacio entre cada etiqueta */
+  flex-wrap: wrap; /* para que se acomode en pantallas pequeñas */
+  align-items: center;
+}
+
+.items-estatus span {
+  display: flex;
+  align-items: center;
+}
+
+.color-circulo {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.pendiente {
+  background-color: orange;
+}
+
+.en-proceso {
+  background-color: goldenrod;
+}
+
+.terminado {
+  background-color: green;
+}

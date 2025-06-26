@@ -36,6 +36,20 @@ const Turnado = () => {
     limpiarDetalle
   } = useDetalleOficio();
 
+    const formatearFecha = (fechaISO) => {
+        if (!fechaISO) return "";
+
+        const fecha = new Date(fechaISO);
+
+        const opciones = {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        };
+
+    return fecha.toLocaleString("es-MX", opciones);
+    };
+
   const cambiarPagina = (nuevaPagina) => {
   setPaginaActual(nuevaPagina);
   };
@@ -64,7 +78,15 @@ const Turnado = () => {
             onFiltrar={handleFiltrar} 
           />
         </div>
-          <div className="col-md-5">
+        <div className="col-md-3 leyenda-estatus">
+          Estatus:
+          <div className="items-estatus">
+            <span><span className="color-circulo pendiente"></span> Pendiente</span>
+            <span><span className="color-circulo en-proceso"></span> En proceso</span>
+            <span><span className="color-circulo terminado"></span> Terminado</span>
+          </div>
+        </div>
+          <div className="col-md-2">
           <div className="contenedor-filas-por-pagina">
             <label htmlFor="filasPorPagina">Filas por página:</label>
             <select
@@ -77,8 +99,8 @@ const Turnado = () => {
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
-              <option value={15}>15</option>
               <option value={20}>20</option>
+              <option value={30}>30</option>
             </select>
           </div>
         </div>
@@ -93,10 +115,11 @@ const Turnado = () => {
           <table className="tabla-registro">
             <thead>
               <tr>
-                <th>#DVSC</th>
+                <th>Num</th>
                 <th>Oficio</th>
+                <th>Fecha</th>
                 <th>Remitente</th>
-                <th>Motivo</th>
+                <th>Asunto</th>
                 <th>Dirección</th>
                 <th>OP</th>
                 <th>Soporte documental</th>
@@ -105,15 +128,18 @@ const Turnado = () => {
             <tbody>
               {datosPagina.map((item, index) => (
                 <tr key={`${item.Pk_IDCorrespondenciaIn}-${index}`}>
-                  <td>{item.NumDVSC}</td>
+                  <td className={`estatus-${item.Estatus?.toLowerCase()}`}>
+                    {item.NumDVSC}
+                  </td>
                   <td
                     style={{ cursor: "pointer", color: "#1976d2", textDecoration: "underline" }}
                     onClick={() => obtenerDetalle(item.Pk_IDCorrespondenciaIn)}
                   >
                     {item.Oficio}
                   </td>
+                  <td>{formatearFecha(item.FechaIn)}</td>
                   <td>{item.Remitente}</td>
-                  <td>{item.Motivo}</td>
+                  <td>{item.Asunto}</td>
                   <td>{item.Direccion}</td>
                   <td>{item.OP ? (item.OP):("S/OP")}</td>
                   <td>

@@ -306,8 +306,16 @@ const FormIn = () => {
           </div>
           <div className="row">
 
+            <div className="col-md-3">
+              <label htmlFor="Calle">Calle:</label>
+              <input type="text" id="Calle" name="calle" value={form.calle} onChange={handleChange} maxLength={60}/>
+            </div>
 
-            
+            <div className="col-md-1">
+              <label htmlFor="NumC">#:</label>
+              <input type="text" id="NumC" name="NumC" value={form.NumC} onChange={handleChange} maxLength={10}/>
+            </div>
+
             <div className="col-md-3">
               <label htmlFor="Alcaldia">Alcaldía:</label>
               <Select
@@ -357,15 +365,6 @@ const FormIn = () => {
 
             {loading && <p>Cargando datos...</p>}
 
-            <div className="col-md-3">
-              <label htmlFor="Calle">Calle:</label>
-              <input type="text" id="Calle" name="calle" value={form.calle} onChange={handleChange} maxLength={60}/>
-            </div>
-
-            <div className="col-md-1">
-              <label htmlFor="NumC">#:</label>
-              <input type="text" id="NumC" name="NumC" value={form.NumC} onChange={handleChange} maxLength={10}/>
-            </div>
           </div>
           <div className="row">
             <div className="col-md-7">
