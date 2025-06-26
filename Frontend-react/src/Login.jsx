@@ -44,9 +44,9 @@ const Login = () => {
         showConfirmButton: false
       }).then(() => {
         const rutas = {
-          1: '/admin',
+          1: '/consulta',
           2: '/turnado',
-          3: '/consulta'
+          3: '/captura'
         };
         navigate(rutas[result.nivel] || '/123');
       });

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import FiltroCorrespondencia from "../hooks/FiltroCorrespondencia";
 import "../css/Turnado.css";
 import ModalTurnado from "../Modals/ModalTurnado";
-import { useTurnado } from "../hooks/useCorrespondencia";
+import useCorrespondencia from "../hooks/useCorrespondencia";
 import useDetalleOficio from "../hooks/useDetalleOficio";
 import { useUsuario } from "../context/UserContext";
 
@@ -13,7 +13,7 @@ const Turnado = () => {
     datos: datosOriginales,
     loading,
     refetch
-    } = useTurnado(usuario?.id);
+    } = useCorrespondencia(usuario?.id);
   const [datosFiltrados, setDatosFiltrados] = useState(null);
   const [paginaActual, setPaginaActual] = useState(1);
   const [resultadosPorPagina, setResultadosPorPagina] = useState(10);

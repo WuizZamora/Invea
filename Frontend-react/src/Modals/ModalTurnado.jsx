@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Detalle.css";
 import { showSuccess, showError, showConfirm } from "../utils/alerts";
+import RespuestaTurnado from "./RespuestaTurnado";
 
 const ModalTurnado = ({ item, loading, error, onClose }) => {
     const [formData, setFormData] = useState({ ...item });
@@ -54,7 +55,7 @@ const ModalTurnado = ({ item, loading, error, onClose }) => {
                     </ul>
                 </div>
                     <div className="detalle-visual-derecha">
-                        123
+                        <RespuestaTurnado />
                     </div>
                 </div>
 
