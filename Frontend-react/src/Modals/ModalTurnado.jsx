@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./Detalle.css";
 import { showSuccess, showError, showConfirm } from "../utils/alerts";
 import RespuestaTurnado from "./RespuestaTurnado";
+import TablaCorrespondenciaOut from "../components/TablaCorrespondeciaOut";
 
-const ModalTurnado = ({ item, loading, error, onClose }) => {
-    const [formData, setFormData] = useState({ ...item });
-    const [TipoMensaje, setTipoMensaje] = useState("");
+const ModalTurnado = ({ item, onClose }) => {
 
-    const mostrarNombreCampo = (clave) => (clave === "FechaIn" ? "Fecha" : clave);
-    const camposOcultos = ["Pk_IDCorrespondenciaIn", "Dependencia", "SoporteDocumental", ""];
+
+    const [refetchOut, setRefetchOut] = useState(false);
+
 
     const formatearFecha = (fechaISO) => {
         if (!fechaISO) return "";
@@ -29,7 +29,7 @@ const ModalTurnado = ({ item, loading, error, onClose }) => {
 
   return (
     <div className="modal-overlay">
-      <div className={`modal-content`}>
+      <div className={`modal-content-turnado`}>
             <div className="detalle-visual-container">
                 <div className="detalle-visual-izquierda card">
                     <h3 className="txt-izq">Detalles del registro</h3>
@@ -47,6 +47,11 @@ const ModalTurnado = ({ item, loading, error, onClose }) => {
                         </span>
                         <span>{item.Oficio}</span>
                         </div>
+                        {item.OP != null && (
+                        <div className="fila-arriba">
+                            <span><strong>OP:</strong> {item.OP}</span>
+                        </div>
+                        )}
                         <br/>
                         <div className="fila-arriba">
                             <span><strong>Asunto:</strong> {item.Asunto}</span>
@@ -63,14 +68,23 @@ const ModalTurnado = ({ item, loading, error, onClose }) => {
 
                         <strong>{item.Remitente}</strong>
                         <strong>{item.Cargo}</strong>
+
+                        <TablaCorrespondenciaOut
+                        idCorrespondencia={item.Pk_IDCorrespondenciaIn}
+                        key={refetchOut}
+                        />
                     </div>
+
                 </div>
                     <div className="detalle-visual-derecha">
-                        <RespuestaTurnado />
+                        <RespuestaTurnado
+                        idCorrespondencia={item.Pk_IDCorrespondenciaIn}
+                        onSuccess={() => setRefetchOut(prev => !prev)} // toggle refetch
+                        />
                     </div>
                 </div>
 
-        <button className="close-button" onClick={onClose}>×</button>
+        <button className="close-boton" onClick={onClose}>×</button>
       </div>
     </div>
   );

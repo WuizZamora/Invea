@@ -73,7 +73,7 @@ const Tabla = () => {
 
 
   return (
-    <div className="table-card">
+    <div className="table-form">
       <h4>Tabla de Registros</h4>
       <div className="row">
         <div className="col-md-7">

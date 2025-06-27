@@ -160,17 +160,36 @@ form button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 1050;
 }
 
-.modal-content {
+.modal-content-turnado {
   background: white;
   padding: 24px;
   border-radius: 8px;
   max-height: 80%;
   overflow-y: auto;
-  width: 80rem;
+  width: 90rem;
+  position: relative;
 }
+
+.close-boton {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  color: #444;
+  cursor: pointer;
+  z-index: 999999;
+}
+
+.close-boton:hover {
+  color: #d00;
+}
+
 .modal-edit{
   width: 50rem;
   display: flex;

@@ -322,7 +322,7 @@ router.get('/obtener-correspondencia-out/:idIn', async (req, res) => {
     const fkId = Number(req.params.idIn);
 
     const [rows] = await devaPool.query(
-      'SELECT * FROM Correspondencia_Interna_Out WHERE Fk_Correspondencia_Interna_In = ?',
+      'SELECT * FROM Correspondencia_Interna_Out WHERE Fk_Correspondencia_Interna_In = ? ORDER BY Pk_IDCorrespondenciaOut DESC',
       [fkId]
     );
 

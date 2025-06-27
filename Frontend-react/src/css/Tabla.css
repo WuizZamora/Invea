@@ -1,12 +1,12 @@
-.form-card {
+.form-card{
   padding: 1%;
   border-radius: 15px;
   margin: 1%;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
   
 }
-.table-card{
-  margin: 0 2rem 0 2rem;
+.table-form{
+  margin: 0 1rem 0 1rem;
 }
 
 .tabla-registro table{
@@ -185,12 +185,12 @@ form button:hover {
 }
 
 .estatus-pendiente {
-  color: orange;
+  color: red;
   font-weight: bold;
 }
 
-.estatus-en\ proceso {
-  color: goldenrod; /* o yellow si prefieres más brillante */
+.estatus-en.proceso {
+  color: orange; /* o yellow si prefieres más brillante */
   font-weight: bold;
 }
 
@@ -224,11 +224,11 @@ form button:hover {
 }
 
 .pendiente {
-  background-color: orange;
+  background-color: red;
 }
 
 .en-proceso {
-  background-color: goldenrod;
+  background-color: orange;
 }
 
 .terminado {

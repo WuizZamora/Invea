@@ -42,6 +42,11 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
               </span>
               <span>{item.Oficio}</span>
             </div>
+            {item.OP != null && (
+              <div className="fila-arriba">
+                <span><strong>OP:</strong> {item.OP}</span>
+              </div>
+            )}
             <br/><br/>
             <div className="fila-arriba">
                 <span><strong>Asunto:</strong> {item.Asunto}</span>

@@ -21,16 +21,18 @@ const Header = () => {
     <header className="header d-flex justify-content-between align-items-center px-4 py-2">
       <div className="d-flex align-items-center gap-3">
         <img src="/INVEAlogo.png" alt="Logo" className="logo" />
-        <nav className="nav">
-          <div className="dropdown">
-            <span className="dropdown-title">DEVA</span>
-            <div className="dropdown-content">
-              <Link to="/consulta">Consulta</Link>
-              <Link to="/captura">Captura</Link>
-              <Link to="/turnado">Turnado</Link>
+        {!loading && usuario?.nivel === 1 && (
+          <nav className="nav">
+            <div className="dropdown">
+              <span className="dropdown-title">DEVA</span>
+              <div className="dropdown-content">
+                <Link to="/consulta">Consulta</Link>
+                <Link to="/captura">Captura</Link>
+                <Link to="/turnado">Turnado</Link>
+              </div>
             </div>
-          </div>
-        </nav>
+          </nav>
+        )}
       </div>
 
       {!loading && usuario && (
