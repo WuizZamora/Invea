@@ -55,7 +55,8 @@ const FormIn = () => {
     { value: "SOLICITA INFORMACIÓN", label: "SOLICITA INFORMACIÓN" },
     { value: "NOTIFICACIÓN", label: "NOTIFICACIÓN" },
     { value: "AMPARO", label: "AMPARO" },
-    { value: "JUICIO DE NULIDAD", label: "JUICIO DE NULIDAD" }
+    { value: "JUICIO DE NULIDAD", label: "JUICIO DE NULIDAD" },
+    { value: "JUICIO DE NULIDAD1", label: "JUICIO DE NULIDAD1" }
   ];
 
   const opcionesMotivo = [
