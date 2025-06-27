@@ -111,7 +111,8 @@ router.post('/guardar-correspondencia', async (req, res) => {
       NumCalle,
       Fk_Personal_Turnado,
       SoporteDocumental,
-      Num
+      Num, 
+      OP
     } = req.body;
 
     if (Fk_Personal_Remitente == 0) {
@@ -125,7 +126,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
     }
 
     // Ahora llamamos al procedimiento almacenado con el remitente ya resuelto
-    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       Num,
       NumDVSC,
@@ -140,7 +141,8 @@ router.post('/guardar-correspondencia', async (req, res) => {
       Calle,
       NumCalle,
       Fk_Personal_Turnado,
-      SoporteDocumental
+      SoporteDocumental, 
+      OP
     ];
 
     await devaPool.query(query, values);
