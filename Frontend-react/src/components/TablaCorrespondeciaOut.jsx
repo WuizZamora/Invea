@@ -10,11 +10,23 @@ const TablaCorrespondenciaOut = ({ idCorrespondencia }) => {
   // Asegúrate que data.data exista y sea arreglo
   const registros = data?.data ?? [];
 
+      const formatearFecha = (fechaISO) => {
+        if (!fechaISO) return "";
+
+        const fecha = new Date(fechaISO);
+
+        const opciones = {
+            day: "2-digit",
+            month: "2-digit"
+        };
+
+    return fecha.toLocaleString("es-MX", opciones);
+    };
+
   if (registros.length === 0) return <p>No hay registros OUT disponibles.</p>;
 
   return (
     <div className="table-container">
-      <h4>Historial de respuesta</h4>
       <table className="tabla-registro">
         <thead>
           <tr>
@@ -27,7 +39,7 @@ const TablaCorrespondenciaOut = ({ idCorrespondencia }) => {
         <tbody>
           {registros.map((fila, index) => (
             <tr key={index}>
-              <td>{new Date(fila.FechaOut).toLocaleDateString("es-MX")}</td>
+              <td>{formatearFecha(fila.FechaOut)}</td>
               <td>{fila.Accion}</td>
               <td>
                 {fila.SoporteDocumental ? (

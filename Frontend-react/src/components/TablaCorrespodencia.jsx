@@ -127,7 +127,7 @@ const Tabla = () => {
                 <th>Asunto</th>
                 <th>Dirección</th>
                 <th>OP</th>
-                <th>Soporte documental</th>
+                <th>Documental</th>
               </tr>
             </thead>
             <tbody>

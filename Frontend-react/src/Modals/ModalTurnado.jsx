@@ -32,6 +32,7 @@ const ModalTurnado = ({ item, onClose }) => {
       <div className={`modal-content-turnado`}>
             <div className="detalle-visual-container">
                 <div className="detalle-visual-izquierda card">
+                    <div className="col-md-12">
                     <h3 className="txt-izq">Detalles del registro</h3>
                     <div className="detalle-bloque">
                         <div className="fila-arriba">
@@ -42,12 +43,12 @@ const ModalTurnado = ({ item, onClose }) => {
                         
                         </div>
                         <div className="fila-arriba">
-                        <span className={item.Caracter === "Urgente" ? "caracter-urgente" : "caracter-ordinario"}>
-                            {item.Caracter}
-                        </span>
-                        <span>{item.Oficio}</span>
+                            <span className={item.Caracter === "Urgente" ? "caracter-urgente" : "caracter-ordinario"}>
+                                {item.Caracter}
+                            </span>
+                            <span>{item.Oficio}</span>
                         </div>
-                        {item.OP != null && (
+                        {item.OP && (
                         <div className="fila-arriba">
                             <span><strong>OP:</strong> {item.OP}</span>
                         </div>
@@ -68,13 +69,13 @@ const ModalTurnado = ({ item, onClose }) => {
 
                         <strong>{item.Remitente}</strong>
                         <strong>{item.Cargo}</strong>
-
+                    </div>
+                    </div>
+                    <h5>Historial de Respuestas</h5>
                         <TablaCorrespondenciaOut
                         idCorrespondencia={item.Pk_IDCorrespondenciaIn}
                         key={refetchOut}
                         />
-                    </div>
-
                 </div>
                     <div className="detalle-visual-derecha">
                         <RespuestaTurnado
