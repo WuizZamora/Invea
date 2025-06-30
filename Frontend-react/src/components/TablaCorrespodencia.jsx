@@ -35,6 +35,20 @@ const Tabla = () => {
   setPaginaActual(nuevaPagina);
   };
 
+      const formatearFecha = (fechaISO) => {
+        if (!fechaISO) return "";
+
+        const fecha = new Date(fechaISO);
+
+        const opciones = {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        };
+
+    return fecha.toLocaleString("es-MX", opciones);
+    };
+
   // Función de filtrado mejorada
   const handleFiltrar = useCallback((resultados) => {
     setDatosFiltrados(resultados);
@@ -128,7 +142,7 @@ const Tabla = () => {
                   >
                     {item.Oficio}
                   </td>
-                  <td>{item.FechaDocumento}</td>
+                  <td>{formatearFecha(item.FechaDocumento)}</td>
                   <td>{item.Remitente}</td>
                   <td>{item.Asunto}</td>
                   <td>{item.Direccion}</td>
