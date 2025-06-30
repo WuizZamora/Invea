@@ -23,6 +23,7 @@ export const handleFormSubmit = async (form, direccionID) => {
   };
 
   try {
+    console.log(payload);
     const response = await fetch(
           `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/guardar-correspondencia`, {
       credentials: 'include',

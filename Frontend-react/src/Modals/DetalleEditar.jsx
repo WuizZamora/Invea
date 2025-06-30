@@ -1,6 +1,24 @@
 import React from "react";
 import Select from "react-select";
 
+const toInputDate = (valor) => {
+  if (!valor || typeof valor !== "string") return "";
+
+  // Si ya viene en formato ISO, devuélvelo tal cual
+  if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
+    return valor;
+  }
+
+  // Si viene en formato DD/MM/YYYY, conviértelo a ISO
+  const parts = valor.split("/");
+  if (parts.length === 3) {
+    const [d, m, y] = parts;
+    return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+  }
+
+  // En cualquier otro caso, regresa vacío
+  return "";
+};
 
 const DetalleEditar = ({
   formData,
@@ -22,13 +40,13 @@ const DetalleEditar = ({
         if (
           camposOcultos.includes(clave) ||
           clave === "Direccion" ||
-          clave === "Cargo" 
+          clave === "Cargo"
           // || ((clave === "NumDVSC" || clave === "NumDEVA") && !valor)
         ) return null;
         return (
           <li key={clave}>
             <div>
-            <strong>{mostrarNombreCampo(clave)}:</strong>
+              <strong>{mostrarNombreCampo(clave)}:</strong>
             </div>
             {" "}
             {camposNoEditables.includes(clave) ? (
@@ -37,13 +55,11 @@ const DetalleEditar = ({
               <div>
                 <input
                   type="date"
-                  value={
-                    valor ? new Date(valor).toISOString().slice(0, 10) : ""
-                  }
+                  value={toInputDate(valor)}
                   onChange={(e) => handleChange(clave, e.target.value)}
                 />
               </div>
-            ):clave === "NumDVSC" ? (
+            ) : clave === "NumDVSC" ? (
               <div>
                 <input
                   type="text"
@@ -67,7 +83,7 @@ const DetalleEditar = ({
                   }}
                 />
               </div>
-            ) :clave === "Oficio" ? (
+            ) : clave === "Oficio" ? (
               <div>
                 <input
                   type="text"
@@ -76,7 +92,7 @@ const DetalleEditar = ({
                   onChange={(e) => handleChange(clave, e.target.value)}
                 />
               </div>
-            ) :clave === "Expediente" ? (
+            ) : clave === "Expediente" ? (
               <div>
                 <input
                   type="text"
@@ -85,7 +101,7 @@ const DetalleEditar = ({
                   onChange={(e) => handleChange(clave, e.target.value)}
                 />
               </div>
-            ) :clave === "Descripcion" ? (
+            ) : clave === "Descripcion" ? (
               <div>
                 <input
                   type="text"
@@ -124,7 +140,7 @@ const DetalleEditar = ({
                   />
                 )
               ) : null
-            ): camposSelect.includes(clave) ? (
+            ) : camposSelect.includes(clave) ? (
               <Select
                 className="mi-select"
                 classNamePrefix="mi-select"

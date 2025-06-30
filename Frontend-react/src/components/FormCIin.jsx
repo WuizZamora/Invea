@@ -30,7 +30,7 @@ const FormIn = () => {
     mode: "onChange",
     defaultValues: {
       NumDVSC: "",
-      Num: 1,
+      Num: "1",
       FechaDocumento: new Date().toISOString().slice(0, 10),
       oficio: "",
       expediente: "",
@@ -62,7 +62,7 @@ const FormIn = () => {
       setRefetchOut(prev => !prev);
       reset({
         NumDVSC: "",
-        Num: 1,
+        Num: "1",
         FechaDocumento: new Date().toISOString().slice(0, 10),
         oficio: "",
         expediente: "",
@@ -97,11 +97,11 @@ const FormIn = () => {
             <label>Num</label>
             <div className="col">
               DVSC
-              <input type="radio" value={1} {...register("Num")} defaultChecked />
+              <input type="radio" value={"1"} {...register("Num")} defaultChecked />
             </div>
             <div className="col">
               DEVA
-              <input type="radio" value={2} {...register("Num")} />
+              <input type="radio" value={"2"} {...register("Num")} />
             </div>
             <div className="col-md-1">
               <label htmlFor="NumDVSC">#{parseInt(Num) === 1 ? "DVSC" : "DEVA"}:</label>

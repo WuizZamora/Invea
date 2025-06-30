@@ -4,7 +4,7 @@ import FiltroCorrespondencia from "../hooks/FiltroCorrespondencia";
 import UploadPDFButton from "../hooks/UploadPDFButton";
 import DeletePDFButton from "../hooks/DeletePDFButton";
 import "../css/Tabla.css";
-import  ModalDetalle from "../Modals/ModalDetalle";
+import ModalDetalle from "../Modals/ModalDetalle";
 import useDetalleOficio from "../hooks/useDetalleOficio";
 
 const Tabla = () => {
@@ -14,16 +14,16 @@ const Tabla = () => {
   const [resultadosPorPagina, setResultadosPorPagina] = useState(10);
 
   // Datos a mostrar - importante el orden de las condiciones
-  const datosMostrar = datosFiltrados === null ? datosOriginales : 
-                      datosFiltrados.length === 0 ? [] : 
-                      datosFiltrados;
+  const datosMostrar = datosFiltrados === null ? datosOriginales :
+    datosFiltrados.length === 0 ? [] :
+      datosFiltrados;
 
   // Cálculos de paginación
   const totalPaginas = Math.ceil(datosMostrar.length / resultadosPorPagina);
   const indiceInicial = (paginaActual - 1) * resultadosPorPagina;
   const indiceFinal = indiceInicial + resultadosPorPagina;
   const datosPagina = datosMostrar.slice(indiceInicial, indiceFinal);
-  {}
+  { }
   const {
     detalle,
     error,
@@ -32,22 +32,8 @@ const Tabla = () => {
   } = useDetalleOficio();
 
   const cambiarPagina = (nuevaPagina) => {
-  setPaginaActual(nuevaPagina);
+    setPaginaActual(nuevaPagina);
   };
-
-      const formatearFecha = (fechaISO) => {
-        if (!fechaISO) return "";
-
-        const fecha = new Date(fechaISO);
-
-        const opciones = {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-        };
-
-    return fecha.toLocaleString("es-MX", opciones);
-    };
 
   // Función de filtrado mejorada
   const handleFiltrar = useCallback((resultados) => {
@@ -62,24 +48,14 @@ const Tabla = () => {
     }
   }, [totalPaginas, paginaActual]);
 
-  // Intervalo de actualizacion de datos
-//   useEffect(() => {
-//   const intervalId = setInterval(() => {
-//     refetch();
-//   }, 3000); // cada 3 segundos
-
-//   return () => clearInterval(intervalId); // limpiar al desmontar
-// }, [refetch]);
-
-
   return (
     <div className="table-form">
       <h4>Tabla de Registros</h4>
       <div className="row">
         <div className="col-md-7">
-          <FiltroCorrespondencia 
-            datos={datosOriginales} 
-            onFiltrar={handleFiltrar} 
+          <FiltroCorrespondencia
+            datos={datosOriginales}
+            onFiltrar={handleFiltrar}
           />
         </div>
         <div className="col-md-3 leyenda-estatus">
@@ -90,7 +66,7 @@ const Tabla = () => {
             <span><span className="color-circulo terminado"></span> Terminado</span>
           </div>
         </div>
-          <div className="col-md-2">
+        <div className="col-md-2">
           <div className="contenedor-filas-por-pagina">
             <label htmlFor="filasPorPagina">Filas por página:</label>
             <select
@@ -110,7 +86,7 @@ const Tabla = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="table-container">
         {datosMostrar.length === 0 ? (
           <div className="sin-resultados">
@@ -142,11 +118,11 @@ const Tabla = () => {
                   >
                     {item.Oficio}
                   </td>
-                  <td>{formatearFecha(item.FechaDocumento)}</td>
+                  <td>{item.FechaDocumento}</td>
                   <td>{item.Remitente}</td>
                   <td>{item.Asunto}</td>
                   <td>{item.Direccion}</td>
-                  <td>{item.OP ? (item.OP):("S/OP")}</td>
+                  <td>{item.OP ? (item.OP) : ("S/OP")}</td>
                   <td>
                     {item.SoporteDocumental ? (
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -158,10 +134,10 @@ const Tabla = () => {
                             style={{ width: "24px", cursor: "pointer" }}
                           />
                         </a>
-                          <DeletePDFButton
-                            id={item.Pk_IDCorrespondenciaIn}
-                            onDeleteSuccess={refetch}
-                          />
+                        <DeletePDFButton
+                          id={item.Pk_IDCorrespondenciaIn}
+                          onDeleteSuccess={refetch}
+                        />
                       </div>
                     ) : (
                       <UploadPDFButton
@@ -180,35 +156,35 @@ const Tabla = () => {
       {/* Mostrar controles de paginación solo si hay resultados */}
       {datosMostrar.length > 0 && totalPaginas > 1 && (
         <div className="paginacion">
-          <button 
-            onClick={() => cambiarPagina(paginaActual - 1)} 
+          <button
+            onClick={() => cambiarPagina(paginaActual - 1)}
             disabled={paginaActual === 1}
           >
             Anterior
           </button>
-          
-        {Array.from({ length: totalPaginas }, (_, i) => i + 1)
-          .filter(num => 
-            num === 1 || 
-            num === totalPaginas || 
-            Math.abs(num - paginaActual) <= 2
-          )
-          .map((num, i, arr) => {
-            const prevNum = arr[i - 1];
-            return (
-              <React.Fragment key={num}>
-                {prevNum && num - prevNum > 1 && <span className="ellipsis">...</span>}
-                <button
-                  onClick={() => cambiarPagina(num)}
-                  className={paginaActual === num ? 'active' : ''}
-                >
-                  {num}
-                </button>
-              </React.Fragment>
-            );
-          })}
-          <button 
-            onClick={() => cambiarPagina(paginaActual + 1)} 
+
+          {Array.from({ length: totalPaginas }, (_, i) => i + 1)
+            .filter(num =>
+              num === 1 ||
+              num === totalPaginas ||
+              Math.abs(num - paginaActual) <= 2
+            )
+            .map((num, i, arr) => {
+              const prevNum = arr[i - 1];
+              return (
+                <React.Fragment key={num}>
+                  {prevNum && num - prevNum > 1 && <span className="ellipsis">...</span>}
+                  <button
+                    onClick={() => cambiarPagina(num)}
+                    className={paginaActual === num ? 'active' : ''}
+                  >
+                    {num}
+                  </button>
+                </React.Fragment>
+              );
+            })}
+          <button
+            onClick={() => cambiarPagina(paginaActual + 1)}
             disabled={paginaActual === totalPaginas}
           >
             Siguiente

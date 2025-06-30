@@ -3,8 +3,6 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { devaPool } from '../../config/db';
-import { Console } from 'console';
-import { isConditionalExpression } from 'typescript';
 import { ResultSetHeader } from 'mysql2';
 
 const router = express.Router();

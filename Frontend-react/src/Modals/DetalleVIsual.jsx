@@ -5,21 +5,6 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
   const soporteUrl =
     soporte &&
     `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${soporte}`;
-
-
-    const formatearFecha = (fechaISO) => {
-        if (!fechaISO) return "";
-
-        const fecha = new Date(fechaISO);
-
-        const opciones = {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-        };
-
-    return fecha.toLocaleString("es-MX", opciones);
-    };
     
   return (
     <div className="detalle-visual-container">
@@ -31,7 +16,7 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
               <span>
                 <strong>{item.NumDVSC ? "DVSC:" : "DEVA:"}</strong> {item.NumDVSC || item.NumDEVA}
               </span>
-              <span>{formatearFecha(item.FechaDocumento)}</span>
+              <span>{item.FechaDocumento}</span>
             </div>
             <div className="fila-arriba">
               <span className={item.Caracter === "Urgente" ? "caracter-urgente" : "caracter-ordinario"}>
