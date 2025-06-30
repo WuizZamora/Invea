@@ -33,10 +33,10 @@ const DetalleEditar = ({
             {" "}
             {camposNoEditables.includes(clave) ? (
               <span>{valor}</span>
-            ) : clave === "FechaIn" ? (
+            ) : clave === "FechaDocumento" ? (
               <div>
                 <input
-                  type="datetime-local"
+                  type="date"
                   value={
                     valor ? new Date(valor).toISOString().slice(0, 16) : ""
                   }
@@ -68,6 +68,15 @@ const DetalleEditar = ({
                 />
               </div>
             ) :clave === "Oficio" ? (
+              <div>
+                <input
+                  type="text"
+                  value={valor ?? ""}
+                  maxLength={55}
+                  onChange={(e) => handleChange(clave, e.target.value)}
+                />
+              </div>
+            ) :clave === "Expediente" ? (
               <div>
                 <input
                   type="text"

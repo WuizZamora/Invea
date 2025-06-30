@@ -23,7 +23,7 @@ const TablaCorrespondenciaOut = ({ idCorrespondencia }) => {
     return fecha.toLocaleString("es-MX", opciones);
     };
 
-  if (registros.length === 0) return <p>No hay registros OUT disponibles.</p>;
+  if (registros.length === 0) return <p>No hay Respuestas para este registro, disponibles.</p>;
 
   return (
     <div className="table-container">

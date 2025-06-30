@@ -4,7 +4,7 @@ export const handleFormSubmit = async (form, direccionID) => {
   const payload = {
     NumDVSC: parseInt(form.NumDVSC),
     Num: parseInt(form.Num),
-    FechaIn: new Date(form.date).toISOString().slice(0, 19).replace("T", " "),
+    FechaDocumento: new Date(form.FechaDocumento).toISOString().slice(0, 10),
     Oficio: form.oficio,
     Expediente: form.expediente,
     Fk_Personal_Remitente: parseInt(form.Fk_Personal_Remitente),

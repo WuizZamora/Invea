@@ -34,7 +34,7 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
               <span>
                 <strong>{item.NumDVSC ? "DVSC:" : "DEVA:"}</strong> {item.NumDVSC || item.NumDEVA}
               </span>
-              <span>{formatearFecha(item.FechaIn)}</span>
+              <span>{item.FechaDocumento}</span>
             </div>
             <div className="fila-arriba">
               <span className={item.Caracter === "Urgente" ? "caracter-urgente" : "caracter-ordinario"}>
@@ -42,11 +42,14 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
               </span>
               <span>{item.Oficio}</span>
             </div>
+            <div className="fila-arriba">
               {item.OP && (
-                <div className="fila-arriba">
                   <span><strong>OP:</strong> {item.OP}</span>
-                </div>
               )}
+              {item.expediente && (
+                  <span><strong>Exp:</strong> {item.expediente}</span>
+              )}
+            </div>
             <br/><br/>
             <div className="fila-arriba">
                 <span><strong>Asunto:</strong> {item.Asunto}</span>

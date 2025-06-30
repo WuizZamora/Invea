@@ -31,7 +31,7 @@ const FormIn = () => {
     defaultValues: {
       NumDVSC: "",
       Num: 1,
-      date: new Date().toISOString().slice(0, 16),
+      FechaDocumento: new Date().toISOString().slice(0, 10),
       oficio: "",
       expediente: "",
       Fk_Personal_Remitente: "",
@@ -51,6 +51,7 @@ const FormIn = () => {
 
   const Num = watch("Num");
   const Fk_Personal_Remitente = watch("Fk_Personal_Remitente");
+  const isOtro = Fk_Personal_Remitente === "0";
 
   const opcionesConOtro = [...opcionesPersonal, { label: "OTRO", value: "0" }];
 
@@ -62,7 +63,7 @@ const FormIn = () => {
       reset({
         NumDVSC: "",
         Num: 1,
-        date: new Date().toISOString().slice(0, 16),
+        FechaDocumento: new Date().toISOString().slice(0, 10),
         oficio: "",
         expediente: "",
         Fk_Personal_Remitente: "",
@@ -93,12 +94,13 @@ const FormIn = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Selector DVSC/DEVA y Número */}
           <div className="row">
+            <label>Num</label>
             <div className="col">
-              <label>DVSC</label>
+              DVSC
               <input type="radio" value={1} {...register("Num")} defaultChecked />
             </div>
             <div className="col">
-              <label>DEVA</label>
+              DEVA
               <input type="radio" value={2} {...register("Num")} />
             </div>
             <div className="col-md-1">
@@ -106,8 +108,8 @@ const FormIn = () => {
               <input type="text" {...register("NumDVSC", { required: true })} maxLength={7} />
             </div>
             <div className="col-md-2">
-              <label>Fecha de Captura:</label>
-              <input type="datetime-local" {...register("date")} />
+              <label>Fecha de Oficio:</label>
+              <input type="date" {...register("FechaDocumento")} />
             </div>
             <div className="col-md-4">
               <label>Oficio:</label>
@@ -115,7 +117,7 @@ const FormIn = () => {
             </div>
             <div className="col-md-4">
               <label>Expediente:</label>
-              <input type="text" {...register("expediente", { required: true })} maxLength={55} />
+              <input type="text" {...register("expediente")} placeholder="Opcional" maxLength={55} />
             </div>
           </div>
 
@@ -148,15 +150,30 @@ const FormIn = () => {
               <>
                 <div className="col-md-3">
                   <label>Nombre:</label>
-                  <input type="text" {...register("Nombre")} />
+                  <input
+                    type="text"
+                    {...register("Nombre", {
+                      required: isOtro ? "El nombre es obligatorio" : false
+                    })}
+                  />
                 </div>
                 <div className="col-md-3">
                   <label>Cargo:</label>
-                  <input type="text" {...register("Cargo")} />
+                  <input
+                    type="text"
+                    {...register("Cargo", {
+                      required: isOtro ? "El cargo es obligatorio" : false
+                    })}
+                  />
                 </div>
                 <div className="col-md-3">
                   <label>Dependencia:</label>
-                  <input type="text" {...register("Dependencia")} />
+                  <input
+                    type="text"
+                    {...register("Dependencia", {
+                      required: isOtro ? "La dependencia es obligatoria" : false
+                    })}
+                  />
                 </div>
               </>
             )}
