@@ -38,7 +38,7 @@ const DetalleEditar = ({
                 <input
                   type="date"
                   value={
-                    valor ? new Date(valor).toISOString().slice(0, 16) : ""
+                    valor ? new Date(valor).toISOString().slice(0, 10) : ""
                   }
                   onChange={(e) => handleChange(clave, e.target.value)}
                 />

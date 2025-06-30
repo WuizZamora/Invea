@@ -16,9 +16,6 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true,
         };
 
     return fecha.toLocaleString("es-MX", opciones);
@@ -34,7 +31,7 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
               <span>
                 <strong>{item.NumDVSC ? "DVSC:" : "DEVA:"}</strong> {item.NumDVSC || item.NumDEVA}
               </span>
-              <span>{item.FechaDocumento}</span>
+              <span>{formatearFecha(item.FechaDocumento)}</span>
             </div>
             <div className="fila-arriba">
               <span className={item.Caracter === "Urgente" ? "caracter-urgente" : "caracter-ordinario"}>

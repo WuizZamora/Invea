@@ -94,7 +94,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
     setEditMode(false);
   };
 
-  const mostrarNombreCampo = (clave) => (clave === "FechaIn" ? "Fecha" : clave);
+  const mostrarNombreCampo = (clave) => (clave === "FechaDocuemnto" ? "Fecha" : clave);
 
   return (
     <div className="modal-overlay">
