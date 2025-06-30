@@ -85,6 +85,7 @@ router.get('/obtener-correspondencia-id/:id', async (req, res) => {
     const id = req.params.id;
     const [rows] = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]);
     res.json({ data: rows });
+    console.log(rows)
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error en la base de datos' });
@@ -112,7 +113,9 @@ router.post('/guardar-correspondencia', async (req, res) => {
       Fk_Personal_Turnado,
       SoporteDocumental,
       Num, 
-      OP
+      OP,
+      Expediente,
+      FechaDocumento
     } = req.body;
 
     if (Fk_Personal_Remitente == 0) {
@@ -126,7 +129,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
     }
 
     // Ahora llamamos al procedimiento almacenado con el remitente ya resuelto
-    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       Num,
       NumDVSC,
@@ -142,7 +145,9 @@ router.post('/guardar-correspondencia', async (req, res) => {
       NumCalle,
       Fk_Personal_Turnado,
       SoporteDocumental, 
-      OP
+      OP,
+      Expediente,
+      FechaDocumento
     ];
 
     await devaPool.query(query, values);
@@ -233,15 +238,17 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Calle,
       NumCalle,
       OP,
-      Fk_Personal_Turnado
+      Fk_Personal_Turnado, 
+      FechaDocumento, 
+      Expediente
     } = req.body;
+    
     console.log(req.body);
-    const query = 'CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       id,
       NumDVSC,
       NumDEVA,
-      FechaIn,
       Oficio,
       Fk_Personal_Remitente,
       Asunto,
@@ -251,7 +258,9 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Calle,
       NumCalle,
       Fk_Personal_Turnado,
-      OP
+      OP, 
+      Expediente, 
+      FechaDocumento
     ];
     console.log(values);
     await devaPool.query(query, values);
