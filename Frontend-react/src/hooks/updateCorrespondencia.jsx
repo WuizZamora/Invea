@@ -16,7 +16,7 @@ export const updateCorrespondencia = async (id, data) => {
     Fk_Personal_Turnado: parseInt(data.Turnado),
     OP: data.OP
   };
-
+    console.log(body);
   try {
     const response = await fetch(url, {
       credentials: 'include',
