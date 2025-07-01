@@ -28,8 +28,8 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
               {item.OP && (
                   <span><strong>OP:</strong> {item.OP}</span>
               )}
-              {item.expediente && (
-                  <span><strong>Exp:</strong> {item.expediente}</span>
+              {item.Expediente && (
+                  <span><strong>Exp:</strong> {item.Expediente}</span>
               )}
             </div>
             <br/><br/>

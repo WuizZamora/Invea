@@ -105,7 +105,22 @@ const FormIn = () => {
             </div>
             <div className="col-md-1">
               <label htmlFor="NumDVSC">#{parseInt(Num) === 1 ? "DVSC" : "DEVA"}:</label>
-              <input type="text" {...register("NumDVSC", { required: true })} maxLength={7} />
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={7}
+                {...register("NumDVSC", { 
+                  required: true,
+                  pattern: {
+                    value: /^[0-9]*$/,
+                    message: "Solo se permiten números"
+                  }
+                })}
+                onInput={e => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                }}
+              />
             </div>
             <div className="col-md-2">
               <label>Fecha de Oficio:</label>
@@ -251,7 +266,7 @@ const FormIn = () => {
             </div>
             <div className="col-md-2">
               <label>#:</label>
-              <input type="text" {...register("NumC", { required: true })} maxLength={10} />
+              <input type="text" {...register("NumC", { required: true })} maxLength={30} />
             </div>
             <div className="col-md-3">
               <label>Alcaldía:</label>
