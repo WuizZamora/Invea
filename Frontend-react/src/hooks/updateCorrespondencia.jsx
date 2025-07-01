@@ -3,7 +3,7 @@ export const updateCorrespondencia = async (id, data) => {
   const body = {
     NumDVSC: parseInt(data.NumDVSC),
     NumDEVA: parseInt(data.NumDEVA),
-    FechaDocumento: new Date(data.FechaDocumento).toISOString().slice(0, 10),
+    FechaDocumento: new Date(data.FechaDocumento),
     Oficio: data.Oficio,
     Expediente: data.Expediente,
     Fk_Personal_Remitente: parseInt(data.Remitente),
