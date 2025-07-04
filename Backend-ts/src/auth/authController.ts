@@ -8,7 +8,7 @@ export const login = async (req: Request, res: Response) => {
     const [rows]: any = await devaPool.query(
       `SELECT  p.Pk_IDPersonalTurnado,
                u.Nivel,
-               p.Iniciales AS Lcp,
+               p.Nombre AS Lcp,
                u.Usuario  
        FROM Usuario u
        LEFT JOIN Personal_Turnado p
