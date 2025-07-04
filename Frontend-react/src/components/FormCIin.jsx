@@ -234,7 +234,8 @@ const FormIn = () => {
                               { value: "PAOT", label: "PAOT" },
                               { value: "CARPETA DE INVESTIGACIÓN", label: "CARPETA DE INVESTIGACIÓN" },
                               { value: "NOTIFICACIÓN CON SANCIÓN", label: "NOTIFICACIÓN CON SANCIÓN" },
-                              { value: "NOTIFICACIÓN SIN SANCIÓN", label: "NOTIFICACIÓN SIN SANCIÓN" }
+                              { value: "NOTIFICACIÓN SIN SANCIÓN", label: "NOTIFICACIÓN SIN SANCIÓN" }, 
+                              { value: "ACUERDO", label: "ACUERDO" }
                             ]
                           : [
                               { value: "ORDINARIO", label: "ORDINARIO" },
