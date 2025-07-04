@@ -215,7 +215,7 @@ const FormIn = () => {
                               { value: "SOLICITA VISITA DE VERIFICACIÓN", label: "SOLICITA VISITA DE VERIFICACIÓN" },
                               { value: "REPOSICIÓN DE SELLOS DE CLAUSURA", label: "REPOSICIÓN DE SELLOS DE CLAUSURA" },
                               { value: "RETIRO DE SELLOS", label: "RETIRO DE SELLOS" },
-                              { value: "REPOSICIÓN DE SELLOS MEDIDAS DE CAUTELARES", label: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES" },
+                              { value: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES", label: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES" },
                               { value: "SOLICITA INFORMACIÓN", label: "SOLICITA INFORMACIÓN" },
                               { value: "NOTIFICACIÓN", label: "NOTIFICACIÓN" },
                               { value: "AMPARO", label: "AMPARO" },
