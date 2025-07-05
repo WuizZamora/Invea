@@ -63,10 +63,18 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
         res.status(400).json({ error: 'Falta el parámetro "turnado" para nivel 2' });
         return;
       }
-      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaPorTurnado(?)', [turnado]);
+      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaSub(?)', [turnado]);
       rows = result;
-    } else {
-      res.status(400).json({ error: 'Nivel no válido. Debe ser 1 o 2.' });
+    }
+    else if (nivel === 4) {
+      if (!turnado) {
+        res.status(400).json({ error: 'Falta el parámetro "turnado" para nivel 4' });
+        return;
+      }
+      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaLCP(?)', [turnado]);
+      rows = result;
+    }else {
+      res.status(400).json({ error: 'Nivel no válido. Debe ser 1,2 o 4.' });
       return;
     }
 

@@ -6,10 +6,11 @@ export const login = async (req: Request, res: Response) => {
 
   try {
     const [rows]: any = await devaPool.query(
-      `SELECT  p.Pk_IDPersonalTurnado,
+      `SELECT  u.Fk_IDPersonalTurnado,
                u.Nivel,
                p.Nombre AS Lcp,
-               u.Usuario  
+               u.Usuario, 
+               u.Fk_IDLcpTurnado
        FROM Usuario u
        LEFT JOIN Personal_Turnado p
               ON p.Pk_IDPersonalTurnado = u.Fk_IDPersonalTurnado
@@ -18,14 +19,15 @@ export const login = async (req: Request, res: Response) => {
     );
 
     if (rows.length > 0) {
-      const { Pk_IDPersonalTurnado, Nivel, Lcp, Usuario } = rows[0];
+      const { Fk_IDPersonalTurnado, Fk_IDLCPTurnado, Nivel, Lcp, Usuario } = rows[0];
       (req.session as any).usuario = {
-        id: Pk_IDPersonalTurnado,
+        id: Fk_IDPersonalTurnado,
+        idLCP: Fk_IDLCPTurnado,
         nivel: Nivel,
         lcp: Lcp,
         usuario: Usuario
       };
-      res.json({ state: true, nombre: Lcp, nivel: Nivel, id:Pk_IDPersonalTurnado, usuario: Usuario});
+      res.json({ state: true, nombre: Lcp, nivel: Nivel, id:Fk_IDPersonalTurnado, usuario: Usuario, idLCP:Fk_IDLCPTurnado});
     } else {
       res.status(401).json({ state: false, mensaje: 'Usuario o contraseña incorrectos' });
     }
