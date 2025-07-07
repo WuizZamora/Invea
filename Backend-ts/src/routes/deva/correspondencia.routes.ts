@@ -89,10 +89,12 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
 router.get('/obtener-correspondencia-id/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const [results]: any = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]);
-    const row = results[0][0];   // primer recordset, primera fila
-    console.log('Consulta:', row.NumDVSC);
+    const [rows]: any = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]);
+    // El resultado de un CALL suele estar en rows[0][0]
+    const numDVSC = rows && rows[0] && rows[0][0] ? rows[0][0].NumDVSC : undefined;
+    console.log('NumDVSC:', numDVSC);
 
+    res.json({ data: rows });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error en la base de datos' });
@@ -122,7 +124,9 @@ router.post('/guardar-correspondencia', async (req, res) => {
       Num,
       OP,
       Expediente,
-      FechaDocumento
+      FechaDocumento,
+      TipoInmueble,
+      Denominacion
     } = req.body;
 
     if (Fk_Personal_Remitente == 0) {
@@ -136,7 +140,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
     }
 
     // Ahora llamamos al procedimiento almacenado con el remitente ya resuelto
-    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       Num,
       NumDVSC,
@@ -154,7 +158,9 @@ router.post('/guardar-correspondencia', async (req, res) => {
       SoporteDocumental,
       OP,
       Expediente,
-      FechaDocumento
+      FechaDocumento,
+      TipoInmueble,
+      Denominacion
     ];
 
     await devaPool.query(query, values);
@@ -235,7 +241,6 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
     const {
       NumDVSC,
       NumDEVA,
-      FechaIn,
       Oficio,
       Fk_Personal_Remitente,
       Asunto,
