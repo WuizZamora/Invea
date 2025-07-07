@@ -161,6 +161,7 @@ const Sub = () => {
         isOpen={mostrarModal}
         onClose={() => setMostrarModal(false)}
         idCorrespondencia={filaSeleccionada?.Pk_IDCorrespondenciaIn}
+        refetch={refetch}
       />
 
       {/* Mostrar controles de paginación solo si hay resultados */}

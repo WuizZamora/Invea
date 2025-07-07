@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { showSuccess, showError } from '../utils/alerts';
 
-const TurnarLCP = async ({ seleccionado, idCorrespondencia, onClose }) => {
+const TurnarLCP = async ({ seleccionado, idCorrespondencia, onClose, refetch }) => {
   if (!seleccionado || !idCorrespondencia) return;
 
   try {
@@ -22,6 +22,9 @@ const TurnarLCP = async ({ seleccionado, idCorrespondencia, onClose }) => {
 
     if (response.ok && result.success) {
       showSuccess('Turnado exitosamente');
+    if (typeof refetch === "function") {
+        await refetch();
+      }
       onClose(); // cerrar modal
     } else {
       showError(result.error || 'Error al turnar');
