@@ -5,8 +5,9 @@ import ModalTurnado from "../Modals/ModalTurnado";
 import useCorrespondencia from "../hooks/useCorrespondencia";
 import useDetalleOficio from "../hooks/useDetalleOficio";
 import { useUsuario } from "../context/UserContext";
+import TurnarModal from "../Modals/SubTurnar";
 
-const Turnado = () => {
+const Sub = () => {
   const { usuario } = useUsuario();
 
     const {
@@ -17,11 +18,15 @@ const Turnado = () => {
   const [datosFiltrados, setDatosFiltrados] = useState(null);
   const [paginaActual, setPaginaActual] = useState(1);
   const [resultadosPorPagina, setResultadosPorPagina] = useState(10);
-
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [filaSeleccionada, setFilaSeleccionada] = useState(null);
+  
   // Datos a mostrar - importante el orden de las condiciones
   const datosMostrar = datosFiltrados === null ? datosOriginales : 
                       datosFiltrados.length === 0 ? [] : 
                       datosFiltrados;
+
+
 
   // Cálculos de paginación
   const totalPaginas = Math.ceil(datosMostrar.length / resultadosPorPagina);
@@ -35,7 +40,6 @@ const Turnado = () => {
     obtenerDetalle,
     limpiarDetalle
   } = useDetalleOficio();
-
 
   const cambiarPagina = (nuevaPagina) => {
   setPaginaActual(nuevaPagina);
@@ -107,6 +111,7 @@ const Turnado = () => {
                 <th>Fecha</th>
                 <th>Asunto</th>
                 <th>OP</th>
+                <th>Turnado</th>
               </tr>
             </thead>
             <tbody>
@@ -115,29 +120,48 @@ const Turnado = () => {
                   <td className={`estatus-${item.Estatus?.toLowerCase()}`}>
                     {item.NumDVSC}
                   </td>
-                  <td>
+                    <td>
                     <span
-                      style={{ cursor: "pointer", color: "#1976d2", textDecoration: "underline" }}
-                      onClick={() => obtenerDetalle(item.Pk_IDCorrespondenciaIn)}
+                        style={{ cursor: "pointer", color: "#1976d2", textDecoration: "underline" }}
+                        onClick={() => obtenerDetalle(item.Pk_IDCorrespondenciaIn)}
                     >
-                      {item.Oficio}
+                        {item.Oficio}
                     </span>
                     {item.Expediente ? (
-                      <>
-                      <br />
-                      <strong>Exp:</strong>{item.Expediente}
-                      </>
+                        <>
+                        <br />
+                        <strong>Exp:</strong>{item.Expediente}
+                        </>
                     ) : null}
-                  </td>
+                    </td>
                   <td>{item.FechaDocumento}</td>
                   <td>{item.Asunto}</td>
                   <td>{item.OP ? (item.OP):("S/OP")}</td>
+
+                  <td>
+                    {item.TurnadoA ? 
+                    (item.TurnadoA)
+                    : (<button 
+                        className="save-button"
+                        onClick={() => {
+                          setFilaSeleccionada(item); // guarda la fila actual
+                          setMostrarModal(true);     // abre el modal
+                        }}
+                      >
+                        Turnar
+                      </button>)}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         )}
       </div>
+      <TurnarModal
+        isOpen={mostrarModal}
+        onClose={() => setMostrarModal(false)}
+        idCorrespondencia={filaSeleccionada?.Pk_IDCorrespondenciaIn}
+      />
 
       {/* Mostrar controles de paginación solo si hay resultados */}
       {datosMostrar.length > 0 && totalPaginas > 1 && (
@@ -198,4 +222,4 @@ const Turnado = () => {
   );
 };
 
-export default Turnado;
+export default Sub;

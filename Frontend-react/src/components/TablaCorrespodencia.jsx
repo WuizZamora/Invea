@@ -112,11 +112,18 @@ const Tabla = () => {
                   <td className={`estatus-${item.Estatus?.toLowerCase()}`}>
                     {item.NumDVSC}
                   </td>
-                  <td
-                    style={{ cursor: "pointer", color: "#1976d2", textDecoration: "underline" }}
-                    onClick={() => obtenerDetalle(item.Pk_IDCorrespondenciaIn)}
-                  >
-                    {item.Oficio}
+                  <td>
+                    <span
+                      style={{ cursor: "pointer", color: "#1976d2", textDecoration: "underline" }}
+                      onClick={() => obtenerDetalle(item.Pk_IDCorrespondenciaIn)}>
+                      {item.Oficio}
+                    </span>
+                    {item.Expediente ? (
+                        <>
+                        <br />
+                        <strong>Exp:</strong>{item.Expediente}
+                        </>
+                    ) : null}
                   </td>
                   <td>{item.FechaDocumento}</td>
                   <td>{item.Remitente}</td>

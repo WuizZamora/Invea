@@ -89,17 +89,6 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">
-      {/* <div className="mb-3">
-        <label className="form-label">Fecha de Salida</label>
-        <input
-          type="datetime-local"
-          className="form-control"
-          name="fechaSalida"
-          value={formData.fechaSalida}
-          onChange={handleChange}
-          required
-        />
-      </div> */}
       <div className="mb-3">
         <div className="d-flex gap-3 align-items-center">
           <label className="form-label">Tipo de Respuesta:</label>

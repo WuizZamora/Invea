@@ -12,11 +12,12 @@ export const updateCorrespondencia = async (id, data) => {
     Motivo: data.Motivo,
     Caracter: data.Caracter,
     Calle: data.Calle,
-    NumCalle: data.NumCalle,
+    NumCalle: data.NumCalle,  
+    TipoInmueble: data.TipoInmueble,
+    Denominacion: data.Denominacion,                      
     Fk_Personal_Turnado: parseInt(data.Turnado),
     OP: data.OP
   };
-    console.log(body);
   try {
     const response = await fetch(url, {
       credentials: 'include',

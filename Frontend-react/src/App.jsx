@@ -5,6 +5,7 @@ import Consulta from "./components/Consulta";
 import Login from "./Login";
 import PrivateRoute from "./components/PrivateRoute";
 import Turnado from "./components/Turnado";
+import Sub from "./components/SubDireccion";
 
 function App() {
   return (
@@ -43,6 +44,17 @@ function App() {
               <>
                 <Header />
                 <Turnado />
+              </>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/sub"
+          element={
+            <PrivateRoute>
+              <>
+                <Header />
+                <Sub />
               </>
             </PrivateRoute>
           }

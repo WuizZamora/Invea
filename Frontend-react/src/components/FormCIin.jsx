@@ -26,6 +26,15 @@ const FormIn = () => {
     direccionID
   } = useDireccionPorAlcaldia();
 
+  const InputMayusculas = ({ register, name, ...props }) => (
+    <input
+      {...register(name)}
+      {...props}
+      onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
+      style={{ textTransform: "uppercase" }}
+    />
+  );
+
   const { register, handleSubmit, control, reset, watch, formState: { isValid }} = useForm({
     mode: "onChange",
     defaultValues: {
@@ -45,6 +54,8 @@ const FormIn = () => {
       Motivo: "",
       Caracter: "",
       OP: "",
+      TipoInmueble: "1",
+      Denominacion: "",
       Fk_Personal_Turnado: ""
     }
   });
@@ -77,6 +88,8 @@ const FormIn = () => {
         Motivo: "",
         Caracter: "",
         OP: "",
+        TipoInmueble: "1",
+        Denominacion: "",
         Fk_Personal_Turnado: ""
       });
       setSelectedAlcaldia("");
@@ -128,11 +141,17 @@ const FormIn = () => {
             </div>
             <div className="col-md-4">
               <label>Oficio:</label>
-              <input type="text" {...register("oficio", { required: true })} maxLength={55} />
+              <input type="text" {...register("oficio", { required: true })} maxLength={55} 
+                onInput={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}/>
             </div>
             <div className="col-md-4">
               <label>Expediente:</label>
-              <input type="text" {...register("expediente")} placeholder="Opcional" maxLength={55} />
+              <input type="text" {...register("expediente")} placeholder="Opcional" maxLength={55} 
+                  onInput={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}/>
             </div>
           </div>
 
@@ -170,6 +189,9 @@ const FormIn = () => {
                     {...register("Nombre", {
                       required: isOtro ? "El nombre es obligatorio" : false
                     })}
+                    onInput={(e) => {
+                      e.target.value = e.target.value.toUpperCase();
+                    }}
                   />
                 </div>
                 <div className="col-md-3">
@@ -179,6 +201,9 @@ const FormIn = () => {
                     {...register("Cargo", {
                       required: isOtro ? "El cargo es obligatorio" : false
                     })}
+                    onInput={(e) => {
+                      e.target.value = e.target.value.toUpperCase();
+                    }}
                   />
                 </div>
                 <div className="col-md-3">
@@ -188,6 +213,9 @@ const FormIn = () => {
                     {...register("Dependencia", {
                       required: isOtro ? "La dependencia es obligatoria" : false
                     })}
+                    onInput={(e) => {
+                      e.target.value = e.target.value.toUpperCase();
+                    }}
                   />
                 </div>
               </>
@@ -196,7 +224,7 @@ const FormIn = () => {
 
           {/* Asunto / Motivo / Caracter / OP */}
           <div className="row">
-            {["Asunto", "Motivo", "Caracter"].map((campo, i) => (
+            {["Asunto", "Motivo", "Caracter", ].map((campo, i) => (
               <div className="col-md-3" key={i}>
                 <label>{campo}:</label>
                 <Controller
@@ -210,32 +238,33 @@ const FormIn = () => {
                       options={
                         campo === "Asunto"
                           ? [
-                              { value: "REMITE INFORMACIÓN", label: "REMITE INFORMACIÓN" },
-                              { value: "SOLICITA INSPECCIÓN OCULAR", label: "SOLICITA INSPECCIÓN OCULAR" },
-                              { value: "SOLICITA VISITA DE VERIFICACIÓN", label: "SOLICITA VISITA DE VERIFICACIÓN" },
-                              { value: "REPOSICIÓN DE SELLOS DE CLAUSURA", label: "REPOSICIÓN DE SELLOS DE CLAUSURA" },
-                              { value: "RETIRO DE SELLOS", label: "RETIRO DE SELLOS" },
-                              { value: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES", label: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES" },
-                              { value: "SOLICITA INFORMACIÓN", label: "SOLICITA INFORMACIÓN" },
-                              { value: "NOTIFICACIÓN", label: "NOTIFICACIÓN" },
                               { value: "AMPARO", label: "AMPARO" },
                               { value: "JUICIO DE NULIDAD", label: "JUICIO DE NULIDAD" },
+                              { value: "NOTIFICACIÓN", label: "NOTIFICACIÓN" },
+                              { value: "REMITE INFORMACIÓN", label: "REMITE INFORMACIÓN" },
+                              { value: "REPOSICIÓN DE SELLOS DE CLAUSURA", label: "REPOSICIÓN DE SELLOS DE CLAUSURA" },
+                              { value: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES", label: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES" },
+                              { value: "RESOLUCIÓN", label: "RESOLUCIÓN" },
+                              { value: "RETIRO DE SELLOS", label: "RETIRO DE SELLOS" },
+                              { value: "SOLICITA INFORMACIÓN", label: "SOLICITA INFORMACIÓN" },
+                              { value: "SOLICITA INSPECCIÓN OCULAR", label: "SOLICITA INSPECCIÓN OCULAR" },
+                              { value: "SOLICITA VISITA DE VERIFICACIÓN", label: "SOLICITA VISITA DE VERIFICACIÓN" }
                             ]
                           : campo === "Motivo"
                           ? [
-                              { value: "ATENCIÓN CIUDADANA", label: "ATENCIÓN CIUDADANA" },
+                              { value: "ACUERDO", label: "ACUERDO" },
                               { value: "ANUNCIOS", label: "ANUNCIOS" },
+                              { value: "ATENCIÓN CIUDADANA", label: "ATENCIÓN CIUDADANA" },
                               { value: "AUDIENCIA CIUDADANA", label: "AUDIENCIA CIUDADANA" },
+                              { value: "CARPETA DE INVESTIGACIÓN", label: "CARPETA DE INVESTIGACIÓN" },
                               { value: "CASA POR CASA", label: "CASA POR CASA" },
                               { value: "INTERNOS", label: "INTERNOS" },
-                              { value: "REMITE INFORMACIÓN", label: "REMITE INFORMACIÓN" },
                               { value: "MEDIOS DIGITALES", label: "MEDIOS DIGITALES" },
+                              { value: "NOTIFICACIÓN CON SANCIÓN", label: "NOTIFICACIÓN CON SANCIÓN" },
+                              { value: "NOTIFICACIÓN SIN SANCIÓN", label: "NOTIFICACIÓN SIN SANCIÓN" },
                               { value: "OFICIALIA DE PARTES", label: "OFICIALIA DE PARTES" },
                               { value: "PAOT", label: "PAOT" },
-                              { value: "CARPETA DE INVESTIGACIÓN", label: "CARPETA DE INVESTIGACIÓN" },
-                              { value: "NOTIFICACIÓN CON SANCIÓN", label: "NOTIFICACIÓN CON SANCIÓN" },
-                              { value: "NOTIFICACIÓN SIN SANCIÓN", label: "NOTIFICACIÓN SIN SANCIÓN" }, 
-                              { value: "ACUERDO", label: "ACUERDO" }
+                              { value: "REMITE INFORMACIÓN", label: "REMITE INFORMACIÓN" }
                             ]
                           : [
                               { value: "ORDINARIO", label: "ORDINARIO" },
@@ -263,11 +292,19 @@ const FormIn = () => {
           <div className="row">
             <div className="col-md-3">
               <label>Calle:</label>
-              <input type="text" {...register("calle", { required: true })} maxLength={60} />
+              <input type="text" {...register("calle", { required: true })} maxLength={60} 
+                onInput={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}              
+              />
             </div>
             <div className="col-md-2">
               <label>#:</label>
-              <input type="text" {...register("NumC", { required: true })} maxLength={30} />
+              <input type="text" {...register("NumC", { required: true })} maxLength={30} 
+                onInput={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}                
+              />
             </div>
             <div className="col-md-3">
               <label>Alcaldía:</label>
@@ -309,11 +346,36 @@ const FormIn = () => {
             </div>
           </div>
 
+          {/* Tipo de Inmueble y Denominicación */}
+          <div className="row">
+            <label>Tipo de Inmueble</label>
+            <div className="col-1">
+              Obra
+              <input type="radio" value={"obra"} {...register("TipoInmueble")} defaultChecked />
+            </div>
+            <div className="col-1">
+              Establecimiento
+              <input type="radio" value={"establecimiento"} {...register("TipoInmueble")} />
+            </div>
+            <div className="col-md-4">
+              <label>Denominación:</label>
+              <input type="text" {...register("Denominacion")} placeholder="Opcional" maxLength={50} 
+                onInput={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}                
+              />
+            </div>
+          </div>
+
           {/* Descripción y Turnado */}
           <div className="row">
             <div className="col-md-7">
               <label>Descripción:</label>
-              <textarea {...register("descripcion", { required: true })} maxLength={255} />
+              <textarea {...register("descripcion", { required: true })} maxLength={255} 
+                onInput={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}                
+              />
             </div>
             <div className="col-md-5">
               <label>Turnado:</label>

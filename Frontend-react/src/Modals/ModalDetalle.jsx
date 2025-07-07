@@ -14,7 +14,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
 
   const camposOcultos = ["Pk_IDCorrespondenciaIn", "Dependencia", "SoporteDocumental", ""];
   const camposNoEditables = ["Alcaldia", "Colonia", "CodigoPostal"];
-  const camposSelect = ["Asunto", "Motivo", "Caracter"];
+  const camposSelect = ["Asunto", "Motivo", "Caracter", "TipoInmueble"];
   const camposSelectPersonal = ["Remitente", "Turnado"];
 
   const { opcionesPersonal, loading: loadingPersonal } = useSelectObtenerPersonal();
@@ -75,14 +75,35 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
 
   const opcionesSelect = {
     Asunto: [
-      "REMITE INFORMACIÓN", "SOLICITA INSPECCIÓN OCULAR", "SOLICITA VISITA DE VERIFICACIÓN",
-      "REPOSICIÓN DE SELLOS DE CLAUSURA","RETIRO DE SELLOS", "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES", "SOLICITA INFORMACIÓN", "NOTIFICACIÓN", "AMPARO", "JUICIO DE NULIDAD"
+      "AMPARO",
+      "JUICIO DE NULIDAD",
+      "NOTIFICACIÓN",
+      "REMITE INFORMACIÓN",
+      "REPOSICIÓN DE SELLOS DE CLAUSURA",
+      "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES",
+      "RESOLUCIÓN",
+      "RETIRO DE SELLOS",,
+      "SOLICITA INFORMACIÓN",
+      "SOLICITA INSPECCIÓN OCULAR",
+      "SOLICITA VISITA DE VERIFICACIÓN"
     ],
     Motivo: [
-      "ATENCIÓN CIUDADANA", "AUDIENCIA CIUDADANA", "CASA POR CASA", "INTERNOS", "MEDIOS DIGITALES", "OFICIALIA DE PARTES", "ANUNCIOS", "PAOT", "CARPETA DE INVESTIGACIÓN", "REMITE INFORMACIÓN", "NOTIFICACIÓN CON SANCIÓN", "NOTIFICACIÓN SIN SANCIÓN"
-
+      "ACUERDO",
+      "ANUNCIOS",
+      "ATENCIÓN CIUDADANA",
+      "AUDIENCIA CIUDADANA",
+      "CARPETA DE INVESTIGACIÓN",
+      "CASA POR CASA",
+      "INTERNOS",
+      "MEDIOS DIGITALES",
+      "NOTIFICACIÓN CON SANCIÓN",
+      "NOTIFICACIÓN SIN SANCIÓN",
+      "OFICIALIA DE PARTES",
+      "PAOT",
+      "REMITE INFORMACIÓN"
     ],
     Caracter: ["ORDINARIO", "URGENTE"],
+    TipoInmueble: ["obra","establecimiento"],
   };
 
   const handleChange = (clave, value) => {

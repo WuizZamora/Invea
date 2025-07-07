@@ -2,30 +2,15 @@ import React, { useState, useEffect } from "react";
 import "./Detalle.css";
 import { showSuccess, showError, showConfirm } from "../utils/alerts";
 import RespuestaTurnado from "./RespuestaTurnado";
+import VisorPDF from "../utils/VisorPDF";
 import TablaCorrespondenciaOut from "../components/TablaCorrespondeciaOut";
+import { useUsuario } from "../context/UserContext";
 
 const ModalTurnado = ({ item, onClose }) => {
-
-
+    
+    const { usuario } = useUsuario();
     const [refetchOut, setRefetchOut] = useState(false);
-
-
-    const formatearFecha = (fechaISO) => {
-        if (!fechaISO) return "";
-
-        const fecha = new Date(fechaISO);
-
-        const opciones = {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true,
-        };
-
-    return fecha.toLocaleString("es-MX", opciones);
-    };
+    const [mostrarRespuesta, setMostrarRespuesta] = useState(true);
 
   return (
     <div className="modal-overlay">
@@ -39,7 +24,7 @@ const ModalTurnado = ({ item, onClose }) => {
                         <span>
                             <strong>{item.NumDVSC ? "DVSC:" : "DEVA:"}</strong> {item.NumDVSC || item.NumDEVA}
                         </span>
-                        <span>{formatearFecha(item.FechaIn)}</span>
+                        <span>{item.FechaDocumento}</span>
                         
                         </div>
                         <div className="fila-arriba">
@@ -48,11 +33,14 @@ const ModalTurnado = ({ item, onClose }) => {
                             </span>
                             <span>{item.Oficio}</span>
                         </div>
-                        {item.OP && (
                         <div className="fila-arriba">
+                        {item.OP && (
                             <span><strong>OP:</strong> {item.OP}</span>
-                        </div>
                         )}
+                        {item.Expediente && (
+                            <span><strong>Exp:</strong> {item.Expediente}</span>
+                        )}
+                        </div>
                         <br/>
                         <div className="fila-arriba">
                             <span><strong>Asunto:</strong> {item.Asunto}</span>
@@ -71,19 +59,44 @@ const ModalTurnado = ({ item, onClose }) => {
                         <strong>{item.Cargo}</strong>
                     </div>
                     </div>
+                    {item.SoporteDocumental && (
+                        <div
+                        style={{ display: "flex", alignItems: "left", gap: "0.5rem", cursor: "pointer", marginTop: "0.5rem" }}
+                        onClick={() => setMostrarRespuesta(false)}
+                        >
+                        <img
+                            src="/PDF.png"
+                            alt="Ver PDF"
+                            className="pdf"
+                            style={{ width: "24px" }}
+                        />
+                        <span>Ver Soporte Documental</span>
+                        </div>
+                    )}
+                    <br />
                     <h5>Historial de Respuestas</h5>
                         <TablaCorrespondenciaOut
                         idCorrespondencia={item.Pk_IDCorrespondenciaIn}
                         key={refetchOut}
                         />
                 </div>
-                    <div className="detalle-visual-derecha">
-                        <RespuestaTurnado
+                <div className="detalle-visual-derecha">
+                {mostrarRespuesta ? (
+                    <>
+
+                    <RespuestaTurnado
                         idCorrespondencia={item.Pk_IDCorrespondenciaIn}
-                        onSuccess={() => setRefetchOut(prev => !prev)} // toggle refetch
-                        />
-                    </div>
+                        onSuccess={() => setRefetchOut(prev => !prev)}
+                    />
+                    </>
+                ) : (
+                    <VisorPDF
+                    url={`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${item.SoporteDocumental}`}
+                    onClose={() => setMostrarRespuesta(true)}
+                    />
+                )}
                 </div>
+            </div>
 
         <button className="close-boton" onClick={onClose}>×</button>
       </div>

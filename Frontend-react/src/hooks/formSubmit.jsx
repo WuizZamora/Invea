@@ -19,6 +19,8 @@ export const handleFormSubmit = async (form, direccionID) => {
     Fk_Direccion_IDAdress: direccionID,
     Calle: form.calle,
     NumCalle: form.NumC,
+    TipoInmueble: form.TipoInmueble,
+    Denominacion: form.Denominacion,
     Fk_Personal_Turnado: parseInt(form.Fk_Personal_Turnado)
   };
 

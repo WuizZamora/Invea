@@ -33,7 +33,8 @@ const Login = () => {
           nombre: result.nombre,
           username: result.usuario,
           nivel: result.nivel,
-          id: result.id
+          id: result.id,
+          idLCP: result.idLCP
         });
 
       Swal.fire({
@@ -45,10 +46,11 @@ const Login = () => {
       }).then(() => {
         const rutas = {
           1: '/consulta',
-          2: '/turnado',
-          3: '/captura'
+          2: '/sub',
+          3: '/captura',
+          4: '/turnado'
         };
-        navigate(rutas[result.nivel] || '/123');
+        navigate(rutas[result.nivel] || '/1234');
       });
     }
   };

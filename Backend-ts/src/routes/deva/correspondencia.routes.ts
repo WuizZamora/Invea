@@ -252,10 +252,12 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       OP,
       Fk_Personal_Turnado,
       FechaDocumento,
-      Expediente
+      Expediente,
+      TipoInmueble,
+      Denominacion
     } = req.body;
 
-    const query = 'CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       id,
       NumDVSC,
@@ -271,7 +273,9 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Fk_Personal_Turnado,
       OP,
       Expediente,
-      FechaDocumento
+      FechaDocumento,
+      TipoInmueble,
+      Denominacion
     ];
     await devaPool.query(query, values);
     res.status(201).json({ message: 'Correspondencia actualizada correctamente' });
