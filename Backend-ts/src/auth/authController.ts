@@ -6,28 +6,31 @@ export const login = async (req: Request, res: Response) => {
 
   try {
     const [rows]: any = await devaPool.query(
-      `SELECT  u.Fk_IDPersonalTurnado,
-               u.Nivel,
-               p.Nombre AS Lcp,
-               u.Usuario, 
-               u.Fk_IDLcpTurnado
-       FROM Usuario u
-       LEFT JOIN Personal_Turnado p
-              ON p.Pk_IDPersonalTurnado = u.Fk_IDPersonalTurnado
+      `SELECT
+        u.Fk_IDPersonalTurnado,
+        u.Nivel,
+        COALESCE(p.Nombre, lt.Nombre) AS Lcp,
+        u.Usuario,
+        u.Fk_IDLcpTurnado
+      FROM Usuario AS u
+      LEFT JOIN Personal_Turnado AS p
+            ON p.Pk_IDPersonalTurnado = u.Fk_IDPersonalTurnado
+      LEFT JOIN Lcp_Turnado AS lt
+            ON lt.Pk_IDLCPTurnado     = u.Fk_IDLcpTurnado
        WHERE  u.Usuario = ? AND u.Pass = ?`,
       [username, password]
     );
 
     if (rows.length > 0) {
-      const { Fk_IDPersonalTurnado, Fk_IDLCPTurnado, Nivel, Lcp, Usuario } = rows[0];
+      const { Fk_IDPersonalTurnado, Fk_IDLcpTurnado, Nivel, Lcp, Usuario } = rows[0];
       (req.session as any).usuario = {
         id: Fk_IDPersonalTurnado,
-        idLCP: Fk_IDLCPTurnado,
+        idLCP: Fk_IDLcpTurnado,
         nivel: Nivel,
         lcp: Lcp,
         usuario: Usuario
       };
-      res.json({ state: true, nombre: Lcp, nivel: Nivel, id:Fk_IDPersonalTurnado, usuario: Usuario, idLCP:Fk_IDLCPTurnado});
+      res.json({ state: true, nombre: Lcp, nivel: Nivel, id: Fk_IDPersonalTurnado, usuario: Usuario, idLCP: Fk_IDLcpTurnado });
     } else {
       res.status(401).json({ state: false, mensaje: 'Usuario o contraseña incorrectos' });
     }
@@ -55,10 +58,11 @@ export const checkSession = (req: Request, res: Response) => {
   if (usuario) {
     res.json({
       state: true,
-      nombre: usuario.lcp, 
+      nombre: usuario.lcp,
       usuario: usuario.Usuario,
       nivel: usuario.nivel,
-      id: usuario.id
+      id: usuario.id,
+      idLCP: usuario.idLCP
     });
   } else {
     res.status(401).json({ state: false, mensaje: 'No hay sesión activa' });

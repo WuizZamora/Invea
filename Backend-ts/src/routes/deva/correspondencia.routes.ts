@@ -73,7 +73,7 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
       }
       const [result] = await devaPool.query('CALL ObtenerCorrespondenciaLCP(?)', [turnado]);
       rows = result;
-    }else {
+    } else {
       res.status(400).json({ error: 'Nivel no válido. Debe ser 1,2 o 4.' });
       return;
     }
@@ -89,9 +89,10 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
 router.get('/obtener-correspondencia-id/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const [rows] = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]);
-    res.json({ data: rows });
-    console.log(rows)
+    const [results]: any = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]);
+    const row = results[0][0];   // primer recordset, primera fila
+    console.log('Consulta:', row.NumDVSC);
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error en la base de datos' });
@@ -118,7 +119,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
       NumCalle,
       Fk_Personal_Turnado,
       SoporteDocumental,
-      Num, 
+      Num,
       OP,
       Expediente,
       FechaDocumento
@@ -150,7 +151,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
       Calle,
       NumCalle,
       Fk_Personal_Turnado,
-      SoporteDocumental, 
+      SoporteDocumental,
       OP,
       Expediente,
       FechaDocumento
@@ -244,12 +245,11 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Calle,
       NumCalle,
       OP,
-      Fk_Personal_Turnado, 
-      FechaDocumento, 
+      Fk_Personal_Turnado,
+      FechaDocumento,
       Expediente
     } = req.body;
-    
-    console.log(req.body);
+
     const query = 'CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       id,
@@ -264,11 +264,10 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Calle,
       NumCalle,
       Fk_Personal_Turnado,
-      OP, 
-      Expediente, 
+      OP,
+      Expediente,
       FechaDocumento
     ];
-    console.log(values);
     await devaPool.query(query, values);
     res.status(201).json({ message: 'Correspondencia actualizada correctamente' });
   } catch (error) {
@@ -313,11 +312,11 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
       `;
 
     await devaPool.query(sql, [
-      fkId,              
-      Accion,          
-      Oficio,          
-      Descripcion,     
-      filePath,        
+      fkId,
+      Accion,
+      Oficio,
+      Descripcion,
+      filePath,
       estaTerminadoNum,
     ]);
 

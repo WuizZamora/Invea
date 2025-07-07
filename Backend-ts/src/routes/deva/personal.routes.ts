@@ -28,6 +28,20 @@ router.get('/personal-turnado', async (req, res) => {
   }
 });
 
+// GET Todos los registros
+router.get('/lcp-turnado', async (req, res) => {
+  try {
+    const [rows] = await devaPool.query(`
+      SELECT Pk_IDLCPTurnado, CONCAT(Nombre, '-', Iniciales) AS Nombre
+      FROM Lcp_Turnado
+    `);
+    res.json({ data: rows });
+  } catch (error) {
+    console.error(error); // Para depuración
+    res.status(500).json({ error: 'Error en la base de datos' });
+  }
+});
+
 // GET por ID
 router.get('/:NumEmpleado', async (req, res) => {
   try {
