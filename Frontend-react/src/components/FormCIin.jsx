@@ -54,7 +54,7 @@ const FormIn = () => {
       Motivo: "",
       Caracter: "",
       OP: "",
-      TipoInmueble: "1",
+      TipoInmueble: "",
       Denominacion: "",
       Fk_Personal_Turnado: ""
     }
@@ -88,7 +88,7 @@ const FormIn = () => {
         Motivo: "",
         Caracter: "",
         OP: "",
-        TipoInmueble: "1",
+        TipoInmueble: "",
         Denominacion: "",
         Fk_Personal_Turnado: ""
       });
@@ -348,14 +348,31 @@ const FormIn = () => {
 
           {/* Tipo de Inmueble y Denominicación */}
           <div className="row">
-            <label>Tipo de Inmueble</label>
-            <div className="col-1">
-              Obra
-              <input type="radio" value={"obra"} {...register("TipoInmueble")} defaultChecked />
-            </div>
-            <div className="col-1">
-              Establecimiento
-              <input type="radio" value={"establecimiento"} {...register("TipoInmueble")} />
+            <div className="col-md-4">
+              <label>Tipo de Inmueble (Opcional):</label>
+              <Controller
+                name="TipoInmueble"
+                control={control}
+                rules={{ required: false }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    className="select-remitente"
+                    options={[
+                      { value: "obra", label: "Obra" },
+                      { value: "establecimiento", label: "Establecimiento" }
+                    ]}
+                    placeholder="Selecciona tipo (opcional)"
+                    isClearable={true} // 👈 permite limpiar la selección
+                    value={
+                      field.value
+                        ? { value: field.value, label: field.value[0].toUpperCase() + field.value.slice(1) }
+                        : null
+                    }
+                    onChange={(val) => field.onChange(val?.value || "")}
+                  />
+                )}
+              />
             </div>
             <div className="col-md-4">
               <label>Denominación:</label>

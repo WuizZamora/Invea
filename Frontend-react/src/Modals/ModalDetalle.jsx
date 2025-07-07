@@ -103,7 +103,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
       "REMITE INFORMACIÓN"
     ],
     Caracter: ["ORDINARIO", "URGENTE"],
-    TipoInmueble: ["obra","establecimiento"],
+    TipoInmueble: ["Obra","Establecimiento"],
   };
 
   const handleChange = (clave, value) => {
