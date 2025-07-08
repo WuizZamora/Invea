@@ -56,9 +56,13 @@ router.get('/lcp-turnado/:id', async (req, res) => {
       `);
     } else {
       [rows] = await devaPool.query(`
-        SELECT Pk_IDLCPTurnado, CONCAT(Iniciales, '-', Nombre) AS Nombre
-        FROM Lcp_Turnado
-        WHERE FK_SubAdscrito = ?
+     SELECT 
+      lt.Fk_Usuarios AS Pk_IDUsuario,
+      CONCAT(lt.Iniciales, ' - ', lt.Nombre) AS Nombre
+    FROM Usuario u
+    INNER JOIN Personal_Turnado pt ON u.Fk_IDPersonalTurnado = pt.Pk_IDPersonalTurnado
+    INNER JOIN Lcp_Turnado lt ON lt.FK_SubAdscrito = pt.Pk_IDPersonalTurnado
+    WHERE u.Pk_IDUsuario = ?
       `, [id]);
     }
 
