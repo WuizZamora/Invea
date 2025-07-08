@@ -359,8 +359,9 @@ const FormIn = () => {
                     {...field}
                     className="select-remitente"
                     options={[
-                      { value: "obra", label: "Obra" },
-                      { value: "establecimiento", label: "Establecimiento" }
+                      { value: "Obra", label: "Obra" },
+                      { value: "Medios publicitarios", label: "Medios publicitarios" },
+                      { value: "Establecimiento", label: "Establecimiento" }
                     ]}
                     placeholder="Selecciona tipo (opcional)"
                     isClearable={true} // 👈 permite limpiar la selección
