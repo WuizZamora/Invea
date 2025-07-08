@@ -3,10 +3,10 @@ import { devaPool } from '../config/db';
 
 export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
-
   try {
     const [rows]: any = await devaPool.query(
       `SELECT
+        u.Pk_IDUsuario,
         u.Fk_IDPersonalTurnado,
         u.Nivel,
         COALESCE(p.Nombre, lt.Nombre) AS Lcp,
@@ -22,15 +22,16 @@ export const login = async (req: Request, res: Response) => {
     );
 
     if (rows.length > 0) {
-      const { Fk_IDPersonalTurnado, Fk_IDLcpTurnado, Nivel, Lcp, Usuario } = rows[0];
+      const { Fk_IDPersonalTurnado, Fk_IDLcpTurnado, Nivel, Lcp, Usuario, Pk_IDUsuario } = rows[0];
       (req.session as any).usuario = {
-        id: Fk_IDPersonalTurnado,
+        id: Pk_IDUsuario,
         idLCP: Fk_IDLcpTurnado,
         nivel: Nivel,
         lcp: Lcp,
         usuario: Usuario
       };
-      res.json({ state: true, nombre: Lcp, nivel: Nivel, id: Fk_IDPersonalTurnado, usuario: Usuario, idLCP: Fk_IDLcpTurnado });
+      res.json({ state: true, nombre: Lcp, nivel: Nivel, id: Pk_IDUsuario, usuario: Usuario});
+      console.log('Usuario autenticado:', Pk_IDUsuario);
     } else {
       res.status(401).json({ state: false, mensaje: 'Usuario o contraseña incorrectos' });
     }

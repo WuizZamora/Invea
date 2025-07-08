@@ -37,7 +37,7 @@ const useSelectLCP = (idUsuario, idLCP) => {
                 }
 
                 const opciones = result.data.map(persona => ({
-                    value: persona.Pk_IDLCPTurnado,
+                    value: persona.Pk_IDUsuario,
                     label: persona.Nombre,
                 }));
 

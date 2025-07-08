@@ -71,6 +71,7 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
         res.status(400).json({ error: 'Falta el parámetro "turnado" para nivel 4' });
         return;
       }
+      console.log('Turnado:', turnado);
       const [result] = await devaPool.query('CALL ObtenerCorrespondenciaLCP(?)', [turnado]);
       rows = result;
     } else {

@@ -18,7 +18,7 @@ const useCorrespondencia = () => {
       } else if (usuario.nivel === 2 && usuario.id) { // Correspondencia para Turnar
         url += `/correspondencia/obtener-correspondencia/2?turnado=${usuario.id}`;
       } else  if (usuario.nivel === 4 && usuario.idLCP) { // Correspondecia Turnada
-        url += `/correspondencia/obtener-correspondencia/4?turnado=${usuario.idLCP}`;
+        url += `/correspondencia/obtener-correspondencia/4?turnado=${usuario.id}`;
       }
 
       const res = await fetch(url, { credentials: 'include' });

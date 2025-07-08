@@ -31,12 +31,36 @@ router.get('/personal-turnado', async (req, res) => {
 // GET Registro por ID
 router.get('/lcp-turnado/:id', async (req, res) => {
   try {
-    const id = req.params.id;
-    const [rows] = await devaPool.query(`
-      SELECT Pk_IDLCPTurnado, CONCAT(Iniciales, '-', Nombre) AS Nombre
-      FROM Lcp_Turnado
-      WHERE FK_SubAdscrito = ?
-    `, [id]); // Se pasa el parámetro para evitar SQL Injection
+    const id = parseInt(req.params.id, 10); // Asegúrate de convertir a entero
+    let rows;
+    console.log('ID recibido:', id); // Para depuración
+
+    if (id === 3) {
+      [rows] = await devaPool.query(`
+        SELECT
+	        u.Pk_IDUsuario,
+          COALESCE(
+            CONCAT(pt.Iniciales, ' - ', pt.Nombre),
+            CONCAT(lcp.Iniciales, ' - ', lcp.Nombre)
+          ) AS Nombre,
+          u.Fk_IDPersonalTurnado,
+          u.Fk_IDLcpTurnado
+        FROM
+          Usuario u
+        LEFT JOIN Personal_Turnado pt 
+          ON u.Fk_IDPersonalTurnado = pt.Pk_IDPersonalTurnado
+        LEFT JOIN Lcp_Turnado lcp
+          ON u.Fk_IDLcpTurnado = lcp.Pk_IDLCPTurnado
+        WHERE
+          u.Pk_IDUsuario NOT IN (1, 2) 
+      `);
+    } else {
+      [rows] = await devaPool.query(`
+        SELECT Pk_IDLCPTurnado, CONCAT(Iniciales, '-', Nombre) AS Nombre
+        FROM Lcp_Turnado
+        WHERE FK_SubAdscrito = ?
+      `, [id]);
+    }
 
     res.json({ data: rows });
   } catch (error) {
