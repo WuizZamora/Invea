@@ -15,11 +15,14 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
   const fileInputRef = useRef(null);
 
     const opcionesAccion = [
-        { value: "INSPECION OCULAR", label: "INSPECION OCULAR" },
-        { value: "VISITA DE VERIFICACION", label: "VISITA DE VERIFICACION" },
-        { value: "ZONIFICACION", label: "ZONIFICACION" },
-        { value: "NO EJECUTADO", label: "NO EJECUTADO" },
-        { value: "EJECUTADO", label: "EJECUTADO" },
+      { value: "CONTESTACIÓN", label: "CONTESTACIÓN" },
+      { value: "EJECUTADO", label: "EJECUTADO" },
+      { value: "INSPECION OCULAR", label: "INSPECION OCULAR" },
+      { value: "NO EJECUTADO", label: "NO EJECUTADO" },
+      { value: "REPOSICÓN DE SELLOS", label: "REPOSICÓN DE SELLOS" },
+      { value: "RETIRO DE SELLOS", label: "RETIRO DE SELLOS" },
+      { value: "VISITA DE VERIFICACION", label: "VISITA DE VERIFICACION" },
+      { value: "ZONIFICACION", label: "ZONIFICACION" },
     ];
 
   const handleChange = (e) => {
@@ -119,7 +122,11 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
         <label className="form-label">Acción</label>
               <Select
                 options={opcionesAccion}
-                value={opcionesAccion.find(op => op.value === formData.accion)}
+                value={
+                  formData.accion
+                    ? opcionesAccion.find(op => op.value === formData.accion)
+                    : null
+                }
                 onChange={(selected) =>
                   setFormData(prev => ({
                     ...prev,

@@ -141,18 +141,21 @@ const DetalleEditar = ({
                 )
               ) : null
             ) : camposSelect.includes(clave) ? (
+              
               <Select
                 className="mi-select"
                 classNamePrefix="mi-select"
                 value={
-                  opcionesSelect[clave]
+                  ((opcionesSelect[clave] || [])
                     .map((opt) => ({ label: opt, value: opt }))
-                    .find((o) => o.value.toLowerCase() === (valor || "").toLowerCase()) || null
+                    .find((o) =>
+                      o?.value?.toLowerCase() === (valor || "").toLowerCase()
+                    )) || null
                 }
                 onChange={(selected) =>
                   handleChange(clave, selected ? selected.value : "")
                 }
-                options={opcionesSelect[clave].map((opt) => ({
+                options={(opcionesSelect[clave] || []).map((opt) => ({
                   label: opt,
                   value: opt,
                 }))}
