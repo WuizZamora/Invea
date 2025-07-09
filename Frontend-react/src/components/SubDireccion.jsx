@@ -139,9 +139,8 @@ const Sub = () => {
                   <td>{item.OP ? (item.OP):("S/OP")}</td>
 
                   <td>
-                    {item.TurnadoA ? 
-                    (item.TurnadoA)
-                    : (<button 
+                    {item.TurnadoA }
+                    <button 
                         className="save-button"
                         onClick={() => {
                           setFilaSeleccionada(item); // guarda la fila actual
@@ -149,7 +148,7 @@ const Sub = () => {
                         }}
                       >
                         Turnar
-                      </button>)}
+                      </button>
                   </td>
                 </tr>
               ))}

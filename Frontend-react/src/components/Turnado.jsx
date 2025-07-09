@@ -13,7 +13,7 @@ const Turnado = () => {
     datos: datosOriginales,
     loading,
     refetch
-    } = useCorrespondencia(usuario?.id);
+    } = useCorrespondencia();
   const [datosFiltrados, setDatosFiltrados] = useState(null);
   const [paginaActual, setPaginaActual] = useState(1);
   const [resultadosPorPagina, setResultadosPorPagina] = useState(10);
@@ -53,6 +53,11 @@ const Turnado = () => {
       setPaginaActual(totalPaginas);
     }
   }, [totalPaginas, paginaActual]);
+  useEffect(() => {
+  if (usuario) {
+    refetch();
+  }
+}, [usuario]);
 
 
   return (

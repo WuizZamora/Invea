@@ -84,6 +84,13 @@ router.post('/lcp-turnar', async (req, res) => {
     `, [Fk_IDCorrespondenciaIn, Fk_LCP_Turnado]);
 
     res.json({ success: true, message: 'Turno registrado exitosamente' });
+
+    const horaMexico = new Date().toLocaleTimeString('es-MX', {
+      timeZone: 'America/Mexico_City',
+      hour12: true,
+    });
+
+    console.log(`Correspondencia ${Fk_IDCorrespondenciaIn} turnada a id: ${Fk_LCP_Turnado}- ${horaMexico}`);
   } catch (error) {
     console.error('Error en el INSERT:', error);
     res.status(500).json({ error: 'Error en la base de datos' });

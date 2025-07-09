@@ -31,7 +31,11 @@ export const login = async (req: Request, res: Response) => {
         usuario: Usuario
       };
       res.json({ state: true, nombre: Lcp, nivel: Nivel, id: Pk_IDUsuario, usuario: Usuario});
-      console.log('Usuario autenticado:', Pk_IDUsuario);
+      const horaMexico = new Date().toLocaleTimeString('es-MX', {
+        timeZone: 'America/Mexico_City',
+        hour12: false,
+      });
+      console.log(`Inicio de sesión: ${Usuario} - ${horaMexico}`);
     } else {
       res.status(401).json({ state: false, mensaje: 'Usuario o contraseña incorrectos' });
     }

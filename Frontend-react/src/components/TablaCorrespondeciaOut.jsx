@@ -33,31 +33,29 @@ const TablaCorrespondenciaOut = ({ idCorrespondencia }) => {
             <th>Fecha</th>
             <th>Acción</th>
             <th>Oficio</th>
-            <th>Descripción</th>
           </tr>
         </thead>
         <tbody>
           {registros.map((fila, index) => (
-            <tr key={index}>
+            <tr key={index} title={fila.Descripcion}>
               <td>{formatearFecha(fila.FechaOut)}</td>
               <td>{fila.Accion}</td>
               <td>
                 {fila.SoporteDocumental ? (
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <a
-                        href={`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${fila.SoporteDocumental}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      href={`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${fila.SoporteDocumental}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                        {fila.Oficio}
+                      {fila.Oficio}
                     </a>
-                    </div>
+                  </div>
                 ) : (
-                    <span>{fila.Oficio}</span>
+                  <span>{fila.Oficio}</span>
                 )}
               </td>
-              <td>{fila.Descripcion}</td>
-
+              {/* <td>{fila.Descripcion}</td> ← También se elimina */}
             </tr>
           ))}
         </tbody>

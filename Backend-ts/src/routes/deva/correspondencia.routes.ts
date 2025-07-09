@@ -91,9 +91,19 @@ router.get('/obtener-correspondencia-id/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const [rows]: any = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]);
-    // El resultado de un CALL suele estar en rows[0][0]
-    const numDVSC = rows && rows[0] && rows[0][0] ? rows[0][0].NumDVSC : undefined;
-    console.log('NumDVSC:', numDVSC);
+    const data = rows?.[0]?.[0];
+    const numDVSC = data?.NumDVSC;
+    const numDEVA = data?.NumDEVA;
+
+    const campoMostrado = numDVSC != null ? 'NumDVSC' : 'NumDEVA';
+    const valorMostrado = numDVSC != null ? numDVSC : numDEVA;
+
+    const horaMexico = new Date().toLocaleTimeString('es-MX', {
+      timeZone: 'America/Mexico_City',
+      hour12: true,
+    });
+
+     console.log(`Consulta de ${campoMostrado}: ${valorMostrado} - ${horaMexico}`);
 
     res.json({ data: rows });
   } catch (error) {
@@ -104,6 +114,12 @@ router.get('/obtener-correspondencia-id/:id', async (req, res) => {
 
 router.post('/guardar-correspondencia', async (req, res) => {
   try {
+    const horaMexico = new Date().toLocaleTimeString('es-MX', {
+      timeZone: 'America/Mexico_City',
+      hour12: true,
+    });
+
+     console.log(`Guardar Correspondecia - ${horaMexico}`);
     console.log(req.body);
     let {
       NumDVSC,
@@ -280,6 +296,17 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
     ];
     await devaPool.query(query, values);
     res.status(201).json({ message: 'Correspondencia actualizada correctamente' });
+
+    // Determinar cuál campo usar
+    const campoMostrado = NumDVSC != null ? 'NumDVSC' : 'NumDEVA';
+    const valorMostrado = NumDVSC != null ? NumDVSC : NumDEVA;
+
+    const horaMexico = new Date().toLocaleTimeString('es-MX', {
+      timeZone: 'America/Mexico_City',
+      hour12: true,
+    });
+
+    console.log(`Actualización de ${campoMostrado}: ${valorMostrado} - ${horaMexico}`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al actualizar la correspondencia' });
@@ -334,6 +361,13 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
       message: 'Archivo OUT subido y registro creado correctamente',
       path: filePath,
     });
+
+    const horaMexico = new Date().toLocaleTimeString('es-MX', {
+      timeZone: 'America/Mexico_City',
+      hour12: true,
+    });
+
+    console.log(`Respuesta en el id ${fkId}:  - ${horaMexico}`);
   } catch (err) {
     console.error('Error al subir OUT:', err);
     res.status(500).json({

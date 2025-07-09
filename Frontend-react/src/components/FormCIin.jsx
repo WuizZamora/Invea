@@ -40,7 +40,7 @@ const FormIn = () => {
     defaultValues: {
       NumDVSC: "",
       Num: "1",
-      FechaDocumento: new Date().toISOString().slice(0, 10),
+      FechaDocumento: new Date().toLocaleDateString("sv-SE"),
       oficio: "",
       expediente: "",
       Fk_Personal_Remitente: "",
@@ -74,7 +74,7 @@ const FormIn = () => {
       reset({
         NumDVSC: "",
         Num: "1",
-        FechaDocumento: new Date().toISOString().slice(0, 10),
+        FechaDocumento: new Date().toLocaleDateString("sv-SE"),
         oficio: "",
         expediente: "",
         Fk_Personal_Remitente: "",
