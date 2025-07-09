@@ -31,7 +31,6 @@ export const login = async (req: Request, res: Response) => {
         usuario: Usuario
       };
       res.json({ state: true, nombre: Lcp, nivel: Nivel, id: Pk_IDUsuario, usuario: Usuario});
-      console.log('Usuario autenticado:', Pk_IDUsuario);
     } else {
       res.status(401).json({ state: false, mensaje: 'Usuario o contraseña incorrectos' });
     }

@@ -33,7 +33,6 @@ router.get('/lcp-turnado/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10); // Asegúrate de convertir a entero
     let rows;
-    console.log('ID recibido:', id); // Para depuración
 
     if (id === 3) {
       [rows] = await devaPool.query(`
