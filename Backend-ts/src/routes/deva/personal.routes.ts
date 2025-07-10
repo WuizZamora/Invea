@@ -34,7 +34,7 @@ router.get('/lcp-turnado/:id', async (req, res) => {
     const id = parseInt(req.params.id, 10); // Asegúrate de convertir a entero
     let rows;
 
-    if (id === 3) {
+    if (id === 3 || id === 1) {
       [rows] = await devaPool.query(`
         SELECT
 	        u.Pk_IDUsuario,
