@@ -26,7 +26,17 @@ const Sub = () => {
                       datosFiltrados.length === 0 ? [] : 
                       datosFiltrados;
 
-
+  // Conteo de estatus
+  const conteoEstatus = datosMostrar.reduce(
+    (acc, item) => {
+      const estatus = item.Estatus?.toLowerCase();
+      if (estatus === "pendiente") acc.pendiente += 1;
+      else if (estatus === "en proceso") acc.enProceso += 1;
+      else if (estatus === "terminado") acc.terminado += 1;
+      return acc;
+    },
+    { pendiente: 0, enProceso: 0, terminado: 0 }
+  );
 
   // Cálculos de paginación
   const totalPaginas = Math.ceil(datosMostrar.length / resultadosPorPagina);
@@ -72,9 +82,18 @@ const Sub = () => {
         <div className="col-md-3 leyenda-estatus">
           Estatus:
           <div className="items-estatus">
-            <span><span className="color-circulo pendiente"></span> Pendiente</span>
-            <span><span className="color-circulo en-proceso"></span> En proceso</span>
-            <span><span className="color-circulo terminado"></span> Terminado</span>
+            <span>
+              <span className="color-circulo pendiente"></span>
+              Pendiente: {conteoEstatus.pendiente}
+            </span>
+            <span>
+              <span className="color-circulo en-proceso"></span>
+              En proceso: {conteoEstatus.enProceso}
+            </span>
+            <span>
+              <span className="color-circulo terminado"></span>
+              Terminado: {conteoEstatus.terminado}
+            </span>
           </div>
         </div>
           <div className="col-md-2">
