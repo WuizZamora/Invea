@@ -11,7 +11,7 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
     soporteDocumental: null,
   });
 
-  const DESCRIPCION_MAX = 255;
+  const DESCRIPCION_MAX = 500;
   const fileInputRef = useRef(null);
 
     const opcionesAccion = [
