@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import "../css/Consulta.css";
 
-const alcaldias = fetchDirecciones();
+const alcaldias = [];
 
 const subDirecciones = [
   { value: "juridico", label: "Jurídico" },
