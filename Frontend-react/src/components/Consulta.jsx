@@ -20,10 +20,6 @@ const asuntos = [
 const Consulta = () => {
   const { register, control, watch } = useForm();
 
-  // Solo para mostrar datos en consola en tiempo real (opcional)
-  const values = watch();
-  console.log(values);
-
   return (
     <form className="consulta">
       <div className="row">
@@ -45,6 +41,7 @@ const Consulta = () => {
             render={({ field }) => (
               <Select
                 {...field}
+                className="select-remitente"
                 options={asuntos}
                 placeholder="Selecciona un asunto"
               />
@@ -60,6 +57,7 @@ const Consulta = () => {
             render={({ field }) => (
               <Select
                 {...field}
+                className="select-remitente"
                 options={alcaldias}
                 placeholder="Selecciona una alcaldía"
               />
@@ -75,6 +73,7 @@ const Consulta = () => {
             render={({ field }) => (
               <Select
                 {...field}
+                className="select-remitente"
                 options={subDirecciones}
                 placeholder="Selecciona una subdirección"
               />
