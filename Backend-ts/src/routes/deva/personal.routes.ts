@@ -78,19 +78,19 @@ router.get('/lcp-turnado/:id', async (req, res) => {
 // POST para insertar turno de correspondencia usando el stored procedure
 router.post('/lcp-turnar', async (req, res) => {
   try {
-    const { Fk_IDCorrespondenciaIn, Fk_LCP_Turnado } = req.body;
+    const { Fk_IDCorrespondenciaIn, Fk_LCP_Turnado, id } = req.body;
 
-    // Llamamos al stored procedure con los parámetros necesarios
+    // Ahora se pasan 3 parámetros al procedimiento
     const [rows] = await devaPool.query(`
-      CALL TurnarCorrespondencia(?, ?);
-    `, [Fk_IDCorrespondenciaIn, Fk_LCP_Turnado]);
+      CALL TurnarCorrespondencia(?, ?, ?);
+    `, [Fk_IDCorrespondenciaIn, Fk_LCP_Turnado, id]);
 
     const horaMexico = new Date().toLocaleTimeString('es-MX', {
       timeZone: 'America/Mexico_City',
       hour12: true,
     });
 
-    console.log(`Correspondencia ${Fk_IDCorrespondenciaIn} turnada a id: ${Fk_LCP_Turnado} - ${horaMexico}`);
+    console.log(`Correspondencia ${Fk_IDCorrespondenciaIn} turnada a id: ${Fk_LCP_Turnado} por usuario ${id} - ${horaMexico}`);
 
     res.json({ success: true, message: 'Turno registrado exitosamente' });
   } catch (error: unknown) {

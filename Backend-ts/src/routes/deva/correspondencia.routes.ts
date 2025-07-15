@@ -325,6 +325,7 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
       Oficio,
       Descripcion,
       EstaTerminado,
+      id
     } = req.body;
 
     const estaTerminadoNum =
@@ -342,8 +343,9 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
            Oficio,
            Descripcion,
            SoporteDocumental,
-           EstaTerminado)
-        VALUES (?, NOW(), ?, ?, ?, ?, ?)
+           EstaTerminado,
+           FK_IDUsuarioContestacion)
+        VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)
       `;
 
     await devaPool.query(sql, [
@@ -353,6 +355,7 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
       Descripcion,
       filePath,
       estaTerminadoNum,
+      id
     ]);
 
     res.json({
