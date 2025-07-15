@@ -31,43 +31,46 @@ router.get('/personal-turnado', async (req, res) => {
 // GET Registro por ID
 router.get('/lcp-turnado/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10); // Asegúrate de convertir a entero
+    const id = parseInt(req.params.id, 10);
     let rows;
 
     if (id === 3 || id === 1) {
       [rows] = await devaPool.query(`
         SELECT
-	        u.Pk_IDUsuario,
-          COALESCE(
-            CONCAT(pt.Iniciales, ' - ', pt.Nombre),
-            CONCAT(lcp.Iniciales, ' - ', lcp.Nombre)
-          ) AS Nombre,
-          u.Fk_IDPersonalTurnado,
-          u.Fk_IDLcpTurnado
+          u.Pk_IDUsuario,
+          CONCAT(pt.Iniciales, ' - ', pt.Nombre) AS Nombre,
+          u.Fk_IDPersonalTurnado
         FROM
           Usuario u
-        LEFT JOIN Personal_Turnado pt 
-          ON u.Fk_IDPersonalTurnado = pt.Pk_IDPersonalTurnado
-        LEFT JOIN Lcp_Turnado lcp
-          ON u.Fk_IDLcpTurnado = lcp.Pk_IDLCPTurnado
-        WHERE
-          u.Pk_IDUsuario NOT IN (1, 2) 
+        LEFT JOIN Personal_Turnado pt ON
+          u.Fk_IDPersonalTurnado = pt.Pk_IDPersonalTurnado
+        WHERE u.Pk_IDUsuario NOT IN(1, 2)  
+        ORDER BY Nombre ASC
       `);
     } else {
       [rows] = await devaPool.query(`
-     SELECT 
-      lt.Fk_Usuarios AS Pk_IDUsuario,
-      CONCAT(lt.Iniciales, ' - ', lt.Nombre) AS Nombre
-    FROM Usuario u
-    INNER JOIN Personal_Turnado pt ON u.Fk_IDPersonalTurnado = pt.Pk_IDPersonalTurnado
-    INNER JOIN Lcp_Turnado lt ON lt.FK_SubAdscrito = pt.Pk_IDPersonalTurnado
-    WHERE u.Pk_IDUsuario = ?
-      `, [id]);
+        SELECT 
+          u.Pk_IDUsuario,
+          CONCAT(pt.Iniciales, ' - ', pt.Nombre) AS Nombre
+        FROM 
+          Usuario u
+        INNER JOIN Personal_Turnado pt 
+          ON u.Fk_IDPersonalTurnado = pt.Pk_IDPersonalTurnado
+        WHERE 
+          pt.Fk_Area = (
+            SELECT pt2.Fk_Area 
+            FROM Usuario u2
+            INNER JOIN Personal_Turnado pt2 
+              ON u2.Fk_IDPersonalTurnado = pt2.Pk_IDPersonalTurnado
+            WHERE u2.Pk_IDUsuario = ?
+          )
+        AND u.Pk_IDUsuario <> ?
+      `, [id, id]);
     }
 
     res.json({ data: rows });
   } catch (error) {
-    console.error(error); // Para depuración
+    console.error(error);
     res.status(500).json({ error: 'Error en la base de datos' });
   }
 });

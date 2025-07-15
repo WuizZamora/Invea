@@ -6,31 +6,26 @@ export const login = async (req: Request, res: Response) => {
   try {
     const [rows]: any = await devaPool.query(
       `SELECT
-        u.Pk_IDUsuario,
-        u.Fk_IDPersonalTurnado,
-        u.Nivel,
-        COALESCE(p.Nombre, lt.Nombre) AS Lcp,
-        u.Usuario,
-        u.Fk_IDLcpTurnado
-      FROM Usuario AS u
-      LEFT JOIN Personal_Turnado AS p
-            ON p.Pk_IDPersonalTurnado = u.Fk_IDPersonalTurnado
-      LEFT JOIN Lcp_Turnado AS lt
-            ON lt.Pk_IDLCPTurnado     = u.Fk_IDLcpTurnado
+          u.Pk_IDUsuario,
+          u.Nivel,
+          p.Nombre,
+          u.Usuario
+        FROM
+          Usuario AS u
+        LEFT JOIN Personal_Turnado AS p ON p.Pk_IDPersonalTurnado = u.Fk_IDPersonalTurnado
        WHERE  u.Usuario = ? AND u.Pass = ?`,
       [username, password]
     );
 
     if (rows.length > 0) {
-      const { Fk_IDPersonalTurnado, Fk_IDLcpTurnado, Nivel, Lcp, Usuario, Pk_IDUsuario } = rows[0];
+      const { Nivel, Nombre, Usuario, Pk_IDUsuario } = rows[0];
       (req.session as any).usuario = {
         id: Pk_IDUsuario,
-        idLCP: Fk_IDLcpTurnado,
         nivel: Nivel,
-        lcp: Lcp,
+        Nombre: Nombre,
         usuario: Usuario
       };
-      res.json({ state: true, nombre: Lcp, nivel: Nivel, id: Pk_IDUsuario, usuario: Usuario});
+      res.json({ state: true, nombre: Nombre, nivel: Nivel, id: Pk_IDUsuario, usuario: Usuario });
       const horaMexico = new Date().toLocaleTimeString('es-MX', {
         timeZone: 'America/Mexico_City',
         hour12: false,
