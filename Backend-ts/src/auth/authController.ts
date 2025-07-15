@@ -58,7 +58,7 @@ export const checkSession = (req: Request, res: Response) => {
   if (usuario) {
     res.json({
       state: true,
-      nombre: usuario.lcp,
+      nombre: usuario.Nombre,
       usuario: usuario.Usuario,
       nivel: usuario.nivel,
       id: usuario.id,

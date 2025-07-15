@@ -55,7 +55,8 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
   try {
     let rows;
 
-    if (nivel === 1) {
+    if (nivel === 1 || turnado === 3) {
+      // Si es nivel 1, o el turnado es 3, siempre usa CorrespondenciaInterna
       const [result] = await devaPool.query('CALL ObtenerCorrespondenciaInterna()');
       rows = result;
     } else if (nivel === 2) {
@@ -65,8 +66,7 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
       }
       const [result] = await devaPool.query('CALL ObtenerCorrespondenciaSub(?)', [turnado]);
       rows = result;
-    }
-    else if (nivel === 4) {
+    } else if (nivel === 4) {
       if (!turnado) {
         res.status(400).json({ error: 'Falta el parámetro "turnado" para nivel 4' });
         return;
@@ -74,7 +74,7 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
       const [result] = await devaPool.query('CALL ObtenerCorrespondenciaLCP(?)', [turnado]);
       rows = result;
     } else {
-      res.status(400).json({ error: 'Nivel no válido. Debe ser 1,2 o 4.' });
+      res.status(400).json({ error: 'Nivel no válido. Debe ser 1, 2 o 4.' });
       return;
     }
 
@@ -84,7 +84,6 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
     res.status(500).json({ error: 'Error en la base de datos' });
   }
 });
-
 
 router.get('/obtener-correspondencia-id/:id', async (req, res) => {
   try {

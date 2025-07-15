@@ -75,27 +75,32 @@ router.get('/lcp-turnado/:id', async (req, res) => {
   }
 });
 
-// POST para insertar turno de correspondencia
+// POST para insertar turno de correspondencia usando el stored procedure
 router.post('/lcp-turnar', async (req, res) => {
   try {
     const { Fk_IDCorrespondenciaIn, Fk_LCP_Turnado } = req.body;
 
+    // Llamamos al stored procedure con los parámetros necesarios
     const [rows] = await devaPool.query(`
-      INSERT INTO Correspondencia_Turnada (Fk_IDCorrespondenciaIn, Fk_LCP_Turnado)
-      VALUES (?, ?);
+      CALL TurnarCorrespondencia(?, ?);
     `, [Fk_IDCorrespondenciaIn, Fk_LCP_Turnado]);
-
-    res.json({ success: true, message: 'Turno registrado exitosamente' });
 
     const horaMexico = new Date().toLocaleTimeString('es-MX', {
       timeZone: 'America/Mexico_City',
       hour12: true,
     });
 
-    console.log(`Correspondencia ${Fk_IDCorrespondenciaIn} turnada a id: ${Fk_LCP_Turnado}- ${horaMexico}`);
-  } catch (error) {
-    console.error('Error en el INSERT:', error);
-    res.status(500).json({ error: 'Error en la base de datos' });
+    console.log(`Correspondencia ${Fk_IDCorrespondenciaIn} turnada a id: ${Fk_LCP_Turnado} - ${horaMexico}`);
+
+    res.json({ success: true, message: 'Turno registrado exitosamente' });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error al turnar correspondencia:', error.message);
+      res.status(500).json({ error: error.message });
+    } else {
+      console.error('Error desconocido al turnar correspondencia:', error);
+      res.status(500).json({ error: 'Error desconocido en la base de datos' });
+    }
   }
 });
 
