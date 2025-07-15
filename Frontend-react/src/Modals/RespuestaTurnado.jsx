@@ -1,8 +1,17 @@
 import React, { useState, useRef } from 'react';
 import Select from 'react-select';
 import { showSuccess, showError } from "../utils/alerts";
+import { Catalogo } from "../utils/Catalogos";
+import { useUsuario } from "../context/UserContext";
+
+
+const toSelectOptions = (array) =>
+  array.map((item) => ({ value: item, label: item }));
 
 const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
+
+  const { usuario } = useUsuario();
+
   const [formData, setFormData] = useState({
     accion: "", // ← importante: no dejarlo como undefined
     oficio: "",
@@ -13,17 +22,6 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
 
   const DESCRIPCION_MAX = 500;
   const fileInputRef = useRef(null);
-
-    const opcionesAccion = [
-      { value: "CONTESTACIÓN", label: "CONTESTACIÓN" },
-      { value: "EJECUTADO", label: "EJECUTADO" },
-      { value: "INSPECION OCULAR", label: "INSPECION OCULAR" },
-      { value: "NO EJECUTADO", label: "NO EJECUTADO" },
-      { value: "REPOSICÓN DE SELLOS", label: "REPOSICÓN DE SELLOS" },
-      { value: "RETIRO DE SELLOS", label: "RETIRO DE SELLOS" },
-      { value: "VISITA DE VERIFICACION", label: "VISITA DE VERIFICACION" },
-      { value: "ZONIFICACION", label: "ZONIFICACION" },
-    ];
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -52,9 +50,10 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
     datos.append('Accion', formData.accion);
     datos.append('Oficio', formData.oficio);
     datos.append('Descripcion', formData.descripcion);
-    datos.append('EstaTerminado', formData.EstaTerminado)
+    datos.append('EstaTerminado', formData.EstaTerminado);
+    datos.append('id', usuario.id);
     if (formData.soporteDocumental) {
-      datos.append('archivo', formData.soporteDocumental); // 👈 nombre correcto para el backend
+      datos.append('archivo', formData.soporteDocumental); 
     }
 
     // Enviar al backend (ejemplo con fetch)
@@ -121,10 +120,10 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
       <div className="mb-3">
         <label className="form-label">Acción</label>
               <Select
-                options={opcionesAccion}
+                options={toSelectOptions(Catalogo.Accion)}
                 value={
                   formData.accion
-                    ? opcionesAccion.find(op => op.value === formData.accion)
+                    ? toSelectOptions(Catalogo.Accion).find(op => op.value === formData.accion)
                     : null
                 }
                 onChange={(selected) =>

@@ -6,6 +6,7 @@ import DetalleVisual from "./DetalleVIsual";
 import DetalleEditar from "./DetalleEditar";
 import { updateCorrespondencia } from "../hooks/updateCorrespondencia";
 import { showSuccess, showError, showConfirm } from "../utils/alerts";
+import { Catalogo } from "../utils/Catalogos";
 
 const ModalDetalle = ({ item, loading, error, onClose }) => {
   const [editMode, setEditMode] = useState(false);
@@ -73,39 +74,6 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
     }
   }, [editMode, item, opcionesPersonal, opcionesTurnado]);
 
-  const opcionesSelect = {
-    Asunto: [
-      "AMPARO",
-      "JUICIO DE NULIDAD",
-      "NOTIFICACIÓN",
-      "REMITE INFORMACIÓN",
-      "REPOSICIÓN DE SELLOS DE CLAUSURA",
-      "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES",
-      "RESOLUCIÓN",
-      "RETIRO DE SELLOS",,
-      "SOLICITA INFORMACIÓN",
-      "SOLICITA INSPECCIÓN OCULAR",
-      "SOLICITA VISITA DE VERIFICACIÓN"
-    ],
-    Motivo: [
-      "ACUERDO",
-      "ANUNCIOS",
-      "ATENCIÓN CIUDADANA",
-      "AUDIENCIA CIUDADANA",
-      "CARPETA DE INVESTIGACIÓN",
-      "CASA POR CASA",
-      "INTERNOS",
-      "MEDIOS DIGITALES",
-      "NOTIFICACIÓN CON SANCIÓN",
-      "NOTIFICACIÓN SIN SANCIÓN",
-      "OFICIALIA DE PARTES",
-      "PAOT",
-      "REMITE INFORMACIÓN"
-    ],
-    Caracter: ["ORDINARIO", "URGENTE"],
-    TipoInmueble: ["Obra","Establecimiento","Medios publicitarios"],
-  };
-
   const handleChange = (clave, value) => {
     setFormData((prev) => ({ ...prev, [clave]: value }));
   };
@@ -134,7 +102,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
             camposNoEditables={camposNoEditables}
             camposSelect={camposSelect}
             camposSelectPersonal={camposSelectPersonal}
-            opcionesSelect={opcionesSelect}
+            opcionesSelect={Catalogo}
             opcionesPersonal={opcionesPersonal}
             loadingPersonal={loadingPersonal}
             opcionesTurnado={opcionesTurnado}

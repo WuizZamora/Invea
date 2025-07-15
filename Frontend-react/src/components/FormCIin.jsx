@@ -6,6 +6,7 @@ import useDireccionPorAlcaldia from "../hooks/AlcaldiaIinput";
 import useSelectPersonalTurnado from "../hooks/SelectPersonalTurnado";
 import { showSuccess, showError } from "../utils/alerts";
 import { handleFormSubmit } from "../hooks/formSubmit";
+import { Catalogo, toSelectOptions } from "../utils/Catalogos";
 import Tabla from "./TablaCorrespodencia";
 
 const FormIn = () => {
@@ -235,47 +236,8 @@ const FormIn = () => {
                     <Select
                       {...field}
                       className="select-remitente"
-                      options={
-                        campo === "Asunto"
-                          ? [
-                              { value: "AMPARO", label: "AMPARO" },
-                              { value: "JUICIO DE NULIDAD", label: "JUICIO DE NULIDAD" },
-                              { value: "NOTIFICACIÓN", label: "NOTIFICACIÓN" },
-                              { value: "REMITE INFORMACIÓN", label: "REMITE INFORMACIÓN" },
-                              { value: "REPOSICIÓN DE SELLOS DE CLAUSURA", label: "REPOSICIÓN DE SELLOS DE CLAUSURA" },
-                              { value: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES", label: "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES" },
-                              { value: "RESOLUCIÓN", label: "RESOLUCIÓN" },
-                              { value: "RETIRO DE SELLOS", label: "RETIRO DE SELLOS" },
-                              { value: "SOLICITA INFORMACIÓN", label: "SOLICITA INFORMACIÓN" },
-                              { value: "SOLICITA INSPECCIÓN OCULAR", label: "SOLICITA INSPECCIÓN OCULAR" },
-                              { value: "SOLICITA VISITA DE VERIFICACIÓN", label: "SOLICITA VISITA DE VERIFICACIÓN" }
-                            ]
-                          : campo === "Motivo"
-                          ? [
-                              { value: "ACUERDO", label: "ACUERDO" },
-                              { value: "ANUNCIOS", label: "ANUNCIOS" },
-                              { value: "ATENCIÓN CIUDADANA", label: "ATENCIÓN CIUDADANA" },
-                              { value: "AUDIENCIA CIUDADANA", label: "AUDIENCIA CIUDADANA" },
-                              { value: "CARPETA DE INVESTIGACIÓN", label: "CARPETA DE INVESTIGACIÓN" },
-                              { value: "CASA POR CASA", label: "CASA POR CASA" },
-                              { value: "INTERNOS", label: "INTERNOS" },
-                              { value: "MEDIOS DIGITALES", label: "MEDIOS DIGITALES" },
-                              { value: "NOTIFICACIÓN CON SANCIÓN", label: "NOTIFICACIÓN CON SANCIÓN" },
-                              { value: "NOTIFICACIÓN SIN SANCIÓN", label: "NOTIFICACIÓN SIN SANCIÓN" },
-                              { value: "OFICIALIA DE PARTES", label: "OFICIALIA DE PARTES" },
-                              { value: "PAOT", label: "PAOT" },
-                              { value: "REMITE INFORMACIÓN", label: "REMITE INFORMACIÓN" }
-                            ]
-                          : [
-                              { value: "ORDINARIO", label: "ORDINARIO" },
-                              { value: "URGENTE", label: "URGENTE" }
-                            ]
-                      }
-                      value={
-                        field.value
-                          ? { value: field.value, label: field.value }
-                          : null
-                      }
+                      options={toSelectOptions(Catalogo[campo] || [])}
+                      value={field.value ? { value: field.value, label: field.value } : null}
                       onChange={(val) => field.onChange(val?.value || "")}
                     />
                   )}
@@ -358,16 +320,12 @@ const FormIn = () => {
                   <Select
                     {...field}
                     className="select-remitente"
-                    options={[
-                      { value: "Obra", label: "Obra" },
-                      { value: "Medios publicitarios", label: "Medios publicitarios" },
-                      { value: "Establecimiento", label: "Establecimiento" }
-                    ]}
+                    options={toSelectOptions(Catalogo.TipoInmueble)}
                     placeholder="Selecciona tipo (opcional)"
-                    isClearable={true} // 👈 permite limpiar la selección
+                    isClearable={true}
                     value={
                       field.value
-                        ? { value: field.value, label: field.value[0].toUpperCase() + field.value.slice(1) }
+                        ? { value: field.value, label: field.value }
                         : null
                     }
                     onChange={(val) => field.onChange(val?.value || "")}

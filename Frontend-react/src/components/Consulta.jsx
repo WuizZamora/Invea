@@ -2,8 +2,11 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import "../css/Consulta.css";
+import useDireccionPorAlcaldia from "../hooks/AlcaldiaIinput";
+import { Catalogo } from "../utils/Catalogos";
 
-const alcaldias = [];
+const toSelectOptions = (array) =>
+  array.map((item) => ({ value: item, label: item }));
 
 const subDirecciones = [
   { value: "juridico", label: "Jurídico" },
@@ -11,14 +14,9 @@ const subDirecciones = [
   { value: "operativa", label: "Operativa" },
 ];
 
-const asuntos = [
-  { value: "inspeccion", label: "Inspección" },
-  { value: "reporte", label: "Reporte" },
-  { value: "solicitud", label: "Solicitud" },
-];
-
 const Consulta = () => {
   const { register, control, watch } = useForm();
+  const { alcaldias } = useDireccionPorAlcaldia();
 
   return (
     <form className="consulta">
@@ -42,7 +40,7 @@ const Consulta = () => {
               <Select
                 {...field}
                 className="select-remitente"
-                options={asuntos}
+                options={toSelectOptions(Catalogo.Asunto)}
                 placeholder="Selecciona un asunto"
               />
             )}
@@ -58,7 +56,7 @@ const Consulta = () => {
               <Select
                 {...field}
                 className="select-remitente"
-                options={alcaldias}
+                options={toSelectOptions(alcaldias)}
                 placeholder="Selecciona una alcaldía"
               />
             )}
@@ -74,7 +72,7 @@ const Consulta = () => {
               <Select
                 {...field}
                 className="select-remitente"
-                options={subDirecciones}
+                options={toSelectOptions(Catalogo.SubDireccion)}
                 placeholder="Selecciona una subdirección"
               />
             )}
