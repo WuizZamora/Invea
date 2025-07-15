@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { showSuccess, showError } from '../utils/alerts';
-import { useUsuario } from "../context/UserContext";
 
 
 
-const TurnarLCP = async ({ seleccionado, idCorrespondencia, onClose, refetch }) => {
+const TurnarLCP = async ({ seleccionado, idCorrespondencia, onClose, refetch, usuarioId }) => {
   if (!seleccionado || !idCorrespondencia) return;
 
-  const { usuario } = useUsuario();
-  
   try {
     const response = await fetch(
       `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/personal/lcp-turnar`,
@@ -19,7 +16,7 @@ const TurnarLCP = async ({ seleccionado, idCorrespondencia, onClose, refetch }) 
         body: JSON.stringify({
           Fk_IDCorrespondenciaIn: idCorrespondencia,
           Fk_LCP_Turnado: seleccionado.value,
-          id: usuario.id,
+          id: usuarioId,
         }),
       }
     );

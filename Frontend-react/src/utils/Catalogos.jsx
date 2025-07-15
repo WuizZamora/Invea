@@ -57,10 +57,13 @@ export const Catalogo = {
   // Para las acciones de respuesta en RespuestaTurnado
 
   Accion: [
+      "CONOCIMIENTO",
       "CONTESTACIÓN",
       "EJECUTADO",
-      "INSPECION OCULAR",
+      "INSPECCIÓN OCULAR",
       "NO EJECUTADO",
+      "RECABACIÓN DE INFORMACION",
+      "REMISION PARA GENERAR VV",
       "REPOSICÓN DE SELLOS",
       "RETIRO DE SELLOS",
       "VISITA DE VERIFICACIVISITA DE VERIFICACION",

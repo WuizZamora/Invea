@@ -45,7 +45,7 @@ const TurnarModal = ({ isOpen, onClose, idCorrespondencia, refetch }) => {
   };
 
   const handleTurnar = () => {
-    TurnarLCP({ seleccionado, idCorrespondencia, onClose, refetch });
+    TurnarLCP({ seleccionado, idCorrespondencia, onClose, refetch, usuarioId: usuario.id});
   };
 
   if (!isOpen) return null;
