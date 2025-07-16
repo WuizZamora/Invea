@@ -394,5 +394,15 @@ router.get('/obtener-correspondencia-out/:idIn', async (req, res) => {
   }
 });
 
+router.get('/consulta-sub', async (req, res) => {
+  try {
+    const [rows] = await devaPool.query('CALL ConsultaSub()');
+    res.json({ data: (rows as any[])[0] });
+  } catch (error) {
+    console.error('Error al ejecutar ConsultaSub:', error);
+    res.status(500).json({ error: 'Error al ejecutar ConsultaSub' });
+  }
+});
+
 
 export default router;
