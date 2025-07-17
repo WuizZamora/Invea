@@ -1,13 +1,27 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import devaRoutes from './routes/deva';  // Importa el grupo de rutas de DEVA
-import dvscRoutes from './routes/dvsc';  // Para futuros proyecto
-import { verificarSesion } from './auth/middleware';
 import session from 'express-session';
+import { createServer } from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import devaRoutes from './routes/deva';
+import dvscRoutes from './routes/dvsc';
+import { verificarSesion } from './auth/middleware';
 import authRoutes from './auth/auth.routes';
+import { setupChatSocket } from './sockets/chatSocket';
+
 const app = express();
-const PORT = process.env.PORT;
+const server = createServer(app); // ⬅️ HTTP server necesario para socket.io
+
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: process.env.HOST_FRONT,
+    credentials: true,
+  }
+});
 
 app.use(express.json());
 
@@ -25,24 +39,22 @@ app.use(session({
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.use('/auth', authRoutes);
-
-// Monta todas las rutas de DEVA bajo /deva
 app.use('/deva', verificarSesion, devaRoutes);
-
-// Agregar más proyectos aquí:
 app.use('/dvsc', dvscRoutes);
 
-// Ruta raíz (opcional)
 app.get('/', (req, res) => {
   res.send('API Principal - Proyectos disponibles: /deva');
 });
 
-// Middleware para rutas no encontradas
 app.use((req, res) => {
   res.status(404).send('<h1>404 - Página no encontrada</h1>');
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// 💬 Aquí activas los sockets
+setupChatSocket(io); // 👈 delega la lógica del chat
+
+// Iniciar el servidor (HTTP + WebSocket)
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

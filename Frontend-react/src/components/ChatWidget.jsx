@@ -1,30 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useUsuario } from "../context/UserContext";
+import { io } from "socket.io-client";
 import "../css/ChatWidget.css";
 
-const ChatWidget = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { from: "bot", text: "Hola 👋 Soy una herramienta en desarrollo, actualmente no sirvo :c" }
-  ]);
-  const [input, setInput] = useState("");
+const socket = io("http://localhost:3000"); // Cambia al puerto de tu backend si es diferente
 
-  const toggleChat = () => {
+const ChatWidget = () => {
+  const { usuario } = useUsuario();
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    // Escucha mensajes del servidor
+    socket.on("mensaje", (data) => {
+      setMessages((prev) => [...prev, data]);
+    });
+
+    // Cleanup
+    return () => {
+      socket.off("mensaje");
+    };
+  }, []);
+
+  const toggleChat = async () => {
     setIsOpen(!isOpen);
+
+    if (!isOpen && usuario?.id) {
+      // Cargar historial cuando se abre el chat
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/chat/${usuario.id}`,{credentials: 'include'});
+        const data = await res.json();
+        setMessages(data);
+      } catch (err) {
+        console.error("Error al cargar historial", err);
+      }
+    }
   };
 
   const handleSend = () => {
     if (input.trim() === "") return;
 
-    setMessages([...messages, { from: "user", text: input }]);
+    const mensaje = {
+      Fk_IDUsuario: usuario.id,
+      nombre: usuario.nombre,
+      mensaje: input,
+      remitente: "user",
+    };
+
+    socket.emit("mensaje", mensaje);
+
+    // No actualices el estado local aquí, lo hará el socket
     setInput("");
-    // Simulación de respuesta del bot
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { from: "bot", text: "Soy una herramienta en desarrollo, actualmente no sirvo :c" }
-      ]);
-    }, 1000);
   };
+
+  useEffect(() => {
+    // Scroll al final cada vez que hay un nuevo mensaje
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <div className={`chat-widget ${isOpen ? "open" : ""}`}>
@@ -44,10 +78,11 @@ const ChatWidget = () => {
         <div className="chat-body">
           <div className="chat-messages">
             {messages.map((msg, idx) => (
-              <div key={idx} className={`chat-message ${msg.from}`}>
-                {msg.text}
+              <div key={idx} className={`chat-message ${msg.remitente}`}>
+                {msg.mensaje}
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
 
           <div className="chat-input">
