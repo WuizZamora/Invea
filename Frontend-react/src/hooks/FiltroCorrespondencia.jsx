@@ -20,16 +20,19 @@ const FiltroCorrespondencia = ({ datos, onFiltrar }) => {
           
         return (
           normalize(item.NumDVSC).includes(terminoNormalizado) ||
+          normalize(item.Expediente).includes(terminoNormalizado) ||
           normalize(item.Oficio).includes(terminoNormalizado) ||
           normalize(item.Remitente).includes(terminoNormalizado) ||
           normalize(item.Motivo).includes(terminoNormalizado) ||
+          normalize(item.Asunto).includes(terminoNormalizado) ||
           normalize(item.Direccion).includes(terminoNormalizado) ||
           normalize(item.OP).includes(terminoNormalizado) ||
           normalize(item.Estatus).includes(terminoNormalizado) ||
+          normalize(item.FechaDocumento).includes(terminoNormalizado) ||
+          normalize(item.TurnadoA).includes(terminoNormalizado) ||
           normalize(item.Descripcion).includes(terminoNormalizado) 
         );
       });
-      console.log("Resultados parciales:", resultados);
     });
     
     return resultados;

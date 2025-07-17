@@ -1,8 +1,17 @@
 import React, { useState, useRef } from 'react';
 import Select from 'react-select';
 import { showSuccess, showError } from "../utils/alerts";
+import { Catalogo } from "../utils/Catalogos";
+import { useUsuario } from "../context/UserContext";
+
+
+const toSelectOptions = (array) =>
+  array.map((item) => ({ value: item, label: item }));
 
 const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
+
+  const { usuario } = useUsuario();
+
   const [formData, setFormData] = useState({
     accion: "", // ← importante: no dejarlo como undefined
     oficio: "",
@@ -11,16 +20,8 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
     soporteDocumental: null,
   });
 
-  const DESCRIPCION_MAX = 255;
+  const DESCRIPCION_MAX = 500;
   const fileInputRef = useRef(null);
-
-    const opcionesAccion = [
-        { value: "INSPECION OCULAR", label: "INSPECION OCULAR" },
-        { value: "VISITA DE VERIFICACION", label: "VISITA DE VERIFICACION" },
-        { value: "ZONIFICACION", label: "ZONIFICACION" },
-        { value: "NO EJECUTADO", label: "NO EJECUTADO" },
-        { value: "EJECUTADO", label: "EJECUTADO" },
-    ];
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -49,9 +50,10 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
     datos.append('Accion', formData.accion);
     datos.append('Oficio', formData.oficio);
     datos.append('Descripcion', formData.descripcion);
-    datos.append('EstaTerminado', formData.EstaTerminado)
+    datos.append('EstaTerminado', formData.EstaTerminado);
+    datos.append('id', usuario.id);
     if (formData.soporteDocumental) {
-      datos.append('archivo', formData.soporteDocumental); // 👈 nombre correcto para el backend
+      datos.append('archivo', formData.soporteDocumental); 
     }
 
     // Enviar al backend (ejemplo con fetch)
@@ -89,17 +91,6 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">
-      {/* <div className="mb-3">
-        <label className="form-label">Fecha de Salida</label>
-        <input
-          type="datetime-local"
-          className="form-control"
-          name="fechaSalida"
-          value={formData.fechaSalida}
-          onChange={handleChange}
-          required
-        />
-      </div> */}
       <div className="mb-3">
         <div className="d-flex gap-3 align-items-center">
           <label className="form-label">Tipo de Respuesta:</label>
@@ -129,8 +120,12 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
       <div className="mb-3">
         <label className="form-label">Acción</label>
               <Select
-                options={opcionesAccion}
-                value={opcionesAccion.find(op => op.value === formData.accion)}
+                options={toSelectOptions(Catalogo.Accion)}
+                value={
+                  formData.accion
+                    ? toSelectOptions(Catalogo.Accion).find(op => op.value === formData.accion)
+                    : null
+                }
                 onChange={(selected) =>
                   setFormData(prev => ({
                     ...prev,

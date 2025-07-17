@@ -23,7 +23,7 @@ const useSelectPersonalTurnado = () => {
                 // Mapea los datos usando las propiedades correctas
                 const opciones = result.data.map(persona => ({
                     value: persona.Pk_IDPersonalTurnado,
-                    label: `${persona.Iniciales}-${persona.Lcp}`,
+                    label: `${persona.Iniciales}-${persona.Nombre}`,
                 }));
 
                 setOpcionesTurnado(opciones);

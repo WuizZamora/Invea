@@ -5,24 +5,6 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
   const soporteUrl =
     soporte &&
     `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${soporte}`;
-
-
-    const formatearFecha = (fechaISO) => {
-        if (!fechaISO) return "";
-
-        const fecha = new Date(fechaISO);
-
-        const opciones = {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true,
-        };
-
-    return fecha.toLocaleString("es-MX", opciones);
-    };
     
   return (
     <div className="detalle-visual-container">
@@ -34,7 +16,7 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
               <span>
                 <strong>{item.NumDVSC ? "DVSC:" : "DEVA:"}</strong> {item.NumDVSC || item.NumDEVA}
               </span>
-              <span>{formatearFecha(item.FechaIn)}</span>
+              <span>{item.FechaDocumento}</span>
             </div>
             <div className="fila-arriba">
               <span className={item.Caracter === "Urgente" ? "caracter-urgente" : "caracter-ordinario"}>
@@ -42,11 +24,14 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
               </span>
               <span>{item.Oficio}</span>
             </div>
-            {item.OP != null && (
-              <div className="fila-arriba">
-                <span><strong>OP:</strong> {item.OP}</span>
-              </div>
-            )}
+            <div className="fila-arriba">
+              {item.OP && (
+                  <span><strong>OP:</strong> {item.OP}</span>
+              )}
+              {item.Expediente && (
+                  <span><strong>Exp:</strong> {item.Expediente}</span>
+              )}
+            </div>
             <br/><br/>
             <div className="fila-arriba">
                 <span><strong>Asunto:</strong> {item.Asunto}</span>
@@ -59,6 +44,7 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
             <p><strong>Descripcion:</strong></p>
             <p>{item.Descripcion}</p>
             <br/><br/>
+            <p>{item.TipoInmueble}:{item.Denominacion}</p>
             <p>{item.Direccion}</p>
 
             <strong>{item.Remitente}</strong>

@@ -13,14 +13,12 @@ const useCorrespondencia = () => {
 
     try {
       let url = `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}`;
-
-      if (usuario.nivel === 1 || usuario.nivel === 3) {
+      if (usuario.nivel === 1 || usuario.nivel === 3) { // Correspondencia completa
         url += "/correspondencia/obtener-correspondencia/1";
-      } else if (usuario.nivel === 2 && usuario.id) {
+      } else if (usuario.nivel === 2 && usuario.id) { // Correspondencia para Turnar
         url += `/correspondencia/obtener-correspondencia/2?turnado=${usuario.id}`;
-      } else {
-        console.warn("Nivel de usuario no reconocido o falta el ID");
-        return;
+      } else  if (usuario.nivel === 4 && usuario.id) { // Correspondecia Turnada
+        url += `/correspondencia/obtener-correspondencia/4?turnado=${usuario.id}`;
       }
 
       const res = await fetch(url, { credentials: 'include' });

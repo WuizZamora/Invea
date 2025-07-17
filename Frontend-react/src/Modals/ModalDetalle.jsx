@@ -6,6 +6,7 @@ import DetalleVisual from "./DetalleVIsual";
 import DetalleEditar from "./DetalleEditar";
 import { updateCorrespondencia } from "../hooks/updateCorrespondencia";
 import { showSuccess, showError, showConfirm } from "../utils/alerts";
+import { Catalogo } from "../utils/Catalogos";
 
 const ModalDetalle = ({ item, loading, error, onClose }) => {
   const [editMode, setEditMode] = useState(false);
@@ -14,7 +15,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
 
   const camposOcultos = ["Pk_IDCorrespondenciaIn", "Dependencia", "SoporteDocumental", ""];
   const camposNoEditables = ["Alcaldia", "Colonia", "CodigoPostal"];
-  const camposSelect = ["Asunto", "Motivo", "Caracter"];
+  const camposSelect = ["Asunto", "Motivo", "Caracter", "TipoInmueble"];
   const camposSelectPersonal = ["Remitente", "Turnado"];
 
   const { opcionesPersonal, loading: loadingPersonal } = useSelectObtenerPersonal();
@@ -73,18 +74,6 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
     }
   }, [editMode, item, opcionesPersonal, opcionesTurnado]);
 
-  const opcionesSelect = {
-    Asunto: [
-      "REMITE INFORMACIÓN", "SOLICITA INSPECCIÓN OCULAR", "SOLICITA VISITA DE VERIFICACIÓN",
-      "REPOSICIÓN DE SELLOS DE CLAUSURA", "REPOSICIÓN DE SELLOS DE MEDIDAS CAUTELARES", "SOLICITA INFORMACIÓN", "NOTIFICACIÓN", "AMPARO", "JUICIO DE NULIDAD"
-    ],
-    Motivo: [
-      "ATENCIÓN CIUDADANA", "AUDIENCIA CIUDADANA", "CASA POR CASA", "INTERNOS", "MEDIOS DIGITALES", "OFICIALIA DE PARTES", "ANUNCIOS", "PAOT", "CARPETA DE INVESTIGACIÓN", "REMITE INFORMACIÓN", "NOTIFICACIÓN CON SANCIÓN", "NOTIFICACIÓN SIN SANCIÓN"
-
-    ],
-    Caracter: ["ORDINARIO", "URGENTE"],
-  };
-
   const handleChange = (clave, value) => {
     setFormData((prev) => ({ ...prev, [clave]: value }));
   };
@@ -94,7 +83,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
     setEditMode(false);
   };
 
-  const mostrarNombreCampo = (clave) => (clave === "FechaIn" ? "Fecha" : clave);
+  const mostrarNombreCampo = (clave) => (clave === "FechaDocuemnto" ? "Fecha" : clave);
 
   return (
     <div className="modal-overlay">
@@ -113,7 +102,7 @@ const ModalDetalle = ({ item, loading, error, onClose }) => {
             camposNoEditables={camposNoEditables}
             camposSelect={camposSelect}
             camposSelectPersonal={camposSelectPersonal}
-            opcionesSelect={opcionesSelect}
+            opcionesSelect={Catalogo}
             opcionesPersonal={opcionesPersonal}
             loadingPersonal={loadingPersonal}
             opcionesTurnado={opcionesTurnado}

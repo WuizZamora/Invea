@@ -4,8 +4,9 @@ export const handleFormSubmit = async (form, direccionID) => {
   const payload = {
     NumDVSC: parseInt(form.NumDVSC),
     Num: parseInt(form.Num),
-    FechaIn: new Date(form.date).toISOString().slice(0, 19).replace("T", " "),
+    FechaDocumento: new Date(form.FechaDocumento).toISOString().slice(0, 10),
     Oficio: form.oficio,
+    Expediente: form.expediente,
     Fk_Personal_Remitente: parseInt(form.Fk_Personal_Remitente),
     Nombre: form.Nombre,
     Cargo: form.Cargo,
@@ -18,10 +19,13 @@ export const handleFormSubmit = async (form, direccionID) => {
     Fk_Direccion_IDAdress: direccionID,
     Calle: form.calle,
     NumCalle: form.NumC,
+    TipoInmueble: form.TipoInmueble,
+    Denominacion: form.Denominacion,
     Fk_Personal_Turnado: parseInt(form.Fk_Personal_Turnado)
   };
 
   try {
+    console.log(payload);
     const response = await fetch(
           `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/guardar-correspondencia`, {
       credentials: 'include',

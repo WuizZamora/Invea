@@ -3,8 +3,6 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { devaPool } from '../../config/db';
-import { Console } from 'console';
-import { isConditionalExpression } from 'typescript';
 import { ResultSetHeader } from 'mysql2';
 
 const router = express.Router();
@@ -57,7 +55,8 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
   try {
     let rows;
 
-    if (nivel === 1) {
+    if (nivel === 1 || turnado === 3) {
+      // Si es nivel 1, o el turnado es 3, siempre usa CorrespondenciaInterna
       const [result] = await devaPool.query('CALL ObtenerCorrespondenciaInterna()');
       rows = result;
     } else if (nivel === 2) {
@@ -65,10 +64,17 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
         res.status(400).json({ error: 'Falta el parámetro "turnado" para nivel 2' });
         return;
       }
-      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaPorTurnado(?)', [turnado]);
+      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaSub(?)', [turnado]);
+      rows = result;
+    } else if (nivel === 4) {
+      if (!turnado) {
+        res.status(400).json({ error: 'Falta el parámetro "turnado" para nivel 4' });
+        return;
+      }
+      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaLCP(?)', [turnado]);
       rows = result;
     } else {
-      res.status(400).json({ error: 'Nivel no válido. Debe ser 1 o 2.' });
+      res.status(400).json({ error: 'Nivel no válido. Debe ser 1, 2 o 4.' });
       return;
     }
 
@@ -79,11 +85,24 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
   }
 });
 
-
 router.get('/obtener-correspondencia-id/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const [rows] = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]);
+    const [rows]: any = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]);
+    const data = rows?.[0]?.[0];
+    const numDVSC = data?.NumDVSC;
+    const numDEVA = data?.NumDEVA;
+
+    const campoMostrado = numDVSC != null ? 'NumDVSC' : 'NumDEVA';
+    const valorMostrado = numDVSC != null ? numDVSC : numDEVA;
+
+    const horaMexico = new Date().toLocaleTimeString('es-MX', {
+      timeZone: 'America/Mexico_City',
+      hour12: true,
+    });
+
+     console.log(`Consulta de ${campoMostrado}: ${valorMostrado} - ${horaMexico}`);
+
     res.json({ data: rows });
   } catch (error) {
     console.error(error);
@@ -93,6 +112,12 @@ router.get('/obtener-correspondencia-id/:id', async (req, res) => {
 
 router.post('/guardar-correspondencia', async (req, res) => {
   try {
+    const horaMexico = new Date().toLocaleTimeString('es-MX', {
+      timeZone: 'America/Mexico_City',
+      hour12: true,
+    });
+
+     console.log(`Guardar Correspondecia - ${horaMexico}`);
     console.log(req.body);
     let {
       NumDVSC,
@@ -111,8 +136,12 @@ router.post('/guardar-correspondencia', async (req, res) => {
       NumCalle,
       Fk_Personal_Turnado,
       SoporteDocumental,
-      Num, 
-      OP
+      Num,
+      OP,
+      Expediente,
+      FechaDocumento,
+      TipoInmueble,
+      Denominacion
     } = req.body;
 
     if (Fk_Personal_Remitente == 0) {
@@ -126,7 +155,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
     }
 
     // Ahora llamamos al procedimiento almacenado con el remitente ya resuelto
-    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       Num,
       NumDVSC,
@@ -141,8 +170,12 @@ router.post('/guardar-correspondencia', async (req, res) => {
       Calle,
       NumCalle,
       Fk_Personal_Turnado,
-      SoporteDocumental, 
-      OP
+      SoporteDocumental,
+      OP,
+      Expediente,
+      FechaDocumento,
+      TipoInmueble,
+      Denominacion
     ];
 
     await devaPool.query(query, values);
@@ -223,7 +256,6 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
     const {
       NumDVSC,
       NumDEVA,
-      FechaIn,
       Oficio,
       Fk_Personal_Remitente,
       Asunto,
@@ -233,15 +265,18 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Calle,
       NumCalle,
       OP,
-      Fk_Personal_Turnado
+      Fk_Personal_Turnado,
+      FechaDocumento,
+      Expediente,
+      TipoInmueble,
+      Denominacion
     } = req.body;
-    console.log(req.body);
-    const query = 'CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+    const query = 'CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       id,
       NumDVSC,
       NumDEVA,
-      FechaIn,
       Oficio,
       Fk_Personal_Remitente,
       Asunto,
@@ -251,11 +286,25 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Calle,
       NumCalle,
       Fk_Personal_Turnado,
-      OP
+      OP,
+      Expediente,
+      FechaDocumento,
+      TipoInmueble,
+      Denominacion
     ];
-    console.log(values);
     await devaPool.query(query, values);
     res.status(201).json({ message: 'Correspondencia actualizada correctamente' });
+
+    // Determinar cuál campo usar
+    const campoMostrado = NumDVSC != null ? 'NumDVSC' : 'NumDEVA';
+    const valorMostrado = NumDVSC != null ? NumDVSC : NumDEVA;
+
+    const horaMexico = new Date().toLocaleTimeString('es-MX', {
+      timeZone: 'America/Mexico_City',
+      hour12: true,
+    });
+
+    console.log(`Actualización de ${campoMostrado}: ${valorMostrado} - ${horaMexico}`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al actualizar la correspondencia' });
@@ -276,6 +325,7 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
       Oficio,
       Descripcion,
       EstaTerminado,
+      id
     } = req.body;
 
     const estaTerminadoNum =
@@ -293,23 +343,32 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
            Oficio,
            Descripcion,
            SoporteDocumental,
-           EstaTerminado)
-        VALUES (?, NOW(), ?, ?, ?, ?, ?)
+           EstaTerminado,
+           FK_IDUsuarioContestacion)
+        VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)
       `;
 
     await devaPool.query(sql, [
-      fkId,              
-      Accion,          
-      Oficio,          
-      Descripcion,     
-      filePath,        
+      fkId,
+      Accion,
+      Oficio,
+      Descripcion,
+      filePath,
       estaTerminadoNum,
+      id
     ]);
 
     res.json({
       message: 'Archivo OUT subido y registro creado correctamente',
       path: filePath,
     });
+
+    const horaMexico = new Date().toLocaleTimeString('es-MX', {
+      timeZone: 'America/Mexico_City',
+      hour12: true,
+    });
+
+    console.log(`Respuesta en el id ${fkId}:  - ${horaMexico}`);
   } catch (err) {
     console.error('Error al subir OUT:', err);
     res.status(500).json({
@@ -332,6 +391,16 @@ router.get('/obtener-correspondencia-out/:idIn', async (req, res) => {
   } catch (error) {
     console.error(error); // Para depuración
     res.status(500).json({ error: 'Error en la base de datos' });
+  }
+});
+
+router.get('/consulta-sub', async (req, res) => {
+  try {
+    const [rows] = await devaPool.query('CALL ConsultaSub()');
+    res.json({ data: (rows as any[])[0] });
+  } catch (error) {
+    console.error('Error al ejecutar ConsultaSub:', error);
+    res.status(500).json({ error: 'Error al ejecutar ConsultaSub' });
   }
 });
 

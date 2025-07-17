@@ -10,42 +10,52 @@ const TablaCorrespondenciaOut = ({ idCorrespondencia }) => {
   // Asegúrate que data.data exista y sea arreglo
   const registros = data?.data ?? [];
 
-  if (registros.length === 0) return <p>No hay registros OUT disponibles.</p>;
+      const formatearFecha = (fechaISO) => {
+        if (!fechaISO) return "";
+
+        const fecha = new Date(fechaISO);
+
+        const opciones = {
+            day: "2-digit",
+            month: "2-digit"
+        };
+
+    return fecha.toLocaleString("es-MX", opciones);
+    };
+
+  if (registros.length === 0) return <p>No hay Respuestas para este registro, disponibles.</p>;
 
   return (
     <div className="table-container">
-      <h4>Historial de respuesta</h4>
       <table className="tabla-registro">
         <thead>
           <tr>
             <th>Fecha</th>
             <th>Acción</th>
             <th>Oficio</th>
-            <th>Descripción</th>
           </tr>
         </thead>
         <tbody>
           {registros.map((fila, index) => (
-            <tr key={index}>
-              <td>{new Date(fila.FechaOut).toLocaleDateString("es-MX")}</td>
+            <tr key={index} title={fila.Descripcion}>
+              <td>{formatearFecha(fila.FechaOut)}</td>
               <td>{fila.Accion}</td>
               <td>
                 {fila.SoporteDocumental ? (
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <a
-                        href={`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${fila.SoporteDocumental}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      href={`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${fila.SoporteDocumental}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                        {fila.Oficio}
+                      {fila.Oficio}
                     </a>
-                    </div>
+                  </div>
                 ) : (
-                    <span>{fila.Oficio}</span>
+                  <span>{fila.Oficio}</span>
                 )}
               </td>
-              <td>{fila.Descripcion}</td>
-
+              {/* <td>{fila.Descripcion}</td> ← También se elimina */}
             </tr>
           ))}
         </tbody>

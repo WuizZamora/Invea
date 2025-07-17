@@ -17,7 +17,8 @@ export const UserProvider = ({ children }) => {
             nombre: data.nombre,
             username: data.usuario,
             nivel: data.nivel,
-            id: data.id
+            id: data.id,
+            idLCP: data.idLCP,
           });
         }
       })

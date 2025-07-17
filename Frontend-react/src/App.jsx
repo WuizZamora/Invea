@@ -5,6 +5,9 @@ import Consulta from "./components/Consulta";
 import Login from "./Login";
 import PrivateRoute from "./components/PrivateRoute";
 import Turnado from "./components/Turnado";
+import Sub from "./components/SubDireccion";
+import ChatWidget from "./components/ChatWidget"; 
+import AdminChat from "./components/AdminChat";
 
 function App() {
   return (
@@ -21,6 +24,7 @@ function App() {
               <>
                 <Header />
                 <FormCIin />
+                <ChatWidget/>
               </>
             </PrivateRoute>
           }
@@ -32,6 +36,7 @@ function App() {
               <>
                 <Header />
                 <Consulta />
+                <ChatWidget/>
               </>
             </PrivateRoute>
           }
@@ -43,6 +48,30 @@ function App() {
               <>
                 <Header />
                 <Turnado />
+                <ChatWidget/>
+              </>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/sub"
+          element={
+            <PrivateRoute>
+              <>
+                <Header />
+                <Sub />
+                <ChatWidget/>
+              </>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <PrivateRoute>
+              <>
+                <Header />
+                <AdminChat />
               </>
             </PrivateRoute>
           }
