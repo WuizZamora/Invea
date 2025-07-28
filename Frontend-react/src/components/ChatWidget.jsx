@@ -3,7 +3,7 @@ import { useUsuario } from "../context/UserContext";
 import { io } from "socket.io-client";
 import "../css/ChatWidget.css";
 
-const socket = io("http://localhost:3000"); // Cambia al puerto de tu backend si es diferente
+const socket = io(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}`); // Cambia al puerto de tu backend si es diferente
 
 const ChatWidget = () => {
   const { usuario } = useUsuario();

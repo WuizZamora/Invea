@@ -83,6 +83,9 @@ const Consulta = () => {
             </div>
           </div>
         </form>
+        <div className="text-center text-danger">
+          <h2>Sistema de Consultas en desarrollo no funcional de momento</h2>
+        </div>
       </div>
 
       <div className="Reporte">

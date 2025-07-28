@@ -12,6 +12,7 @@ import dvscRoutes from './routes/dvsc';
 import { verificarSesion } from './auth/middleware';
 import authRoutes from './auth/auth.routes';
 import { setupChatSocket } from './sockets/chatSocket';
+import { setupAnuncioSocket } from './sockets/anuncioSocket';
 
 const app = express();
 const server = createServer(app); // ⬅️ HTTP server necesario para socket.io
@@ -51,7 +52,8 @@ app.use((req, res) => {
 });
 
 // 💬 Aquí activas los sockets
-setupChatSocket(io); // 👈 delega la lógica del chat
+setupChatSocket(io); 
+setupAnuncioSocket(io);
 
 // Iniciar el servidor (HTTP + WebSocket)
 const PORT = process.env.PORT || 3001;

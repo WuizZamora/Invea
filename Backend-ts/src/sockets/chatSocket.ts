@@ -12,7 +12,6 @@ export const setupChatSocket = (io: Server) => {
   io.on('connection', (socket) => {
 
     socket.on('mensaje', async (data: ChatMensaje) => {
-      console.log('Mensaje recibido:', data);
 
       // Guardar en base de datos
       await guardarMensaje(data);
