@@ -37,11 +37,11 @@ const storageOut = multer.diskStorage({
 const uploadOut = multer({ storage: storageOut });
 
 // CONSULTA GENERAL PARA DASHBOARD
-router.post('/dashboard', async (req: Request, res: Response): Promise<void> => {
+router.get('/dashboard', async (req: Request, res: Response): Promise<void> => {
   try {
-    const { fechaInicio, fechaFin } = req.body;
-    // const fechaInicio = "2025-05-01";""
-    // const fechaFin = "2025-07-29";
+    // const { fechaInicio, fechaFin } = req.body;
+    const fechaInicio = "2025-05-01";""
+    const fechaFin = "2025-07-29";
     if (!fechaInicio || !fechaFin) {
       res.status(400).json({ error: 'Faltan fechas' }); 
       return;
