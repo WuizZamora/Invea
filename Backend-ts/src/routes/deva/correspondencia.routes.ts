@@ -1,4 +1,4 @@
-import express, { Router, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
@@ -35,6 +35,26 @@ const storageOut = multer.diskStorage({
 });
 
 const uploadOut = multer({ storage: storageOut });
+
+// CONSULTA GENERAL PARA DASHBOARD
+router.get('/dashboard', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    // const fechaInicio = "2025-05-01";""
+    // const fechaFin = "2025-07-29";
+    if (!fechaInicio || !fechaFin) {
+      res.status(400).json({ error: 'Faltan fechas' });
+      return;
+    }
+
+    const [rows]: any = await devaPool.query('CALL ObtenerDatosDashboard(?, ?)', [fechaInicio, fechaFin]);
+
+    res.json({ data: rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error en la base de datos' });
+  }
+});
 
 // Entradas CONSULTA GENERAL Y TEST
 router.get('/entrada', async (req, res) => {
@@ -101,7 +121,7 @@ router.get('/obtener-correspondencia-id/:id', async (req, res) => {
       hour12: true,
     });
 
-     console.log(`Consulta de ${campoMostrado}: ${valorMostrado} - ${horaMexico}`);
+    console.log(`Consulta de ${campoMostrado}: ${valorMostrado} - ${horaMexico}`);
 
     res.json({ data: rows });
   } catch (error) {
@@ -117,7 +137,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
       hour12: true,
     });
 
-     console.log(`Guardar Correspondecia - ${horaMexico}`);
+    console.log(`Guardar Correspondecia - ${horaMexico}`);
     console.log(req.body);
     let {
       NumDVSC,
@@ -403,6 +423,5 @@ router.get('/consulta-sub', async (req, res) => {
     res.status(500).json({ error: 'Error al ejecutar ConsultaSub' });
   }
 });
-
 
 export default router;
