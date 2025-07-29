@@ -44,7 +44,7 @@ router.get('/lcp-turnado/:id', async (req, res) => {
           Usuario u
         LEFT JOIN Personal_Turnado pt ON
           u.Fk_IDPersonalTurnado = pt.Pk_IDPersonalTurnado
-        WHERE u.Pk_IDUsuario NOT IN(1, 2)  
+        WHERE u.Pk_IDUsuario NOT IN(1, 2)  AND Vigente = 1
         ORDER BY Nombre ASC
       `);
     } else {
@@ -64,7 +64,7 @@ router.get('/lcp-turnado/:id', async (req, res) => {
               ON u2.Fk_IDPersonalTurnado = pt2.Pk_IDPersonalTurnado
             WHERE u2.Pk_IDUsuario = ?
           )
-        AND u.Pk_IDUsuario <> ?
+        AND u.Pk_IDUsuario <> ? AND Vigente = 1
       `, [id, id]);
     }
 
