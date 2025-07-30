@@ -9,6 +9,7 @@ dotenv.config();
 
 import devaRoutes from './routes/deva';
 import dvscRoutes from './routes/dvsc';
+import chatRoutes from './routes/chat';
 import { verificarSesion } from './auth/middleware';
 import authRoutes from './auth/auth.routes';
 import { setupChatSocket } from './sockets/chatSocket';
@@ -41,6 +42,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.use('/auth', authRoutes);
 app.use('/deva', verificarSesion, devaRoutes);
+app.use('/chat', verificarSesion, chatRoutes);
 app.use('/dvsc', dvscRoutes);
 
 app.get('/', (req, res) => {

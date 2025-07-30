@@ -3,7 +3,7 @@ import { useUsuario } from "../context/UserContext";
 import { io } from "socket.io-client";
 import "../css/ChatWidget.css";
 
-const socket = io(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}`); // Cambia al puerto de tu backend si es diferente
+const socket = io(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}`); 
 
 const ChatWidget = () => {
   const { usuario } = useUsuario();
@@ -30,7 +30,7 @@ const ChatWidget = () => {
     if (!isOpen && usuario?.id) {
       // Cargar historial cuando se abre el chat
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/chat/${usuario.id}`,{credentials: 'include'});
+        const res = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}/chat/${usuario.id}`,{credentials: 'include'});
         const data = await res.json();
         setMessages(data);
       } catch (err) {

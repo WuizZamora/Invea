@@ -12,7 +12,7 @@ const AdminChat = () => {
 
   // Carga la lista de usuarios con último mensaje
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/userchat`,{credentials: 'include'})
+    fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}/chat/userchat`,{credentials: 'include'})
       .then((res) => res.json())
       .then((data) => setUsers(data))
       .catch(console.error);
@@ -23,7 +23,7 @@ const AdminChat = () => {
     setSelectedUser(null); // Limpia temporalmente para mostrar loader si quieres
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/chat/${user.id}`,{credentials: 'include'});
+      const res = await fetch(`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}/chat/${user.id}`,{credentials: 'include'});
       const messages = await res.json();
 
       // Mapear mensajes para usar la misma estructura que antes

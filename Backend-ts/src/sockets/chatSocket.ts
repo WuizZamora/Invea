@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { guardarMensaje } from "../services/chatService";
+import { guardarMensaje } from "../services/chat/chatService";
 
 interface ChatMensaje {
   Fk_IDUsuario: number;
