@@ -426,4 +426,26 @@ router.get('/obtener-dashboard-sub', async (req, res) => {
   }
 });
 
+router.post('/oficio-comision', async (req, res) => {
+  try {
+    const { Oficio, Observaciones, Fk_IDCorrespondenciaIn } = req.body;
+
+    const sql = `
+      INSERT INTO CiNumeroOficio
+        (Oficio, Observaciones, Fk_IDCorrespondenciaIn)
+      VALUES (?, ?, ?)
+    `;
+
+    await devaPool.query(sql, [Oficio, Observaciones, Fk_IDCorrespondenciaIn]);
+
+    // Respuesta de éxito
+    res.status(201).json({ message: 'Oficio de comisión guardado exitosamente' });
+
+  } catch (error) {
+    console.error('Error al guardar oficio de comisión:', error);
+    res.status(500).json({ error: 'Error al guardar oficio de comisión' });
+  }
+});
+
+
 export default router;
