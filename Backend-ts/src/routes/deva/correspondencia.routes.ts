@@ -7,7 +7,7 @@ import { ResultSetHeader } from 'mysql2';
 
 const router = express.Router();
 
-// GUARDAR ARCHIVO
+// GUARDAR ARCHIVO Ci
 const storage = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
     const uploadDir = path.join(__dirname, '../../../uploads/correspondencia');
@@ -22,6 +22,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+//GUARDAR ARCHIVO Co
 const storageOut = multer.diskStorage({
   destination: (_req, _file, cb) => {
     const uploadDir = path.join(__dirname, '../../../uploads/correspondenciaOUT');
@@ -36,27 +37,7 @@ const storageOut = multer.diskStorage({
 
 const uploadOut = multer({ storage: storageOut });
 
-// CONSULTA GENERAL PARA DASHBOARD
-router.get('/dashboard', async (req: Request, res: Response): Promise<void> => {
-  try {
-    // const { fechaInicio, fechaFin } = req.body;
-    const fechaInicio = "2025-05-01";""
-    const fechaFin = "2025-07-29";
-    if (!fechaInicio || !fechaFin) {
-      res.status(400).json({ error: 'Faltan fechas' }); 
-      return;
-    }
-
-    const [rows]: any = await devaPool.query('CALL ObtenerDatosDashboard(?, ?)', [fechaInicio, fechaFin]);
-
-    res.json({ data: rows });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error en la base de datos' });
-  }
-});
-
-// Entradas CONSULTA GENERAL Y TEST
+// CONSULTA PARA CORRESPONDENCIA ENTRANTE
 router.get('/entrada', async (req, res) => {
   try {
     const [rows] = await devaPool.query('SELECT * FROM Correspondencia_Interna_In');
@@ -67,7 +48,7 @@ router.get('/entrada', async (req, res) => {
   }
 });
 
-// Procedimiento almacenado
+//TRAEMOS LA CORRESPONDENCIA POR NIVEL
 router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response): Promise<void> => {
   const nivel = Number(req.params.nivel);
   const turnado = Number(req.query.turnado);
@@ -77,21 +58,21 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
 
     if (nivel === 1 || turnado === 3) {
       // Si es nivel 1, o el turnado es 3, siempre usa CorrespondenciaInterna
-      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaInterna()');
+      const [result] = await devaPool.query('CALL Ci_SELECT()');
       rows = result;
     } else if (nivel === 2) {
       if (!turnado) {
         res.status(400).json({ error: 'Falta el parámetro "turnado" para nivel 2' });
         return;
       }
-      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaSub(?)', [turnado]);
+      const [result] = await devaPool.query('CALL Ci_SELECT_Subdirector(?)', [turnado]);
       rows = result;
     } else if (nivel === 4) {
       if (!turnado) {
         res.status(400).json({ error: 'Falta el parámetro "turnado" para nivel 4' });
         return;
       }
-      const [result] = await devaPool.query('CALL ObtenerCorrespondenciaLCP(?)', [turnado]);
+      const [result] = await devaPool.query('CALL Ci_SELECT_Lcp(?)', [turnado]);
       rows = result;
     } else {
       res.status(400).json({ error: 'Nivel no válido. Debe ser 1, 2 o 4.' });
@@ -105,10 +86,11 @@ router.get('/obtener-correspondencia/:nivel', async (req: Request, res: Response
   }
 });
 
+// TRAEMOS EL DETALLE DE LA CORRESPONDENCIA POR ID
 router.get('/obtener-correspondencia-id/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const [rows]: any = await devaPool.query('CALL ObtenerCorrespondenciaInternaPorID(?)', [id]);
+    const [rows]: any = await devaPool.query('CALL Ci_SELECT_ID(?)', [id]);
     const data = rows?.[0]?.[0];
     const numDVSC = data?.NumDVSC;
     const numDEVA = data?.NumDEVA;
@@ -175,7 +157,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
     }
 
     // Ahora llamamos al procedimiento almacenado con el remitente ya resuelto
-    const query = 'CALL GuardarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL Ci_INSERT(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       Num,
       NumDVSC,
@@ -270,7 +252,7 @@ router.delete('/borrar-soporte/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/actualizar-correspondencia/:id', async (req, res) => {
+router.put('/actualizar-correspondencia/:id', async (req, res) => {6
   try {
     const id = +req.params.id;
     const {
@@ -292,7 +274,7 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Denominacion
     } = req.body;
 
-    const query = 'CALL ActualizarCorrespondenciaInternaIn(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL Ci_UPDATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       id,
       NumDVSC,
@@ -331,7 +313,7 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
   }
 });
 
-
+//CORESPONDENCIA DE SALIDA
 router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), async (req: Request, res: Response): Promise<void> => {
   try {
     const fkId = Number(req.params.idIn);
@@ -414,9 +396,29 @@ router.get('/obtener-correspondencia-out/:idIn', async (req, res) => {
   }
 });
 
-router.get('/consulta-sub', async (req, res) => {
+// CONSULTA GENERAL PARA DASHBOARD
+router.post('/dashboard', async (req: Request, res: Response): Promise<void> => {
   try {
-    const [rows] = await devaPool.query('CALL ConsultaSub()');
+    const { fechaInicio, fechaFin } = req.body;
+    // const fechaInicio = "2025-05-01";""
+    // const fechaFin = "2025-07-29";
+    if (!fechaInicio || !fechaFin) {
+      res.status(400).json({ error: 'Faltan fechas' }); 
+      return;
+    }
+
+    const [rows]: any = await devaPool.query('CALL Db_SELECT(?, ?)', [fechaInicio, fechaFin]);
+
+    res.json({ data: rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error en la base de datos' });
+  }
+});
+
+router.get('/obtener-dashboard-sub', async (req, res) => {
+  try {
+    const [rows] = await devaPool.query('CALL Db_SELECT_Subdirector()');
     res.json({ data: (rows as any[])[0] });
   } catch (error) {
     console.error('Error al ejecutar ConsultaSub:', error);
