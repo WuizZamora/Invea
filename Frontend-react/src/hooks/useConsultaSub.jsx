@@ -8,7 +8,7 @@ export default function useConsultaSub() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/consulta-sub`;
+        const url = `${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_API_DIRECCION}/correspondencia/obtener-dashboard-sub`;
         const res = await fetch(url, {credentials: 'include'});
         const json = await res.json();
 
