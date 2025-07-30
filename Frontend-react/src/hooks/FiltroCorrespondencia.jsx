@@ -30,6 +30,7 @@ const FiltroCorrespondencia = ({ datos, onFiltrar }) => {
           normalize(item.Estatus).includes(terminoNormalizado) ||
           normalize(item.FechaDocumento).includes(terminoNormalizado) ||
           normalize(item.TurnadoA).includes(terminoNormalizado) ||
+          normalize(item.OficioOut).includes(terminoNormalizado) ||
           normalize(item.Descripcion).includes(terminoNormalizado) 
         );
       });
