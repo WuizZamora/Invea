@@ -7,6 +7,7 @@ import useDetalleOficio from "../hooks/useDetalleOficio";
 import { useUsuario } from "../context/UserContext";
 import TurnarModal from "../Modals/SubTurnar";
 import CreateOficioComision from "../Modals/CreateOficioComision";
+import ModalGenerarReporte from "../Modals/ModalGenerarReporteSub";
 
 const Sub = () => {
   const { usuario } = useUsuario();
@@ -23,6 +24,7 @@ const Sub = () => {
   const [filaSeleccionada, setFilaSeleccionada] = useState(null);
   const [modalOficioAbierto, setModalOficioAbierto] = useState(false);
   const [idParaOficio, setIdParaOficio] = useState(null);
+  const [modalAbierto, setModalAbierto] = useState(false);
 
   
   // Datos a mostrar - importante el orden de las condiciones
@@ -118,6 +120,17 @@ const Sub = () => {
             </select>
           </div>
         </div>
+      </div>
+      <div className="text-end">
+        <button className="btn " style={{backgroundColor: '#9f2241', color: 'white', fontSize:'1.2rem'}}
+          onClick={() => setModalAbierto(true)}> 
+          Generar Reporte📋
+        </button>
+        <ModalGenerarReporte
+          isOpen={modalAbierto}
+          onClose={() => setModalAbierto(false)}
+          datos={datosOriginales}
+        />
       </div>
       
       <div className="table-container">

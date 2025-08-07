@@ -234,3 +234,18 @@ form button:hover {
 .terminado {
   background-color: green;
 }
+
+.icon-trash {
+  cursor: pointer;
+  font-size: 1.2rem; /* Ajusta el tamaño */
+  user-select: none;
+}
+
+.icon-trash:hover {
+  opacity: 0.7; /* Efecto al pasar el mouse */
+}
+
+.table-report {
+  max-height: 38rem; /* o el alto que quieras */
+  overflow-y: auto;
+}
