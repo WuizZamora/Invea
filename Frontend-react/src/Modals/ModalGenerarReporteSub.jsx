@@ -12,10 +12,11 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
 
   const [columnasSeleccionadas, setColumnasSeleccionadas] = useState({
     Num: true,
-    Oficio: true,
     Expediente: true,
     Asunto: true,
     Fecha: true,
+    Direccion: true,
+    Denominacion: true,
     TurnadoA: true,
   });
 
@@ -106,6 +107,8 @@ useEffect(() => {
           if (col === "Oficio") return item.Oficio;
           if (col === "Expediente") return item.Expediente;
           if (col === "Asunto") return item.Asunto;
+          if (col === "Direccion") return item.Direccion;
+          if (col === "Denominacion") return item.Denominacion;
           if (col === "Fecha") return item.FechaDocumento;
           if (col === "TurnadoA") return item.TurnadoA;
           return "";
@@ -222,13 +225,13 @@ useEffect(() => {
           <table border="1" className="tabla-registro">
             <thead>
               <tr>
-                {/* <th>
+                <th>
                   <input
                     type="checkbox"
                     checked={filasSeleccionadas.every(Boolean)}
                     onChange={(e) => toggleTodasFilas(e.target.checked)}
                   /> Seleccionar Fila
-                </th> */}
+                </th>
                 {Object.keys(columnasSeleccionadas)
                   .filter(col => columnasSeleccionadas[col])
                   .map(col => (
@@ -239,18 +242,20 @@ useEffect(() => {
             <tbody>
               {datosFiltrados.map((item, i) => (
                 <tr key={i}>
-                  {/* <td>
+                  <td>
                     <input
                       type="checkbox"
                       checked={filasSeleccionadas[i]}
                       onChange={() => toggleFila(i)}
                     />
-                  </td> */}
+                  </td>
                   {columnasSeleccionadas.Num && <td>{item.NumDVSC}</td>}
                   {columnasSeleccionadas.Oficio && <td>{item.Oficio}</td>}
                   {columnasSeleccionadas.Expediente && <td>{item.Expediente}</td>}
                   {columnasSeleccionadas.Asunto && <td>{item.Asunto}</td>}
                   {columnasSeleccionadas.Fecha && <td>{item.FechaDocumento}</td>}
+                  {columnasSeleccionadas.Asunto && <td>{item.Direccion}</td>}
+                  {columnasSeleccionadas.Asunto && <td>{item.Denominacion}</td>}
                   {columnasSeleccionadas.TurnadoA && <td>{item.TurnadoA}</td>}
 
                 </tr>
