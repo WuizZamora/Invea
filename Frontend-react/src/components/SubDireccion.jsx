@@ -6,6 +6,8 @@ import useCorrespondencia from "../hooks/useCorrespondencia";
 import useDetalleOficio from "../hooks/useDetalleOficio";
 import { useUsuario } from "../context/UserContext";
 import TurnarModal from "../Modals/SubTurnar";
+import CreateOficioComision from "../Modals/CreateOficioComision";
+import ModalGenerarReporte from "../Modals/ModalGenerarReporteSub";
 
 const Sub = () => {
   const { usuario } = useUsuario();
@@ -20,6 +22,10 @@ const Sub = () => {
   const [resultadosPorPagina, setResultadosPorPagina] = useState(10);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [filaSeleccionada, setFilaSeleccionada] = useState(null);
+  const [modalOficioAbierto, setModalOficioAbierto] = useState(false);
+  const [idParaOficio, setIdParaOficio] = useState(null);
+  const [modalAbierto, setModalAbierto] = useState(false);
+
   
   // Datos a mostrar - importante el orden de las condiciones
   const datosMostrar = datosFiltrados === null ? datosOriginales : 
@@ -115,6 +121,17 @@ const Sub = () => {
           </div>
         </div>
       </div>
+      <div className="text-end">
+        <button className="btn " style={{backgroundColor: '#9f2241', color: 'white', fontSize:'1.2rem'}}
+          onClick={() => setModalAbierto(true)}> 
+          Generar Reporte📋
+        </button>
+        <ModalGenerarReporte
+          isOpen={modalAbierto}
+          onClose={() => setModalAbierto(false)}
+          datos={datosOriginales}
+        />
+      </div>
       
       <div className="table-container">
         {datosMostrar.length === 0 ? (
@@ -127,6 +144,7 @@ const Sub = () => {
               <tr>
                 <th>Num</th>
                 <th>Oficio</th>
+                <th>Oficio de Comision</th>
                 <th>Fecha</th>
                 <th>Asunto</th>
                 <th>OP</th>
@@ -135,7 +153,7 @@ const Sub = () => {
             </thead>
             <tbody>
               {datosPagina.map((item, index) => (
-                <tr key={`${item.Pk_IDCorrespondenciaIn}-${index}`}>
+                <tr key={`${item.Pk_IDCorrespondenciaIn}-${index}`} title={`${item.ObservacionesOut}`}>
                   <td className={`estatus-${item.Estatus?.toLowerCase()}`}>
                     {item.NumDVSC}
                   </td>
@@ -153,21 +171,52 @@ const Sub = () => {
                         </>
                     ) : null}
                     </td>
+                    <td>
+                    {item.OficioOut ? (
+                      <span>
+                        {item.OficioOut}
+                      </span>
+                    ) : (
+                      <span
+                        style={{ cursor: "pointer", textDecoration: "underline", color: "#9F2241" }}
+                        onClick={() => {
+                          setIdParaOficio(item.Pk_IDCorrespondenciaIn);
+                          setModalOficioAbierto(true);
+                        }}
+                        title="Click para Asignar Oficio"
+                      >
+                        Asignar Oficio
+                      </span>
+                    )}
+                  </td>
                   <td>{item.FechaDocumento}</td>
                   <td>{item.Asunto}</td>
                   <td>{item.OP ? (item.OP):("S/OP")}</td>
 
                   <td>
-                    {item.TurnadoA }
-                    <button 
-                        className="save-button"
+                    {item.TurnadoA ? (
+                      <span
+                        style={{ cursor: "pointer", textDecoration: "underline", color: "#007bff" }}
                         onClick={() => {
-                          setFilaSeleccionada(item); // guarda la fila actual
-                          setMostrarModal(true);     // abre el modal
+                          setFilaSeleccionada(item);
+                          setMostrarModal(true);
                         }}
+                        title="Click para returnar"
+                      >
+                        🔁 {item.TurnadoA}
+                      </span>
+                    ) : (
+                      <span
+                        style={{ cursor: "pointer", textDecoration: "underline", color: "#28a745" }}
+                        onClick={() => {
+                          setFilaSeleccionada(item);
+                          setMostrarModal(true);
+                        }}
+                        title="Click para turnar"
                       >
                         Turnar
-                      </button>
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -236,6 +285,13 @@ const Sub = () => {
           error={error}
         />
       )}
+
+    <CreateOficioComision
+      isOpen={modalOficioAbierto}
+      onClose={() => setModalOficioAbierto(false)}
+      idCorrespondencia={idParaOficio}
+      refetch={refetch}
+    />
 
     </div>
   );

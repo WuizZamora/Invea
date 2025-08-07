@@ -75,7 +75,8 @@ export default function DonutGraph({ data, size = 200 }) {
                 borderRadius: 3,
               }}
             ></div>
-            <span>{entry.name}</span>
+            <div className='col'> <span>{entry.name}:</span></div>
+            <div className='col'> <span>{entry.value}</span></div>
           </div>
         ))}
       </div>

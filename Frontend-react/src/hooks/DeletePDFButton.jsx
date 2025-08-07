@@ -35,9 +35,14 @@ const DeletePDFButton = ({ id, onDeleteSuccess }) => {
   };
 
   return (
-    <button className="button-table" onClick={handleDelete}>
-      🗑️ Eliminar
-    </button>
+    <span 
+      className="icon-trash" 
+      onClick={handleDelete} 
+      role="button" 
+      aria-label="Eliminar"
+    >
+      🗑️
+    </span>
   );
 };
 export default DeletePDFButton;

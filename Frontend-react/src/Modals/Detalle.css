@@ -115,3 +115,13 @@ input{
   font-size: 1.1rem;
   font-style: italic;
 }
+
+.modal-report {
+  width: 95rem !important;
+  height: 55rem;
+  padding: 20px;
+  border-radius: 10px !important;
+  background-color: white !important;
+  position: fixed;
+  z-index: 1010;
+}

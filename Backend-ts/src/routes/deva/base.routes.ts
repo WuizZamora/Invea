@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import fs from 'fs';
 import path from 'path';
 
@@ -17,5 +18,6 @@ router.get('/anuncio', (req, res) => {
     res.send({ mensaje: data.trim() });
   });
 });
+
 
 export default router;

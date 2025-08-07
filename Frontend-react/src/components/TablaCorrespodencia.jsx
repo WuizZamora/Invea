@@ -6,12 +6,14 @@ import DeletePDFButton from "../hooks/DeletePDFButton";
 import "../css/Tabla.css";
 import ModalDetalle from "../Modals/ModalDetalle";
 import useDetalleOficio from "../hooks/useDetalleOficio";
+import ModalGenerarReporte from "../Modals/ModalGenerarReporte";
 
 const Tabla = () => {
   const { datos: datosOriginales, loading, refetch } = useCorrespondencia();
   const [datosFiltrados, setDatosFiltrados] = useState(null);
   const [paginaActual, setPaginaActual] = useState(1);
   const [resultadosPorPagina, setResultadosPorPagina] = useState(10);
+  const [modalAbierto, setModalAbierto] = useState(false);
 
   // Datos a mostrar - importante el orden de las condiciones
   const datosMostrar = datosFiltrados === null ? datosOriginales :
@@ -62,7 +64,23 @@ const Tabla = () => {
 
   return (
     <div className="table-form">
-      <h4>Tabla de Registros</h4>
+      <div className="row">
+        <div className="col-md-10">
+          <h4>Tabla de Registros</h4>
+        </div>
+        <div className="col-md-2 text-end">
+          <button className="btn " style={{backgroundColor: '#9f2241', color: 'white', fontSize:'1.2rem'}}
+           onClick={() => setModalAbierto(true)}> 
+            Generar Reporte📋
+          </button>
+          <ModalGenerarReporte
+            isOpen={modalAbierto}
+            onClose={() => setModalAbierto(false)}
+            datos={datosOriginales}
+          />
+        </div>
+      </div>
+      <br />
       <div className="row">
         <div className="col-md-7">
           <FiltroCorrespondencia
@@ -122,9 +140,10 @@ const Tabla = () => {
                 <th>Fecha</th>
                 <th>Remitente</th>
                 <th>Asunto</th>
+                <th>Denominacion</th>
                 <th>Dirección</th>
                 <th>OP</th>
-                <th>Documental</th>
+                <th style={{fontSize:'1.2rem'}}>📋​</th>
               </tr>
             </thead>
             <tbody>
@@ -149,6 +168,9 @@ const Tabla = () => {
                   <td>{item.FechaDocumento}</td>
                   <td>{item.Remitente}</td>
                   <td>{item.Asunto}</td>
+                  <td>
+                    {item.Denominacion ? (item.Denominacion):('S/D')}
+                    </td>
                   <td>{item.Direccion}</td>
                   <td>{item.OP ? (item.OP) : ("S/OP")}</td>
                   <td>
