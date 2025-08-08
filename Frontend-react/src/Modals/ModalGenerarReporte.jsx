@@ -156,12 +156,10 @@ useEffect(() => {
         columnas.forEach((col) => {
           if (col === "Num") fila["Num"] = item.NumDVSC;
           else if (col === "Oficio") fila["Oficio"] = item.Oficio;
-          else if (col === "Expediente") fila["Expediente"] = item.Expediente;
-          else if (col === "Asunto") fila["Asunto"] = item.Asunto;
           else if (col === "Direccion") fila["Direccion"] = item.Direccion;
-          else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion;
+          else if (col === "Remitente") fila["Remitente"] = item.Remitente;
           else if (col === "Fecha") fila["Fecha"] = item.FechaDocumento;
-          else if (col === "TurnadoA") fila["TurnadoA"] = item.TurnadoA;
+          else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion;
         });
         return fila;
       });
