@@ -3,6 +3,7 @@ import { Catalogo, toSelectOptions } from "../utils/Catalogos";
 import Select from "react-select";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
 
 const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
   const [fechaInicial, setFechaInicial] = useState("");
@@ -146,6 +147,33 @@ useEffect(() => {
     window.open(doc.output("bloburl"), "_blank");
   };
 
+  const generarExcel = () => {
+    const columnas = Object.keys(columnasSeleccionadas).filter(col => columnasSeleccionadas[col]);
+    const filas = datosFiltrados
+      .filter((_, i) => filasSeleccionadas[i])
+      .map((item) => {
+        const fila = {};
+        columnas.forEach((col) => {
+          if (col === "Num") fila["Num"] = item.NumDVSC;
+          else if (col === "Oficio") fila["Oficio"] = item.Oficio;
+          else if (col === "Expediente") fila["Expediente"] = item.Expediente;
+          else if (col === "Asunto") fila["Asunto"] = item.Asunto;
+          else if (col === "Direccion") fila["Direccion"] = item.Direccion;
+          else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion;
+          else if (col === "Fecha") fila["Fecha"] = item.FechaDocumento;
+          else if (col === "TurnadoA") fila["TurnadoA"] = item.TurnadoA;
+        });
+        return fila;
+      });
+  
+    const worksheet = XLSX.utils.json_to_sheet(filas);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Reporte");
+  
+    // Descargar archivo
+    XLSX.writeFile(workbook, "ReporteCorrespondencia.xlsx");
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -192,7 +220,8 @@ useEffect(() => {
             />
           </div>
           <div className="col-md-4 text-end">
-            <button className="save-button" onClick={generarPDF}>Generar PDF 📋​</button>
+            <button className="save-button" onClick={generarPDF}>PDF 📋​</button>
+            <button className="save-button ms-2" onClick={generarExcel}>Excel 📊</button>
           </div>
         </div><br />
         <div className="card-checkbox">
@@ -218,7 +247,7 @@ useEffect(() => {
 
 
         {/* Tabla con checkboxes */}
-        <div className="table-container">
+        <div className="table-report">
           <table border="1" className="tabla-registro">
             <thead>
               <tr>
