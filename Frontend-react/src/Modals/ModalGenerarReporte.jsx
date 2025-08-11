@@ -249,13 +249,13 @@ useEffect(() => {
           <table border="1" className="tabla-registro">
             <thead>
               <tr>
-                {/* <th>
+                <th>
                   <input
                     type="checkbox"
                     checked={filasSeleccionadas.every(Boolean)}
                     onChange={(e) => toggleTodasFilas(e.target.checked)}
                   /> Seleccionar Fila
-                </th> */}
+                </th>
                 {Object.keys(columnasSeleccionadas)
                   .filter(col => columnasSeleccionadas[col])
                   .map(col => (
@@ -266,13 +266,13 @@ useEffect(() => {
             <tbody>
               {datosFiltrados.map((item, i) => (
                 <tr key={i}>
-                  {/* <td>
+                  <td>
                     <input
                       type="checkbox"
                       checked={filasSeleccionadas[i]}
                       onChange={() => toggleFila(i)}
                     />
-                  </td> */}
+                  </td>
                   {columnasSeleccionadas.Num && <td>{item.NumDVSC}</td>}
                   {columnasSeleccionadas.Oficio && <td>{item.Oficio}</td>}
                   {columnasSeleccionadas.Direccion && <td>{item.Direccion}</td>}
