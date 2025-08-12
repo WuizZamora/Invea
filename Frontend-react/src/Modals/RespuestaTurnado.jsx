@@ -86,8 +86,8 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
   const isFormInvalid =
   formData.accion.trim() === "" ||
   formData.oficio.trim() === "" ||
-  formData.descripcion.trim() === "" ||
-  !formData.soporteDocumental || formData.soporteDocumental.type !== 'application/pdf';
+  formData.descripcion.trim() === ""
+  // !formData.soporteDocumental || formData.soporteDocumental.type !== 'application/pdf';
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">

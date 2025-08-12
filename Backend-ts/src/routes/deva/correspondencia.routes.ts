@@ -318,10 +318,7 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
   try {
     const fkId = Number(req.params.idIn);
     const file = req.file;
-    if (!file) {
-      res.status(400).json({ error: 'No se ha subido ningún archivo.' });
-      return;             // ← devuelve void
-    }
+
     const {
       Accion,
       Oficio,
@@ -335,7 +332,8 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
         ? 1
         : 0;
 
-    const filePath = `/uploads/correspondenciaOUT/${file.filename}`;
+    // Si hay archivo, guarda la ruta; si no, guarda NULL
+    const filePath = file ? `/uploads/correspondenciaOUT/${file.filename}` : null;
 
     const sql = `
         INSERT INTO Correspondencia_Interna_Out
@@ -355,13 +353,13 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
       Accion,
       Oficio,
       Descripcion,
-      filePath,
+      filePath, // Puede ser null si no hay archivo
       estaTerminadoNum,
       id
     ]);
 
     res.json({
-      message: 'Archivo OUT subido y registro creado correctamente',
+      message: 'Correspondencia OUT guardada correctamente',
       path: filePath,
     });
 
@@ -372,13 +370,12 @@ router.post('/guardar-correspondencia-out/:idIn', uploadOut.single('archivo'), a
 
     console.log(`Respuesta en el id ${fkId}:  - ${horaMexico}`);
   } catch (err) {
-    console.error('Error al subir OUT:', err);
+    console.error('Error al guardar OUT:', err);
     res.status(500).json({
-      error: 'Error al subir el archivo o insertar en la base de datos',
+      error: 'Error al guardar los datos en la base de datos',
     });
   }
-},
-);
+});
 
 router.get('/obtener-correspondencia-out/:idIn', async (req, res) => {
   try {
