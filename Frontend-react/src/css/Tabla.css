@@ -102,6 +102,10 @@ form button:hover {
   background-color: #f1f1f1;
 }
 
+.report-cap{
+  font-size: 0.8rem;
+}
+
 /* Estilos para la paginación */
 .paginacion {
   display: flex;
@@ -249,3 +253,5 @@ form button:hover {
   max-height: 38rem; /* o el alto que quieras */
   overflow-y: auto;
 }
+
+

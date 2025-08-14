@@ -13,15 +13,26 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
 
   const [columnasSeleccionadas, setColumnasSeleccionadas] = useState({
     Num: true,
+    REF: true,
     Oficio: true,
-    Direccion: true,
     Remitente: true,
+    Asunto: true,
+    Direccion: true,
+    Turnado: true,
     Fecha: true,
-    Denominacion: true,
+    
   });
 
   const [filasSeleccionadas, setFilasSeleccionadas] = useState([]);
   const [datosFiltrados, setDatosFiltrados] = useState([]);
+  const [remitente, setRemitente] = useState("");
+
+  // Crear opciones únicas de remitente
+  const opcionesRemitente = [
+    { value: "", label: "Todos" },
+    ...Array.from(new Set(datos.map(item => item.Remitente).filter(Boolean)))
+      .map(rem => ({ value: rem, label: rem }))
+  ];
 
   // Opciones de asunto desde Catalogo
   const opcionesAsunto = toSelectOptions(Catalogo.Asunto);
@@ -65,6 +76,10 @@ useEffect(() => {
   if (asunto) {
     filtrados = filtrados.filter((item) => item.Asunto === asunto);
   }
+  
+  if (remitente) {
+    filtrados = filtrados.filter((item) => item.Remitente === remitente);
+  }
 
   if (numTipo !== "TODA") {
     filtrados = filtrados.filter((item) =>
@@ -74,7 +89,7 @@ useEffect(() => {
 
   setDatosFiltrados(filtrados);
   setFilasSeleccionadas(filtrados.map(() => true));
-}, [fechaInicial, fechaFinal, asunto, numTipo, datos]);
+}, [fechaInicial, fechaFinal, asunto, remitente, numTipo, datos]);
 
 
   const toggleColumna = (col) => {
@@ -96,41 +111,78 @@ useEffect(() => {
     setFilasSeleccionadas(Array(datosFiltrados.length).fill(valor));
   };
 
-  const generarPDF = () => {
-    const doc = new jsPDF();
-    const columnas = Object.keys(columnasSeleccionadas).filter(col => columnasSeleccionadas[col]);
-    const filas = datosFiltrados
-      .filter((_, i) => filasSeleccionadas[i])
-      .map((item) =>
-        columnas.map((col) => {
+const generarPDF = () => {
+  // Página en horizontal
+  const doc = new jsPDF({ orientation: 'landscape' });
+
+  const columnas = [
+    ...Object.keys(columnasSeleccionadas).filter(col => columnasSeleccionadas[col]),
+    "Observaciones"
+  ];
+  const filas = datosFiltrados
+    .filter((_, i) => filasSeleccionadas[i])
+    .map((item) => [
+      ...columnas
+        .filter(col => col !== "Observaciones") // evitamos buscar un campo inexistente
+        .map((col) => {
           if (col === "Num") return item.NumDVSC;
+          if (col === "REF") return item.OP || "S/N";
           if (col === "Oficio") return item.Oficio;
-          if (col === "Direccion") return item.Direccion;
           if (col === "Remitente") return item.Remitente;
+          if (col === "Asunto") return item.Asunto;
+          if (col === "Direccion") return item.Direccion;
+          if (col === "Denominacion") return item.Denominacion || "S/N";
+          if (col === "Turnado") return item.TurnadoA;
           if (col === "Fecha") return item.FechaDocumento;
-          if (col === "Denominacion") return item.Denominacion;
           return "";
-        })
-      );
+        }),
+      "" // aquí va Observaciones vacío
+    ]);
 
   const totalPagesExp = "{total_pages_count_string}";
+
+  // Encontrar índices de columnas para negritas
+  const colIndexNum = columnas.indexOf("Num");
+  const colIndexREF = columnas.indexOf("REF");
+  const colIndexOficio = columnas.indexOf("Oficio");
+  const colIndexDireccion = columnas.indexOf("Direccion");
+  const colIndexRemitente = columnas.indexOf("Remitente");
+  const colIndexAsunto = columnas.indexOf("Asunto");
+  const colIndexTurnado = columnas.indexOf("Turnado");
+  const colIndexOvservaciones = columnas.indexOf("Ovservaciones");
+
+  let startY = 20; // deja espacio para el encabezado en la primera página
 
   autoTable(doc, {
     head: [columnas],
     body: filas,
-    styles: { fontSize: 8 },
+    styles: { fontSize: 6 },
     headStyles: { fillColor: [159, 34, 65] },
-    margin: { top: 30 }, // deja espacio para encabezado
+    columnStyles: {
+      [colIndexNum]: { cellWidth: 15, overflow: 'linebreak', fontStyle: 'bold' },
+      [colIndexREF]: { cellWidth: 10, overflow: 'linebreak' },
+      [colIndexOficio]: { cellWidth: 40, overflow: 'linebreak', fontStyle: 'bold' },
+      [colIndexDireccion]:  { cellWidth: 40, cellStyles: { cellWidth: 'wrap' } },
+      [colIndexRemitente]:  { cellWidth: 50, cellStyles: { cellWidth: 'wrap' } },
+      [colIndexAsunto]:  { cellWidth: 40, cellStyles: { cellWidth: 'wrap' } },
+      [colIndexTurnado]:  { cellWidth: 40, cellStyles: { cellWidth: 'wrap' } },
+
+    },
+    startY: startY,
     didDrawPage: (data) => {
-      // Encabezado solo en la primera página
       if (data.pageNumber === 1) {
+        // Encabezado
         doc.setFontSize(16);
         doc.text("Reporte de Correspondencia", data.settings.margin.left, 15);
+
         doc.setFontSize(10);
-        doc.text(`Generado: ${new Date().toLocaleDateString()}`, data.settings.margin.left, 22);
+        const fecha = `Generado: ${new Date().toLocaleDateString()}`;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const textWidth = doc.getTextWidth(fecha);
+        doc.text(fecha, pageWidth - data.settings.margin.right - textWidth, 15);
       }
 
-      // Pie con número de página
+      // Pie de página
       let str = `Página ${data.pageNumber} de ${totalPagesExp}`;
       doc.setFontSize(9);
       let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
@@ -138,14 +190,12 @@ useEffect(() => {
     }
   });
 
-  // Reemplaza marcador con número total de páginas
   if (typeof doc.putTotalPages === "function") {
     doc.putTotalPages(totalPagesExp);
   }
 
-
-    window.open(doc.output("bloburl"), "_blank");
-  };
+  window.open(doc.output("bloburl"), "_blank");
+};
 
   const generarExcel = () => {
     const columnas = Object.keys(columnasSeleccionadas).filter(col => columnasSeleccionadas[col]);
@@ -155,11 +205,14 @@ useEffect(() => {
         const fila = {};
         columnas.forEach((col) => {
           if (col === "Num") fila["Num"] = item.NumDVSC;
+          else if (col === "REF") fila["REF"] = item.OP;
           else if (col === "Oficio") fila["Oficio"] = item.Oficio;
-          else if (col === "Direccion") fila["Direccion"] = item.Direccion;
           else if (col === "Remitente") fila["Remitente"] = item.Remitente;
-          else if (col === "Fecha") fila["Fecha"] = item.FechaDocumento;
+          else if (col === "Asunto") fila["Asunto"] = item.Asunto;
+          else if (col === "Direccion") fila["Direccion"] = item.Direccion;
           else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion;
+          else if (col === "Turnado") fila["Turnado"] = item.TurnadoA;
+          else if (col === "Fecha") fila["Fecha"] = item.FechaDocumento;
         });
         return fila;
       });
@@ -176,7 +229,7 @@ useEffect(() => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-report">
+      <div className="modal-report-cap">
         <div className="modal-header">
         <h3>Generar Reporte</h3>
         </div>
@@ -217,9 +270,19 @@ useEffect(() => {
               isClearable
             />
           </div>
-          <div className="col-md-4 text-end">
-            <button className="save-button" onClick={generarPDF}>PDF 📋​</button>
-            <button className="save-button ms-2" onClick={generarExcel}>Excel 📊</button>
+          <div className="col-md-2">
+            <label>Remitente:</label>
+            <Select
+              className="select-remitente"
+              options={opcionesRemitente}
+              value={opcionesRemitente.find(opt => opt.value === remitente) || { value: "", label: "Todos" }}
+              onChange={(selected) => setRemitente(selected?.value || "")}
+              isClearable
+            />
+          </div>
+          <div className="col-md-2 text-end">
+            <span className="save-button" onClick={generarPDF}>PDF 📋​</span>
+            <span className="save-button ms-2" onClick={generarExcel}>Excel 📊</span>
           </div>
         </div><br />
         <div className="card-checkbox">
@@ -246,7 +309,7 @@ useEffect(() => {
 
         {/* Tabla con checkboxes */}
         <div className="table-report">
-          <table border="1" className="tabla-registro">
+          <table border="1" className="tabla-registro report-cap">
             <thead>
               <tr>
                 <th>
@@ -274,11 +337,14 @@ useEffect(() => {
                     />
                   </td>
                   {columnasSeleccionadas.Num && <td>{item.NumDVSC}</td>}
+                  {columnasSeleccionadas.REF && <td>{item.OP}</td>}
                   {columnasSeleccionadas.Oficio && <td>{item.Oficio}</td>}
-                  {columnasSeleccionadas.Direccion && <td>{item.Direccion}</td>}
                   {columnasSeleccionadas.Remitente && <td>{item.Remitente}</td>}
-                  {columnasSeleccionadas.Fecha && <td>{item.FechaDocumento}</td>}
+                  {columnasSeleccionadas.Asunto && <td>{item.Asunto}</td>}
+                  {columnasSeleccionadas.Direccion && <td>{item.Direccion}</td>}
                   {columnasSeleccionadas.Denominacion && <td>{item.Denominacion}</td>}
+                  {columnasSeleccionadas.Turnado && <td>{item.TurnadoA}</td>}
+                  {columnasSeleccionadas.Fecha && <td>{item.FechaDocumento}</td>}
 
                 </tr>
               ))}

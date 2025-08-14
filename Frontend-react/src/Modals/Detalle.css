@@ -125,3 +125,13 @@ input{
   position: fixed;
   z-index: 1010;
 }
+
+.modal-report-cap {
+  width: 110rem !important;
+  height: 55rem;
+  padding: 20px;
+  border-radius: 10px !important;
+  background-color: white !important;
+  position: fixed;
+  z-index: 1010;
+}
