@@ -85,7 +85,7 @@ export const Catalogo = {
       "REMISION PARA GENERAR VV",
       "REPOSICÓN DE SELLOS",
       "RETIRO DE SELLOS",
-      "VISITA DE VERIFICACIVISITA DE VERIFICACION",
+      "VISITA DE VERIFICACIÓN",
       "ZONIFICACION",
   ],
 };
