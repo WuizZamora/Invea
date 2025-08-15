@@ -17,6 +17,7 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
     Oficio: true,
     Remitente: true,
     Asunto: true,
+    Motivo: true,
     Direccion: true,
     Turnado: true,
     Fecha: true,
@@ -130,9 +131,10 @@ const generarPDF = () => {
           if (col === "Oficio") return item.Oficio;
           if (col === "Remitente") return item.Remitente;
           if (col === "Asunto") return item.Asunto;
+          if (col === "Motivo") return item.Motivo;
           if (col === "Direccion") return item.Direccion;
           if (col === "Denominacion") return item.Denominacion || "S/N";
-          if (col === "Turnado") return item.TurnadoA;
+          if (col === "Turnado") return item.TurnadoSub;
           if (col === "Fecha") return item.FechaDocumento;
           return "";
         }),
@@ -148,12 +150,14 @@ const generarPDF = () => {
   const colIndexDireccion = columnas.indexOf("Direccion");
   const colIndexRemitente = columnas.indexOf("Remitente");
   const colIndexAsunto = columnas.indexOf("Asunto");
+  const colIndexMotivo = columnas.indexOf("Motivo");
   const colIndexTurnado = columnas.indexOf("Turnado");
   const colIndexOvservaciones = columnas.indexOf("Ovservaciones");
 
   let startY = 20; // deja espacio para el encabezado en la primera página
 
   autoTable(doc, {
+    margin: { top: 3, left: 5, right: 23, bottom: 13 },
     head: [columnas],
     body: filas,
     styles: { fontSize: 6 },
@@ -161,11 +165,12 @@ const generarPDF = () => {
     columnStyles: {
       [colIndexNum]: { cellWidth: 15, overflow: 'linebreak', fontStyle: 'bold' },
       [colIndexREF]: { cellWidth: 10, overflow: 'linebreak' },
-      [colIndexOficio]: { cellWidth: 40, overflow: 'linebreak', fontStyle: 'bold' },
-      [colIndexDireccion]:  { cellWidth: 40, cellStyles: { cellWidth: 'wrap' } },
-      [colIndexRemitente]:  { cellWidth: 50, cellStyles: { cellWidth: 'wrap' } },
-      [colIndexAsunto]:  { cellWidth: 40, cellStyles: { cellWidth: 'wrap' } },
-      [colIndexTurnado]:  { cellWidth: 40, cellStyles: { cellWidth: 'wrap' } },
+      [colIndexOficio]: { cellWidth: 30, overflow: 'linebreak', fontStyle: 'bold' },
+      [colIndexDireccion]:  { cellWidth: 30, cellStyles: { cellWidth: 'wrap' } },
+      [colIndexRemitente]:  { cellWidth: 40, cellStyles: { cellWidth: 'wrap' } },
+      [colIndexAsunto]:  { cellWidth: 30, cellStyles: { cellWidth: 'wrap' } },
+      [colIndexMotivo]:  { cellWidth: 30, cellStyles: { cellWidth: 'wrap' } },
+      [colIndexTurnado]:  { cellWidth: 30, cellStyles: { cellWidth: 'wrap' } },
 
     },
     startY: startY,
@@ -209,9 +214,10 @@ const generarPDF = () => {
           else if (col === "Oficio") fila["Oficio"] = item.Oficio;
           else if (col === "Remitente") fila["Remitente"] = item.Remitente;
           else if (col === "Asunto") fila["Asunto"] = item.Asunto;
+          else if (col === "Motivo") fila["Asunto"] = item.Motivo;
           else if (col === "Direccion") fila["Direccion"] = item.Direccion;
           else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion;
-          else if (col === "Turnado") fila["Turnado"] = item.TurnadoA;
+          else if (col === "Turnado") fila["Turnado"] = item.TurnadoSub;
           else if (col === "Fecha") fila["Fecha"] = item.FechaDocumento;
         });
         return fila;
@@ -237,11 +243,11 @@ const generarPDF = () => {
 
         {/* Filtros */}
         <div className="filters-row row text-start">
-          <div className="col-md-2">
+          <div className="col-md-1">
             <label>Fecha Inicial:</label>
             <input type="date" value={fechaInicial} onChange={(e) => setFechaInicial(e.target.value)} />
           </div>
-          <div className="col-md-2">
+          <div className="col-md-1">
             <label>Fecha Final:</label>
             <input type="date"  value={fechaFinal} onChange={(e) => setFechaFinal(e.target.value)} />
           </div>
@@ -280,7 +286,7 @@ const generarPDF = () => {
               isClearable
             />
           </div>
-          <div className="col-md-2 text-end">
+          <div className="col-md-4 text-end">
             <span className="save-button" onClick={generarPDF}>PDF 📋​</span>
             <span className="save-button ms-2" onClick={generarExcel}>Excel 📊</span>
           </div>
@@ -341,9 +347,10 @@ const generarPDF = () => {
                   {columnasSeleccionadas.Oficio && <td>{item.Oficio}</td>}
                   {columnasSeleccionadas.Remitente && <td>{item.Remitente}</td>}
                   {columnasSeleccionadas.Asunto && <td>{item.Asunto}</td>}
+                  {columnasSeleccionadas.Motivo && <td>{item.Motivo}</td>}
                   {columnasSeleccionadas.Direccion && <td>{item.Direccion}</td>}
                   {columnasSeleccionadas.Denominacion && <td>{item.Denominacion}</td>}
-                  {columnasSeleccionadas.Turnado && <td>{item.TurnadoA}</td>}
+                  {columnasSeleccionadas.Turnado && <td>{item.TurnadoSub}</td>}
                   {columnasSeleccionadas.Fecha && <td>{item.FechaDocumento}</td>}
 
                 </tr>
