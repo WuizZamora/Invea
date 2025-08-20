@@ -113,19 +113,27 @@ useEffect(() => {
   };
 
 const generarPDF = () => {
-  // Página en horizontal
-  const doc = new jsPDF({ orientation: 'landscape' });
+  const doc = new jsPDF({ orientation: "landscape" });
 
-  const columnas = [
-    ...Object.keys(columnasSeleccionadas).filter(col => columnasSeleccionadas[col]),
-    "Observaciones"
+  // columnas seleccionadas del usuario
+  let columnas = [
+    ...Object.keys(columnasSeleccionadas).filter((col) => columnasSeleccionadas[col])
   ];
+
+  // ✅ renombrar Turnado a Observaciones
+  columnas = columnas.map((col) => (col === "Turnado" ? "Observaciones" : col));
+
+  // ✅ agregar columna numeración al inicio
+  columnas = ["#", ...columnas];
+
+  // filas con numeración automática
   const filas = datosFiltrados
     .filter((_, i) => filasSeleccionadas[i])
-    .map((item) => [
-      ...columnas
-        .filter(col => col !== "Observaciones") // evitamos buscar un campo inexistente
-        .map((col) => {
+    .map((item, index) => {
+      return [
+        // ✅ número de fila
+        index + 1,
+        ...columnas.slice(1).map((col) => {
           if (col === "Num") return item.NumDVSC;
           if (col === "REF") return item.OP || "S/N";
           if (col === "Oficio") return item.Oficio;
@@ -134,16 +142,23 @@ const generarPDF = () => {
           if (col === "Motivo") return item.Motivo;
           if (col === "Direccion") return item.Direccion;
           if (col === "Denominacion") return item.Denominacion || "S/N";
-          if (col === "Turnado") return item.TurnadoSub;
+
+          // ✅ en Observaciones imprimir vacío si es "Claudia Yvette Molina Sánchez"
+          if (col === "Observaciones") {
+            return item.TurnadoSub === "Claudia Yvette Molina Sánchez"
+              ? ""
+              : item.TurnadoSub;
+          }
+
           if (col === "Fecha") return item.FechaDocumento;
           return "";
         }),
-      "" // aquí va Observaciones vacío
-    ]);
+      ];
+    });
 
   const totalPagesExp = "{total_pages_count_string}";
 
-  // Encontrar índices de columnas para negritas
+  // índices para estilos
   const colIndexNum = columnas.indexOf("Num");
   const colIndexREF = columnas.indexOf("REF");
   const colIndexOficio = columnas.indexOf("Oficio");
@@ -151,32 +166,31 @@ const generarPDF = () => {
   const colIndexRemitente = columnas.indexOf("Remitente");
   const colIndexAsunto = columnas.indexOf("Asunto");
   const colIndexMotivo = columnas.indexOf("Motivo");
-  const colIndexTurnado = columnas.indexOf("Turnado");
-  const colIndexOvservaciones = columnas.indexOf("Ovservaciones");
+  const colIndexObservaciones = columnas.indexOf("Observaciones");
 
-  let startY = 20; // deja espacio para el encabezado en la primera página
+  let startY = 20;
 
   autoTable(doc, {
     margin: { top: 3, left: 5, right: 23, bottom: 13 },
     head: [columnas],
     body: filas,
-    styles: { fontSize: 6 },
+    styles: { fontSize: 9 },
     headStyles: { fillColor: [159, 34, 65] },
     columnStyles: {
-      [colIndexNum]: { cellWidth: 15, overflow: 'linebreak', fontStyle: 'bold' },
-      [colIndexREF]: { cellWidth: 10, overflow: 'linebreak' },
-      [colIndexOficio]: { cellWidth: 30, overflow: 'linebreak', fontStyle: 'bold' },
-      [colIndexDireccion]:  { cellWidth: 30, cellStyles: { cellWidth: 'wrap' } },
-      [colIndexRemitente]:  { cellWidth: 40, cellStyles: { cellWidth: 'wrap' } },
-      [colIndexAsunto]:  { cellWidth: 30, cellStyles: { cellWidth: 'wrap' } },
-      [colIndexMotivo]:  { cellWidth: 30, cellStyles: { cellWidth: 'wrap' } },
-      [colIndexTurnado]:  { cellWidth: 30, cellStyles: { cellWidth: 'wrap' } },
-
+      0: { cellWidth: 10, fontStyle: "bold" }, // ✅ columna #
+      [colIndexNum]: { cellWidth: 20, fontStyle: "bold" },
+      [colIndexREF]: { cellWidth: 15 },
+      [colIndexOficio]: { cellWidth: 43, fontStyle: "bold" },
+      [colIndexDireccion]: { cellWidth: 47 },
+      [colIndexRemitente]: { cellWidth: 50 },
+      [colIndexAsunto]: { cellWidth: 30 },
+      [colIndexMotivo]: { cellWidth: 23 },
+      [colIndexObservaciones]: { cellWidth: 33 },
     },
     startY: startY,
     didDrawPage: (data) => {
       if (data.pageNumber === 1) {
-        // Encabezado
+        // encabezado
         doc.setFontSize(16);
         doc.text("Reporte de Correspondencia", data.settings.margin.left, 15);
 
@@ -187,12 +201,12 @@ const generarPDF = () => {
         doc.text(fecha, pageWidth - data.settings.margin.right - textWidth, 15);
       }
 
-      // Pie de página
+      // pie de página
       let str = `Página ${data.pageNumber} de ${totalPagesExp}`;
       doc.setFontSize(9);
       let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
       doc.text(str, data.settings.margin.left, pageHeight - 10);
-    }
+    },
   });
 
   if (typeof doc.putTotalPages === "function") {
@@ -201,6 +215,7 @@ const generarPDF = () => {
 
   window.open(doc.output("bloburl"), "_blank");
 };
+
 
   const generarExcel = () => {
     const columnas = Object.keys(columnasSeleccionadas).filter(col => columnasSeleccionadas[col]);
@@ -214,7 +229,7 @@ const generarPDF = () => {
           else if (col === "Oficio") fila["Oficio"] = item.Oficio;
           else if (col === "Remitente") fila["Remitente"] = item.Remitente;
           else if (col === "Asunto") fila["Asunto"] = item.Asunto;
-          else if (col === "Motivo") fila["Asunto"] = item.Motivo;
+          else if (col === "Motivo") fila["Motivo"] = item.Motivo;
           else if (col === "Direccion") fila["Direccion"] = item.Direccion;
           else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion;
           else if (col === "Turnado") fila["Turnado"] = item.TurnadoSub;

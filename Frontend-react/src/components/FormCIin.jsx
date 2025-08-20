@@ -10,10 +10,10 @@ import { Catalogo, toSelectOptions } from "../utils/Catalogos";
 import Tabla from "./TablaCorrespodencia";
 
 const FormIn = () => {
-  const { opcionesPersonal, loading: loadingPersonal } = useSelectObtenerPersonal();
-  const { opcionesTurnado, loading: loadingTurnado } = useSelectPersonalTurnado();
   const [Otro, setOtro] = useState(false);
   const [refetchOut, setRefetchOut] = useState(false);
+  const { opcionesPersonal, loading: loadingPersonal } = useSelectObtenerPersonal(refetchOut);
+  const { opcionesTurnado, loading: loadingTurnado } = useSelectPersonalTurnado();
 
   const {
     alcaldias,
