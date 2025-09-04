@@ -19,7 +19,7 @@ router.get('/personal-turnado', async (req, res) => {
     const [rows] = await devaPool.query(`
       SELECT * 
       FROM Personal_Turnado 
-      WHERE	Pk_IDPersonalTurnado IN(1,2,3,4,5);
+      WHERE	Pk_IDPersonalTurnado IN(1,2,3,4,5,30);
     `);
     res.json({ data: rows });
   } catch (error) {
