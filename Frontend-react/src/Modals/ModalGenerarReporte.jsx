@@ -349,7 +349,11 @@ const generarPDF = () => {
             </thead>
             <tbody>
               {datosFiltrados.map((item, i) => (
-                <tr key={i}>
+                <tr key={`${i}`}
+                style={{
+                  backgroundColor:
+                    item.TurnadoSub === "Adrián Contreras Cruz" ? "rgba(255, 165, 0, 0.6)" : "transparent",
+                }}>
                   <td>
                     <input
                       type="checkbox"

@@ -148,7 +148,13 @@ const Tabla = () => {
             </thead>
             <tbody>
               {datosPagina.map((item, index) => (
-                <tr key={`${item.Pk_IDCorrespondenciaIn}-${index}`}>
+                    <tr
+                      key={`${item.Pk_IDCorrespondenciaIn}-${index}`}
+                      style={{
+                        backgroundColor:
+                          item.TurnadoA === "ACC - Adrián Contreras Cruz" ? "rgba(255, 165, 0, 0.6)" : "transparent",
+                      }}
+                    >
                   <td className={`estatus-${item.Estatus?.toLowerCase()}`}>
                     {item.NumDVSC}
                   </td>
