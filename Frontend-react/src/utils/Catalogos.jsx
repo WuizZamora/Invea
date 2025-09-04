@@ -7,7 +7,6 @@ export const Catalogo = {
 
   Asunto: [
     "AMPARO",
-    "CONCEPTO",
     "INSPECCIÓN OCULAR REPOSICIÓN DE SELLOS DE CLAUSURA",
     "INSPECCIÓN OCULAR Y REPOSICIÓN DE SELLOS DE SUSPENSIÓN",
     "JUICIO DE NULIDAD",
@@ -87,5 +86,7 @@ export const Catalogo = {
       "RETIRO DE SELLOS",
       "VISITA DE VERIFICACIÓN",
       "ZONIFICACION",
+      "REMISIÓN A SUBSTANCIACIÓN",
+      "REMISIÓN A JURIDICO",
   ],
 };

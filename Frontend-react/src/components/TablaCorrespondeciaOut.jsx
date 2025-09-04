@@ -10,18 +10,18 @@ const TablaCorrespondenciaOut = ({ idCorrespondencia }) => {
   // Asegúrate que data.data exista y sea arreglo
   const registros = data?.data ?? [];
 
-      const formatearFecha = (fechaISO) => {
-        if (!fechaISO) return "";
+  const formatearFecha = (fechaISO) => {
+    if (!fechaISO) return "";
 
-        const fecha = new Date(fechaISO);
+    const fecha = new Date(fechaISO);
 
-        const opciones = {
-            day: "2-digit",
-            month: "2-digit"
-        };
+    const opciones = {
+      day: "2-digit",
+      month: "2-digit"
+    };
 
     return fecha.toLocaleString("es-MX", opciones);
-    };
+  };
 
   if (registros.length === 0) return <p>No hay Respuestas para este registro, disponibles.</p>;
 
@@ -36,29 +36,46 @@ const TablaCorrespondenciaOut = ({ idCorrespondencia }) => {
           </tr>
         </thead>
         <tbody>
-          {registros.map((fila, index) => (
-            <tr key={index} title={fila.Descripcion}>
-              <td>{formatearFecha(fila.FechaOut)}</td>
-              <td>{fila.Accion}</td>
-              <td>
-                {fila.SoporteDocumental ? (
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <a
-                      href={`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${fila.SoporteDocumental}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {fila.Oficio}
-                    </a>
-                  </div>
-                ) : (
-                  <span>{fila.Oficio}</span>
-                )}
-              </td>
-              {/* <td>{fila.Descripcion}</td> ← También se elimina */}
-            </tr>
-          ))}
-        </tbody>
+  {registros.map((fila, index) => (
+    <React.Fragment key={index}>
+      <tr title={fila.Descripcion}>
+        <td>{formatearFecha(fila.FechaOut)}</td>
+        <td>{fila.Accion}</td>
+        <td>
+          {fila.SoporteDocumental ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <a
+                href={`${import.meta.env.VITE_API_HOST}${import.meta.env.VITE_API_PORT}${fila.SoporteDocumental}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {fila.Oficio}
+              </a>
+            </div>
+          ) : (
+            <span>{fila.Oficio}</span>
+          )}
+        </td>
+      </tr>
+      <tr>
+        <td colSpan={3} style={{ background: "#f9f9f9", fontStyle: "italic" }}>
+          <div 
+            style={{
+              maxWidth: "30rem", // o el ancho que prefieras
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              cursor: "default"
+            }}
+            title={fila.Descripcion} // Esto mostrará el texto completo al pasar el mouse
+          >
+            {fila.Descripcion}
+          </div>
+        </td>
+      </tr>
+    </React.Fragment>
+  ))}
+</tbody>
       </table>
     </div>
   );
