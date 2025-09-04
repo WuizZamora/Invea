@@ -151,8 +151,7 @@ const Tabla = () => {
                     <tr
                       key={`${item.Pk_IDCorrespondenciaIn}-${index}`}
                       style={{
-                        backgroundColor:
-                          item.TurnadoA === "MFR - Mariano Fernández Rosas" ? "rgba(255, 165, 0, 0.6)" : "transparent",
+                        backgroundColor:item.Seguimiento === 1 ? "rgba(255, 165, 0, 0.6)" : "transparent",
                       }}
                     >
                   <td className={`estatus-${item.Estatus?.toLowerCase()}`}>

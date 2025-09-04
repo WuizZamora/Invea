@@ -351,7 +351,7 @@ const FormIn = () => {
 
             {/* Checkbox sin nombre */}
             <div className="col-md-1 d-flex align-items-center">
-              <label>MFR:</label>
+              <label>Seguimiento:</label>
               <input type="checkbox" {...register("Mario")} />
             </div>
           </div>

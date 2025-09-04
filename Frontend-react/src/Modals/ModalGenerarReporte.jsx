@@ -350,10 +350,9 @@ const generarPDF = () => {
             <tbody>
               {datosFiltrados.map((item, i) => (
                 <tr key={`${i}`}
-                style={{
-                  backgroundColor:
-                    item.Mario === "1" ? "rgba(255, 165, 0, 0.6)" : "transparent",
-                }}>
+                  style={{
+                    backgroundColor: item.Seguimiento === 1 ? "rgba(255, 165, 0, 0.6)" : "transparent",
+                  }}>
                   <td>
                     <input
                       type="checkbox"
