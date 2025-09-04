@@ -143,9 +143,13 @@ router.post('/guardar-correspondencia', async (req, res) => {
       Expediente,
       FechaDocumento,
       TipoInmueble,
-      Denominacion
+      Denominacion,
+      Mario
     } = req.body;
 
+    // Si viene como "true" => true (1)
+    Mario = (Mario === true || Mario === 'true' || Mario === 1) ? 1 : 0;
+    
     if (Fk_Personal_Remitente == 0) {
       const insertQuery = `
         INSERT INTO Personal (Nombre, Cargo, Dependencia)
@@ -157,7 +161,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
     }
 
     // Ahora llamamos al procedimiento almacenado con el remitente ya resuelto
-    const query = 'CALL Ci_INSERT(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL Ci_INSERT(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       Num,
       NumDVSC,
@@ -177,7 +181,8 @@ router.post('/guardar-correspondencia', async (req, res) => {
       Expediente,
       FechaDocumento,
       TipoInmueble,
-      Denominacion
+      Denominacion,
+      Mario
     ];
 
     await devaPool.query(query, values);
@@ -252,7 +257,8 @@ router.delete('/borrar-soporte/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/actualizar-correspondencia/:id', async (req, res) => {6
+router.put('/actualizar-correspondencia/:id', async (req, res) => {
+  6
   try {
     const id = +req.params.id;
     const {
@@ -400,7 +406,7 @@ router.post('/dashboard', async (req: Request, res: Response): Promise<void> => 
     // const fechaInicio = "2025-05-01";""
     // const fechaFin = "2025-07-29";
     if (!fechaInicio || !fechaFin) {
-      res.status(400).json({ error: 'Faltan fechas' }); 
+      res.status(400).json({ error: 'Faltan fechas' });
       return;
     }
 
