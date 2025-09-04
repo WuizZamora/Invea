@@ -57,6 +57,7 @@ const FormIn = () => {
       OP: "",
       TipoInmueble: "",
       Denominacion: "",
+      Mario: "",
       Fk_Personal_Turnado: ""
     }
   });
@@ -91,6 +92,7 @@ const FormIn = () => {
         OP: "",
         TipoInmueble: "",
         Denominacion: "",
+        Mario: "",
         Fk_Personal_Turnado: ""
       });
       setSelectedAlcaldia("");
@@ -308,7 +310,7 @@ const FormIn = () => {
             </div>
           </div>
 
-          {/* Tipo de Inmueble y Denominicación */}
+          {/* Tipo de Inmueble y Denominación */}
           <div className="row">
             <div className="col-md-4">
               <label>Tipo de Inmueble (Opcional):</label>
@@ -333,13 +335,24 @@ const FormIn = () => {
                 )}
               />
             </div>
+
             <div className="col-md-4">
               <label>Denominación:</label>
-              <input type="text" {...register("Denominacion")} placeholder="Opcional" maxLength={50} 
+              <input
+                type="text"
+                {...register("Denominacion")}
+                placeholder="Opcional"
+                maxLength={50}
                 onInput={(e) => {
                   e.target.value = e.target.value.toUpperCase();
-                }}                
+                }}
               />
+            </div>
+
+            {/* Checkbox sin nombre */}
+            <div className="col-md-1 d-flex align-items-center">
+              <label>MFR:</label>
+              <input type="checkbox" {...register("Mario")} />
             </div>
           </div>
 
