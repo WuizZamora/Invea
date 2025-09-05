@@ -258,7 +258,6 @@ router.delete('/borrar-soporte/:id', async (req: Request, res: Response) => {
 });
 
 router.put('/actualizar-correspondencia/:id', async (req, res) => {
-  6
   try {
     const id = +req.params.id;
     const {
@@ -277,10 +276,14 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       FechaDocumento,
       Expediente,
       TipoInmueble,
-      Denominacion
+      Denominacion, 
+      Seguimiento
     } = req.body;
 
-    const query = 'CALL Ci_UPDATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+ const seguimientoValor = 
+  (Seguimiento === true || Seguimiento === 'true' || Seguimiento === 1) ? 1 : 0;
+
+    const query = 'CALL Ci_UPDATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       id,
       NumDVSC,
@@ -298,7 +301,8 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Expediente,
       FechaDocumento,
       TipoInmueble,
-      Denominacion
+      Denominacion, 
+      seguimientoValor
     ];
     await devaPool.query(query, values);
     res.status(201).json({ message: 'Correspondencia actualizada correctamente' });
