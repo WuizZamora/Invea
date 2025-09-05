@@ -46,6 +46,11 @@ const Turnado = () => {
     limpiarDetalle
   } = useDetalleOficio();
 
+    const handleRespuestaSuccess = async () => {
+    await refetch();      // 🔄 refresca la tabla
+   // limpiarDetalle();     // ✅ opcional: cierra el modal
+  };
+
 
   const cambiarPagina = (nuevaPagina) => {
   setPaginaActual(nuevaPagina);
@@ -215,6 +220,7 @@ const Turnado = () => {
           onClose={limpiarDetalle}
           loading={loading}
           error={error}
+          onSuccess={handleRespuestaSuccess}   // 👈 aquí le paso refetch
         />
       )}
 

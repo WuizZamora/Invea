@@ -51,7 +51,17 @@ const DetalleEditar = ({
             {" "}
             {camposNoEditables.includes(clave) ? (
               <span>{valor}</span>
-            ) : clave === "FechaDocumento" ? (
+            ) : clave === "Seguimiento" ? (
+              <div>
+                <input
+                  type="checkbox"
+                  checked={formData[clave] === 1} // true si marcado
+                  onChange={(e) =>
+                    handleChange(clave, e.target.checked ? 1 : 0) // envía "1" o "0"
+                  }
+                />
+              </div>
+            ) :clave === "FechaDocumento" ? (
               <div>
                 <input
                   type="date"

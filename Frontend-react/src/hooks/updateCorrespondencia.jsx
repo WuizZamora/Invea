@@ -20,6 +20,7 @@ export const updateCorrespondencia = async (id, data) => {
     Expediente: data.Expediente,
     Fk_Personal_Remitente: parseInt(data.Remitente),
     Asunto: data.Asunto,
+    Seguimiento: data.Seguimiento,
     Descripcion: data.Descripcion,
     Motivo: data.Motivo,
     Caracter: data.Caracter,

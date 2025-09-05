@@ -6,7 +6,7 @@ import VisorPDF from "../utils/VisorPDF";
 import TablaCorrespondenciaOut from "../components/TablaCorrespondeciaOut";
 import { useUsuario } from "../context/UserContext";
 
-const ModalTurnado = ({ item, onClose }) => {
+const ModalTurnado = ({ item, onClose, onSuccess }) => {
     
     const { usuario } = useUsuario();
     const [refetchOut, setRefetchOut] = useState(false);
@@ -87,7 +87,13 @@ const ModalTurnado = ({ item, onClose }) => {
       {mostrarRespuesta ? (
         <RespuestaTurnado
           idCorrespondencia={item.Pk_IDCorrespondenciaIn}
-          onSuccess={() => setRefetchOut(prev => !prev)}
+          onSuccess={() => {
+            // 🔄 refresca tabla interna de respuestas
+            setRefetchOut(prev => !prev);
+
+            // 🔄 refresca Turnado (padre)
+            if (onSuccess) onSuccess();
+          }}
         />
       ) : (
         <VisorPDF
