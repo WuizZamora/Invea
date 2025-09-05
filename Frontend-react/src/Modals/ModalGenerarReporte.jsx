@@ -12,6 +12,11 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
   const [seguimientoFiltro, setSeguimientoFiltro] = useState("");
   const [numTipo, setNumTipo] = useState("TODA");
 
+  //Ordenar Columnas
+  const [ordenColumna, setOrdenColumna] = useState("Num"); // columna a ordenar
+  const [ordenAscendente, setOrdenAscendente] = useState(true); // true=asc, false=desc
+
+
   const [columnasSeleccionadas, setColumnasSeleccionadas] = useState({
     Num: true,
     REF: true,
@@ -50,6 +55,27 @@ const parseFechaInput = (str) => {
   const [anio, mes, dia] = str.split("-").map(Number);
   return new Date(anio, mes - 1, dia, 0, 0, 0, 0); // hora local sin desfase
 };
+
+//Función para ordenar los datos por Num
+const ordenarDatos = (datosAOrdenar) => {
+  const copia = [...datosAOrdenar];
+  copia.sort((a, b) => {
+    const numA = a.NumDVSC || "";
+    const numB = b.NumDVSC || "";
+
+    // Si quieres comparar como números reales y no como strings:
+    const parsedA = parseInt(numA.replace(/\D/g, "")) || 0;
+    const parsedB = parseInt(numB.replace(/\D/g, "")) || 0;
+
+    if (ordenAscendente) {
+      return parsedA - parsedB;
+    } else {
+      return parsedB - parsedA;
+    }
+  });
+  return copia;
+};
+
 
 
   // Filtrar datos cada vez que cambian filtros
@@ -95,9 +121,11 @@ useEffect(() => {
     filtrados = filtrados.filter(item => item.Seguimiento === 0);
   }
 
+  filtrados = ordenarDatos(filtrados);
+
   setDatosFiltrados(filtrados);
   setFilasSeleccionadas(filtrados.map(() => true));
-}, [fechaInicial, fechaFinal, asunto, remitente, numTipo, seguimientoFiltro, datos]);
+}, [fechaInicial, fechaFinal, asunto, remitente, numTipo, seguimientoFiltro, datos, ordenAscendente, ordenColumna]);
 
 
   const toggleColumna = (col) => {
@@ -361,6 +389,17 @@ const generarPDF = () => {
                     onChange={(e) => toggleTodasFilas(e.target.checked)}
                   /> Seleccionar Fila
                 </th>
+                <th onClick={() => {
+                  if (ordenColumna === "Num") {
+                    setOrdenAscendente(!ordenAscendente); // cambiar dirección
+                  } else {
+                    setOrdenColumna("Num");
+                    setOrdenAscendente(true);
+                  }
+                }}>
+                  Num {ordenColumna === "Num" ? (ordenAscendente ? "↑" : "↓") : ""}
+                </th>
+
                 {Object.keys(columnasSeleccionadas)
                   .filter(col => columnasSeleccionadas[col])
                   .map(col => (
