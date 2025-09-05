@@ -9,6 +9,7 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
   const [fechaInicial, setFechaInicial] = useState("");
   const [fechaFinal, setFechaFinal] = useState("");
   const [asunto, setAsunto] = useState("");
+  const [seguimientoFiltro, setSeguimientoFiltro] = useState("");
   const [numTipo, setNumTipo] = useState("TODA");
 
   const [columnasSeleccionadas, setColumnasSeleccionadas] = useState({
@@ -88,9 +89,15 @@ useEffect(() => {
     );
   }
 
+  if (seguimientoFiltro === "1") {
+    filtrados = filtrados.filter(item => item.Seguimiento === 1);
+  } else if (seguimientoFiltro === "0") {
+    filtrados = filtrados.filter(item => item.Seguimiento === 0);
+  }
+
   setDatosFiltrados(filtrados);
   setFilasSeleccionadas(filtrados.map(() => true));
-}, [fechaInicial, fechaFinal, asunto, remitente, numTipo, datos]);
+}, [fechaInicial, fechaFinal, asunto, remitente, numTipo, seguimientoFiltro, datos]);
 
 
   const toggleColumna = (col) => {
@@ -301,7 +308,21 @@ const generarPDF = () => {
               isClearable
             />
           </div>
-          <div className="col-md-4 text-end">
+          <div className="col-md-1">
+            <label>Seguimiento:</label>
+            <Select
+              className="select-remitente"
+              options={[
+                { value: "", label: "Todos" },
+                { value: "1", label: "Sí" },
+                { value: "0", label: "No" }
+              ]}
+              value={{ value: seguimientoFiltro, label: seguimientoFiltro === "1" ? "Sí" : seguimientoFiltro === "0" ? "No" : "Todos" }}
+              onChange={(selected) => setSeguimientoFiltro(selected?.value || "")}
+              isClearable
+            />
+          </div>
+          <div className="col-md-3 text-end">
             <span className="save-button" onClick={generarPDF}>PDF 📋​</span>
             <span className="save-button ms-2" onClick={generarExcel}>Excel 📊</span>
           </div>
