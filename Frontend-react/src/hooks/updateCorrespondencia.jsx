@@ -21,6 +21,7 @@ export const updateCorrespondencia = async (id, data) => {
     Fk_Personal_Remitente: parseInt(data.Remitente),
     Asunto: data.Asunto,
     Seguimiento: data.Seguimiento,
+    Giro: data.Giro,
     Descripcion: data.Descripcion,
     Motivo: data.Motivo,
     Caracter: data.Caracter,

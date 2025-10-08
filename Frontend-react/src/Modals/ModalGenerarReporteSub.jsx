@@ -11,14 +11,22 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
   const [asunto, setAsunto] = useState("");
   const [numTipo, setNumTipo] = useState("TODA");
 
+  
+  //Ordenar Columnas
+  const [ordenColumna, setOrdenColumna] = useState("Num"); // columna a ordenar
+  const [ordenAscendente, setOrdenAscendente] = useState(true); // true=asc, false=desc
+  
+
   const [columnasSeleccionadas, setColumnasSeleccionadas] = useState({
     Num: true,
     Expediente: true,
     Asunto: true,
-    Fecha: true,
+    Tipo: true,
+    Nombre: true,
+    Giro: true,
     Direccion: true,
-    Denominacion: true,
     TurnadoA: true,
+    Fecha: true,
   });
 
   const [filasSeleccionadas, setFilasSeleccionadas] = useState([]);
@@ -38,6 +46,27 @@ const parseFechaInput = (str) => {
   const [anio, mes, dia] = str.split("-").map(Number);
   return new Date(anio, mes - 1, dia, 0, 0, 0, 0); // hora local sin desfase
 };
+
+//Función para ordenar los datos por Num
+const ordenarDatos = (datosAOrdenar) => {
+  const copia = [...datosAOrdenar];
+  copia.sort((a, b) => {
+    const numA = a.NumDVSC || "";
+    const numB = b.NumDVSC || "";
+
+    // Si quieres comparar como números reales y no como strings:
+    const parsedA = parseInt(numA.replace(/\D/g, "")) || 0;
+    const parsedB = parseInt(numB.replace(/\D/g, "")) || 0;
+
+    if (ordenAscendente) {
+      return parsedA - parsedB;
+    } else {
+      return parsedB - parsedA;
+    }
+  });
+  return copia;
+};
+
 
 
   // Filtrar datos cada vez que cambian filtros
@@ -73,6 +102,26 @@ useEffect(() => {
     );
   }
 
+    // 🔹 Transformar Denominacion en Tipo y Nombre
+  filtrados = filtrados.map((item) => {
+    let tipo = "";
+    let nombre = "";
+
+    if (item.Denominacion && item.Denominacion.includes(":")) {
+      const partes = item.Denominacion.split(":");
+      tipo = partes[0]?.trim() || "";
+      nombre = partes[1]?.trim() || "";
+    } else {
+      nombre = item.Denominacion || "";
+    }
+
+    return {
+      ...item,
+      Tipo: tipo || item.Tipo || "S/T",
+      Nombre: nombre || "S/N",
+    };
+  });
+
   setDatosFiltrados(filtrados);
   setFilasSeleccionadas(filtrados.map(() => true));
 }, [fechaInicial, fechaFinal, asunto, numTipo, datos]);
@@ -98,7 +147,7 @@ useEffect(() => {
   };
 
   const generarPDF = () => {
-    const doc = new jsPDF();
+    const doc = new jsPDF({ orientation: "landscape" });
     const columnas = Object.keys(columnasSeleccionadas).filter(col => columnasSeleccionadas[col]);
     const filas = datosFiltrados
       .filter((_, i) => filasSeleccionadas[i])
@@ -108,8 +157,10 @@ useEffect(() => {
           if (col === "Oficio") return item.Oficio;
           if (col === "Expediente") return item.Expediente;
           if (col === "Asunto") return item.Asunto;
+          if (col === "Tipo") return item.Tipo|| "S/T";
+          if (col === "Nombre") return item.Nombre|| "S/D";
+          if (col === "Giro") return item.Giro|| "S/G";
           if (col === "Direccion") return item.Direccion;
-          if (col === "Denominacion") return item.Denominacion;
           if (col === "Fecha") return item.FechaDocumento;
           if (col === "TurnadoA") return item.TurnadoA;
           return "";
@@ -118,12 +169,15 @@ useEffect(() => {
 
   const totalPagesExp = "{total_pages_count_string}";
 
+  let startY = 30;
+
   autoTable(doc, {
     head: [columnas],
     body: filas,
     styles: { fontSize: 8 },
     headStyles: { fillColor: [159, 34, 65] },
-    margin: { top: 30 }, // deja espacio para encabezado
+    margin: { top: 3, left: 5, right: 23, bottom: 13 },
+    startY:startY,
     didDrawPage: (data) => {
       // Encabezado solo en la primera página
       if (data.pageNumber === 1) {
@@ -163,6 +217,7 @@ useEffect(() => {
         else if (col === "Asunto") fila["Asunto"] = item.Asunto;
         else if (col === "Direccion") fila["Direccion"] = item.Direccion;
         else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion;
+        else if (col === "Nombre") fila["Nombre"] = item.Nombre;
         else if (col === "Fecha") fila["Fecha"] = item.FechaDocumento;
         else if (col === "TurnadoA") fila["TurnadoA"] = item.TurnadoA;
       });
@@ -283,10 +338,12 @@ useEffect(() => {
                   {columnasSeleccionadas.Oficio && <td>{item.Oficio}</td>}
                   {columnasSeleccionadas.Expediente && <td>{item.Expediente}</td>}
                   {columnasSeleccionadas.Asunto && <td>{item.Asunto}</td>}
-                  {columnasSeleccionadas.Fecha && <td>{item.FechaDocumento}</td>}
-                  {columnasSeleccionadas.Asunto && <td>{item.Direccion}</td>}
-                  {columnasSeleccionadas.Asunto && <td>{item.Denominacion}</td>}
+                  {columnasSeleccionadas.Tipo && <td>{item.Tipo || 'S/T' }</td>}
+                  {columnasSeleccionadas.Nombre && <td>{item.Nombre || 'S/N'}</td>}
+                  {columnasSeleccionadas.Giro && <td>{item.Giro || 'S/G'}</td>}
+                  {columnasSeleccionadas.Direccion && <td>{item.Direccion}</td>}
                   {columnasSeleccionadas.TurnadoA && <td>{item.TurnadoA}</td>}
+                  {columnasSeleccionadas.Fecha && <td>{item.FechaDocumento}</td>}
 
                 </tr>
               ))}

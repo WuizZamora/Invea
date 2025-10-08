@@ -50,6 +50,7 @@ const ModalTurnado = ({ item, onClose, onSuccess }) => {
         <p>{item.Descripcion}</p>
         <br />
         <p>{item.TipoInmueble}:{item.Denominacion}</p>
+        {item.Giro && <span><strong>Giro:</strong> {item.Giro}</span>}
         <p>{item.Direccion}</p>
         <strong>{item.Remitente}</strong>
         <strong>{item.Cargo}</strong>

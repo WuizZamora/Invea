@@ -58,6 +58,7 @@ const FormIn = () => {
       TipoInmueble: "",
       Denominacion: "",
       Mario: "",
+      Giro: "",
       Fk_Personal_Turnado: ""
     }
   });
@@ -93,6 +94,7 @@ const FormIn = () => {
         TipoInmueble: "",
         Denominacion: "",
         Mario: "",
+        Giro: "",
         Fk_Personal_Turnado: ""
       });
       setSelectedAlcaldia("");
@@ -341,6 +343,19 @@ const FormIn = () => {
               <input
                 type="text"
                 {...register("Denominacion")}
+                placeholder="Opcional"
+                maxLength={50}
+                onInput={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}
+              />
+            </div>
+
+            <div className="col-md-2">
+              <label>Giro:</label>
+              <input
+                type="text"
+                {...register("Giro")}
                 placeholder="Opcional"
                 maxLength={50}
                 onInput={(e) => {

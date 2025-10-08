@@ -24,6 +24,8 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
     Remitente: true,
     Asunto: true,
     Motivo: true,
+    Giro: true,
+    Denominacion: true,
     Direccion: true,
     Turnado: true,
     Fecha: true,
@@ -175,6 +177,7 @@ const generarPDF = () => {
           if (col === "Remitente") return item.Remitente;
           if (col === "Asunto") return item.Asunto;
           if (col === "Motivo") return item.Motivo;
+          if (col === "Giro") return item.Giro || "S/G";
           if (col === "Direccion") return item.Direccion;
           if (col === "Denominacion") return item.Denominacion || "S/N";
 
@@ -201,26 +204,30 @@ const generarPDF = () => {
   const colIndexRemitente = columnas.indexOf("Remitente");
   const colIndexAsunto = columnas.indexOf("Asunto");
   const colIndexMotivo = columnas.indexOf("Motivo");
+  const colIndexDenominacion = columnas.indexOf("Denominacion");
+  const colIndexGiro = columnas.indexOf("Giro");
   const colIndexObservaciones = columnas.indexOf("Observaciones");
 
   let startY = 20;
 
   autoTable(doc, {
-    margin: { top: 3, left: 5, right: 23, bottom: 13 },
+    margin: { top: 3, left: 3, right: 23, bottom: 13 },
     head: [columnas],
     body: filas,
-    styles: { fontSize: 9 },
+    styles: { fontSize: 8.5 },
     headStyles: { fillColor: [159, 34, 65] },
     columnStyles: {
       0: { cellWidth: 10, fontStyle: "bold" }, // ✅ columna #
-      [colIndexNum]: { cellWidth: 20, fontStyle: "bold" },
+      [colIndexNum]: { cellWidth: 13, fontStyle: "bold" },
       [colIndexREF]: { cellWidth: 15 },
       [colIndexOficio]: { cellWidth: 43, fontStyle: "bold" },
-      [colIndexDireccion]: { cellWidth: 47 },
-      [colIndexRemitente]: { cellWidth: 50 },
-      [colIndexAsunto]: { cellWidth: 30 },
+      [colIndexDireccion]: { cellWidth: 37 },
+      [colIndexRemitente]: { cellWidth: 37},
+      [colIndexAsunto]: { cellWidth: 25 },
       [colIndexMotivo]: { cellWidth: 23 },
-      [colIndexObservaciones]: { cellWidth: 33 },
+      [colIndexDenominacion]: { cellWidth: 24 },
+      [colIndexGiro]: { cellWidth: 20 },
+      [colIndexObservaciones]: { cellWidth: 30 },
     },
     startY: startY,
     didDrawPage: (data) => {
@@ -260,13 +267,14 @@ const generarPDF = () => {
         const fila = {};
         columnas.forEach((col) => {
           if (col === "Num") fila["Num"] = item.NumDVSC;
-          else if (col === "REF") fila["REF"] = item.OP;
+          else if (col === "REF") fila["REF"] = item.OP || "S/N";
           else if (col === "Oficio") fila["Oficio"] = item.Oficio;
           else if (col === "Remitente") fila["Remitente"] = item.Remitente;
           else if (col === "Asunto") fila["Asunto"] = item.Asunto;
           else if (col === "Motivo") fila["Motivo"] = item.Motivo;
+          else if (col === "Giro") fila["Giro"] = item.Giro || "S/G";
           else if (col === "Direccion") fila["Direccion"] = item.Direccion;
-          else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion;
+          else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion || "S/N";
           else if (col === "Turnado") fila["Turnado"] = item.TurnadoSub;
           else if (col === "Fecha") fila["Fecha"] = item.FechaDocumento;
         });
@@ -401,7 +409,7 @@ const generarPDF = () => {
                 </th>
 
                 {Object.keys(columnasSeleccionadas)
-                  .filter(col => columnasSeleccionadas[col])
+                  .filter(col => columnasSeleccionadas[col] && col !== "Num")
                   .map(col => (
                     <th key={col}>{col}</th>
                 ))}
@@ -421,13 +429,14 @@ const generarPDF = () => {
                     />
                   </td>
                   {columnasSeleccionadas.Num && <td>{item.NumDVSC}</td>}
-                  {columnasSeleccionadas.REF && <td>{item.OP}</td>}
+                  {columnasSeleccionadas.REF && <td>{item.OP || 'S/N'} </td>}
                   {columnasSeleccionadas.Oficio && <td>{item.Oficio}</td>}
                   {columnasSeleccionadas.Remitente && <td>{item.Remitente}</td>}
                   {columnasSeleccionadas.Asunto && <td>{item.Asunto}</td>}
                   {columnasSeleccionadas.Motivo && <td>{item.Motivo}</td>}
+                  {columnasSeleccionadas.Giro && <td>{item.Giro || 'S/G'}</td>}
+                  {columnasSeleccionadas.Denominacion && <td>{item.Denominacion || 'S/D'}</td>}
                   {columnasSeleccionadas.Direccion && <td>{item.Direccion}</td>}
-                  {columnasSeleccionadas.Denominacion && <td>{item.Denominacion}</td>}
                   {columnasSeleccionadas.Turnado && <td>{item.TurnadoSub}</td>}
                   {columnasSeleccionadas.Fecha && <td>{item.FechaDocumento}</td>}
 

@@ -45,6 +45,7 @@ const DetalleVisual = ({ item, camposOcultos, mostrarNombreCampo }) => {
             <p>{item.Descripcion}</p>
             <br/><br/>
             <p>{item.TipoInmueble}:{item.Denominacion}</p>
+            <p>Giro: {item.Giro}</p>
             <p>{item.Direccion}</p>
 
             <strong>{item.Remitente}</strong>
