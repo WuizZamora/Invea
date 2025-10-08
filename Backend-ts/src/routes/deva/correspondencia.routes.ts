@@ -144,12 +144,13 @@ router.post('/guardar-correspondencia', async (req, res) => {
       FechaDocumento,
       TipoInmueble,
       Denominacion,
-      Mario
+      Mario,
+      Giro
     } = req.body;
 
     // Si viene como "true" => true (1)
     Mario = (Mario === true || Mario === 'true' || Mario === 1) ? 1 : 0;
-    
+
     if (Fk_Personal_Remitente == 0) {
       const insertQuery = `
         INSERT INTO Personal (Nombre, Cargo, Dependencia)
@@ -161,7 +162,7 @@ router.post('/guardar-correspondencia', async (req, res) => {
     }
 
     // Ahora llamamos al procedimiento almacenado con el remitente ya resuelto
-    const query = 'CALL Ci_INSERT(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'CALL Ci_INSERT(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       Num,
       NumDVSC,
@@ -182,7 +183,8 @@ router.post('/guardar-correspondencia', async (req, res) => {
       FechaDocumento,
       TipoInmueble,
       Denominacion,
-      Mario
+      Mario,
+      Giro
     ];
 
     await devaPool.query(query, values);
@@ -276,14 +278,13 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       FechaDocumento,
       Expediente,
       TipoInmueble,
-      Denominacion, 
-      Seguimiento
+      Denominacion,
+      Seguimiento,
+      Giro
     } = req.body;
-
- const seguimientoValor = 
-  (Seguimiento === true || Seguimiento === 'true' || Seguimiento === 1) ? 1 : 0;
-
-    const query = 'CALL Ci_UPDATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const seguimientoValor =
+      (Seguimiento === true || Seguimiento === 'true' || Seguimiento === 1) ? 1 : 0;
+    const query = 'CALL Ci_UPDATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     const values = [
       id,
       NumDVSC,
@@ -301,8 +302,9 @@ router.put('/actualizar-correspondencia/:id', async (req, res) => {
       Expediente,
       FechaDocumento,
       TipoInmueble,
-      Denominacion, 
-      seguimientoValor
+      Denominacion,
+      seguimientoValor,
+      Giro
     ];
     await devaPool.query(query, values);
     res.status(201).json({ message: 'Correspondencia actualizada correctamente' });
