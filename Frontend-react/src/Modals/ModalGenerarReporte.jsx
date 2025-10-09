@@ -411,7 +411,9 @@ const generarPDF = () => {
                 {Object.keys(columnasSeleccionadas)
                   .filter(col => columnasSeleccionadas[col] && col !== "Num")
                   .map(col => (
-                    <th key={col}>{col}</th>
+                    <th key={col}>
+                    {col === "Denominacion" ? "Tipo/Denominacion" : col}
+                    </th>
                 ))}
               </tr>
             </thead>
