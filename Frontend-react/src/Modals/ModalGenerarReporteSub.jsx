@@ -216,8 +216,9 @@ useEffect(() => {
         else if (col === "Expediente") fila["Expediente"] = item.Expediente;
         else if (col === "Asunto") fila["Asunto"] = item.Asunto;
         else if (col === "Direccion") fila["Direccion"] = item.Direccion;
-        else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion;
+        else if (col === "Tipo") fila["Tipo"] = item.Tipo;
         else if (col === "Nombre") fila["Nombre"] = item.Nombre;
+        else if (col === "Giro") fila["Giro"] = item.Giro;
         else if (col === "Fecha") fila["Fecha"] = item.FechaDocumento;
         else if (col === "TurnadoA") fila["TurnadoA"] = item.TurnadoA;
       });
