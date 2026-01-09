@@ -203,6 +203,11 @@ form button:hover {
   font-weight: bold;
 }
 
+.estatus-cancelado {
+  color: #5f5f5f;
+  font-weight: bold;
+}
+
 .leyenda-estatus {
   font-size: 0.95rem;
 }
@@ -238,6 +243,11 @@ form button:hover {
 .terminado {
   background-color: green;
 }
+
+.cancelado {
+  background-color: #e0e0e0;
+}
+
 
 .icon-trash {
   cursor: pointer;
