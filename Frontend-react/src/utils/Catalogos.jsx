@@ -89,5 +89,8 @@ export const Catalogo = {
       "ZONIFICACION",
       "REMISIÓN A SUBSTANCIACIÓN",
       "REMISIÓN A JURIDICO",
+      "SIN COMPETENCIA EN LA MATERIA",
+      "DOMICILIO INCIERTO",
+      "NO SE OBSERVAN ACTOS DENUNCIADOS",
   ],
 };

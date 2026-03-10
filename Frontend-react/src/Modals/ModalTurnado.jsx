@@ -42,9 +42,9 @@ const ModalTurnado = ({ item, onClose, onSuccess }) => {
           <span><strong>Asunto:</strong> {item.Asunto}</span>
           <span><strong>Motivo:</strong> {item.Motivo}</span>
         </div>
-        <div className="fila-arriba">
+        {/* <div className="fila-arriba">
           <span><strong>Turnado a:</strong> {item.Turnado}</span>
-        </div>
+        </div> */}
         <br />
         <p><strong>Descripcion:</strong></p>
         <p>{item.Descripcion}</p>

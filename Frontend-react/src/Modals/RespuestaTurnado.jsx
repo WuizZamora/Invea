@@ -49,7 +49,17 @@ const RespuestaTurnado = ({ idCorrespondencia, onSuccess }) => {
         descripcion: "SinObservaciones",
         EstaTerminado: "1",
       }));
-    } else {
+    }  else if (
+      formData.accion === "SIN COMPETENCIA EN LA MATERIA" ||
+      formData.accion === "DOMICILIO INCIERTO" ||
+      formData.accion === "NO SE OBSERVAN ACTOS DENUNCIADOS"
+    ) {
+      setFormData((prev) => ({
+        ...prev,
+        EstaTerminado: "1",
+      }));
+    }
+      else{
       setFormData((prev) => ({
         ...prev,
         oficio: prev.oficio === "SinOficio" ? "" : prev.oficio,

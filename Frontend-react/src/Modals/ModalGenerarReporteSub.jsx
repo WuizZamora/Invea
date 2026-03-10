@@ -9,6 +9,7 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
   const [fechaInicial, setFechaInicial] = useState("");
   const [fechaFinal, setFechaFinal] = useState("");
   const [asunto, setAsunto] = useState("");
+  const [turno, setTurno] = useState("");
   const [numTipo, setNumTipo] = useState("TODA");
 
   
@@ -34,6 +35,14 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
 
   // Opciones de asunto desde Catalogo
   const opcionesAsunto = toSelectOptions(Catalogo.Asunto);
+  
+  // Opciones de Turno
+  const opcionesTurno = [
+    ...new Set(datos.map(item => item.TurnadoA).filter(Boolean))
+  ].map(turno => ({
+    value: turno,
+    label: turno
+  }));
 
   // Convierte dd/MM/yyyy a Date en hora local
 const parseFecha = (str) => {
@@ -95,6 +104,10 @@ useEffect(() => {
   if (asunto) {
     filtrados = filtrados.filter((item) => item.Asunto === asunto);
   }
+  if (turno) {
+    filtrados = filtrados.filter((item) => item.TurnadoA === turno);
+  }
+
 
   if (numTipo !== "TODA") {
     filtrados = filtrados.filter((item) =>
@@ -124,7 +137,7 @@ useEffect(() => {
 
   setDatosFiltrados(filtrados);
   setFilasSeleccionadas(filtrados.map(() => true));
-}, [fechaInicial, fechaFinal, asunto, numTipo, datos]);
+}, [fechaInicial, fechaFinal, asunto, numTipo, turno, datos]);
 
 
   const toggleColumna = (col) => {
@@ -286,9 +299,19 @@ const generarPDF = () => {
               isClearable
             />
           </div>
-          <div className="col-md-4 text-end">
+          <div className="col-md-2">
+            <label>Turno:</label>
+            <Select
+              className="select-remitente"
+              options={[{ value: "", label: "Todos" }, ...opcionesTurno]}
+              value={opcionesTurno.find(opt => opt.value === turno) || { value: "", label: "Todos" }}
+              onChange={(selected) => setTurno(selected?.value || "")}
+              isClearable
+            />
+          </div>
+          <div className="col-md-3 text-end">
             <button className="save-button" onClick={generarPDF}>PDF 📋​</button>
-            <button className="save-button ms-2" onClick={generarExcel}>Excel 📊</button>
+            <button className="save-button ms-1" onClick={generarExcel}>Excel 📊</button>
           </div>
         </div><br />
         <div className="card-checkbox">
