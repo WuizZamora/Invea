@@ -456,5 +456,26 @@ router.post('/oficio-comision', async (req, res) => {
   }
 });
 
+router.post('/subir-soporte-cio/:id', uploadOut.single('archivo'), async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const file = req.file;
+
+    if (!file) {
+      res.status(400).json({ error: 'No se ha subido ningún archivo' });
+      return;  // Solo return sin valor
+    }
+
+    const filePath = `/uploads/correspondenciaOUT/${file.filename}`;
+
+    const query = 'UPDATE Correspondencia_Interna_Out SET SoporteDocumental = ? WHERE Pk_IDCorrespondenciaOut = ?';
+    await devaPool.query(query, [filePath, id]);
+
+    res.json({ message: 'Archivo subido y ruta actualizada correctamente', path: filePath });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al subir el archivo o actualizar la base de datos' });
+  }
+});
 
 export default router;

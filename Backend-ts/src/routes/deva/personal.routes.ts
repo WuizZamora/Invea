@@ -29,7 +29,6 @@ router.get('/personal-turnado', async (req, res) => {
 });
 
 // GET Registro por ID
-// GET Registro por ID
 router.get('/lcp-turnado/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
