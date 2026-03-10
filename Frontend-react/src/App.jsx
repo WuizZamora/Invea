@@ -48,7 +48,7 @@ function App() {
               <>
                 <Header />
                 <Turnado />
-                <ChatWidget/>
+                {/* <ChatWidget/> */}
               </>
             </PrivateRoute>
           }
@@ -60,7 +60,7 @@ function App() {
               <>
                 <Header />
                 <Sub />
-                <ChatWidget/>
+                {/* <ChatWidget/> */}
               </>
             </PrivateRoute>
           }

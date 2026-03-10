@@ -103,6 +103,10 @@ const Tabla = () => {
             <span className="color-circulo terminado"></span>
             Terminado: {conteoEstatus.terminado}
           </span>
+          <span>
+            <span className="color-circulo cancelado"></span>
+            Cancelado
+          </span>
         </div>
         </div>
         <div className="col-md-2">
@@ -121,6 +125,8 @@ const Tabla = () => {
               <option value={25}>25</option>
               <option value={50}>50</option>
               <option value={100}>100</option>
+              <option value={500}>500</option>
+              <option value={1000}>1000</option>
             </select>
           </div>
         </div>
@@ -148,12 +154,17 @@ const Tabla = () => {
             </thead>
             <tbody>
               {datosPagina.map((item, index) => (
-                    <tr
-                      key={`${item.Pk_IDCorrespondenciaIn}-${index}`}
-                      style={{
-                        backgroundColor:item.Seguimiento === 1 ? "rgba(255, 165, 0, 0.6)" : "transparent",
-                      }}
-                    >
+                <tr
+                  key={`${item.Pk_IDCorrespondenciaIn}-${index}`}
+                  style={{
+                    backgroundColor:
+                      item.Estatus?.toLowerCase() === "cancelado"
+                        ? "#e0e0e0" // gris claro
+                        : item.Seguimiento === 1
+                          ? "rgba(255, 165, 0, 0.6)"
+                          : "transparent",
+                  }}
+                >
                   <td className={`estatus-${item.Estatus?.toLowerCase()}`}>
                     {item.NumDVSC}
                   </td>

@@ -11,14 +11,22 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
   const [asunto, setAsunto] = useState("");
   const [numTipo, setNumTipo] = useState("TODA");
 
+  
+  //Ordenar Columnas
+  const [ordenColumna, setOrdenColumna] = useState("Num"); // columna a ordenar
+  const [ordenAscendente, setOrdenAscendente] = useState(true); // true=asc, false=desc
+  
+
   const [columnasSeleccionadas, setColumnasSeleccionadas] = useState({
     Num: true,
     Expediente: true,
     Asunto: true,
-    Fecha: true,
+    Tipo: true,
+    Nombre: true,
+    Giro: true,
     Direccion: true,
-    Denominacion: true,
     TurnadoA: true,
+    Fecha: true,
   });
 
   const [filasSeleccionadas, setFilasSeleccionadas] = useState([]);
@@ -38,6 +46,27 @@ const parseFechaInput = (str) => {
   const [anio, mes, dia] = str.split("-").map(Number);
   return new Date(anio, mes - 1, dia, 0, 0, 0, 0); // hora local sin desfase
 };
+
+//Función para ordenar los datos por Num
+const ordenarDatos = (datosAOrdenar) => {
+  const copia = [...datosAOrdenar];
+  copia.sort((a, b) => {
+    const numA = a.NumDVSC || "";
+    const numB = b.NumDVSC || "";
+
+    // Si quieres comparar como números reales y no como strings:
+    const parsedA = parseInt(numA.replace(/\D/g, "")) || 0;
+    const parsedB = parseInt(numB.replace(/\D/g, "")) || 0;
+
+    if (ordenAscendente) {
+      return parsedA - parsedB;
+    } else {
+      return parsedB - parsedA;
+    }
+  });
+  return copia;
+};
+
 
 
   // Filtrar datos cada vez que cambian filtros
@@ -73,6 +102,26 @@ useEffect(() => {
     );
   }
 
+    // 🔹 Transformar Denominacion en Tipo y Nombre
+  filtrados = filtrados.map((item) => {
+    let tipo = "";
+    let nombre = "";
+
+    if (item.Denominacion && item.Denominacion.includes(":")) {
+      const partes = item.Denominacion.split(":");
+      tipo = partes[0]?.trim() || "";
+      nombre = partes[1]?.trim() || "";
+    } else {
+      nombre = item.Denominacion || "";
+    }
+
+    return {
+      ...item,
+      Tipo: tipo || item.Tipo || "S/T",
+      Nombre: nombre || "S/N",
+    };
+  });
+
   setDatosFiltrados(filtrados);
   setFilasSeleccionadas(filtrados.map(() => true));
 }, [fechaInicial, fechaFinal, asunto, numTipo, datos]);
@@ -97,35 +146,48 @@ useEffect(() => {
     setFilasSeleccionadas(Array(datosFiltrados.length).fill(valor));
   };
 
-  const generarPDF = () => {
-    const doc = new jsPDF();
-    const columnas = Object.keys(columnasSeleccionadas).filter(col => columnasSeleccionadas[col]);
-    const filas = datosFiltrados
-      .filter((_, i) => filasSeleccionadas[i])
-      .map((item) =>
-        columnas.map((col) => {
-          if (col === "Num") return item.NumDVSC;
-          if (col === "Oficio") return item.Oficio;
-          if (col === "Expediente") return item.Expediente;
-          if (col === "Asunto") return item.Asunto;
-          if (col === "Direccion") return item.Direccion;
-          if (col === "Denominacion") return item.Denominacion;
-          if (col === "Fecha") return item.FechaDocumento;
-          if (col === "TurnadoA") return item.TurnadoA;
-          return "";
-        })
-      );
+const generarPDF = () => {
+  const doc = new jsPDF({ orientation: "landscape" });
+
+  // Claves internas reales
+  const columnasClaves = Object.keys(columnasSeleccionadas)
+    .filter(col => columnasSeleccionadas[col]);
+
+  // Encabezados visibles
+  const columnasVisibles = columnasClaves.map(col =>
+    col === "Nombre" ? "Denominación" : col
+  );
+
+  // Generar filas usando las claves internas (no los encabezados)
+  const filas = datosFiltrados
+    .filter((_, i) => filasSeleccionadas[i])
+    .map((item) =>
+      columnasClaves.map((col) => {
+        if (col === "Num") return item.NumDVSC;
+        if (col === "Oficio") return item.Oficio;
+        if (col === "Expediente") return item.Expediente;
+        if (col === "Asunto") return item.Asunto;
+        if (col === "Tipo") return item.Tipo || "S/T";
+        if (col === "Nombre") return item.Nombre || "S/D";
+        if (col === "Giro") return item.Giro || "S/G";
+        if (col === "Direccion") return item.Direccion;
+        if (col === "Fecha") return item.FechaDocumento;
+        if (col === "TurnadoA") return item.TurnadoA;
+        return "";
+      })
+    );
 
   const totalPagesExp = "{total_pages_count_string}";
+  let startY = 30;
 
   autoTable(doc, {
-    head: [columnas],
+    head: [columnasVisibles], // 👈 mostramos los encabezados visibles
     body: filas,
     styles: { fontSize: 8 },
     headStyles: { fillColor: [159, 34, 65] },
-    margin: { top: 30 }, // deja espacio para encabezado
+    margin: { top: 3, left: 5, right: 23, bottom: 13 },
+    startY: startY,
     didDrawPage: (data) => {
-      // Encabezado solo en la primera página
       if (data.pageNumber === 1) {
         doc.setFontSize(16);
         doc.text("Reporte de Correspondencia", data.settings.margin.left, 15);
@@ -133,22 +195,20 @@ useEffect(() => {
         doc.text(`Generado: ${new Date().toLocaleDateString()}`, data.settings.margin.left, 22);
       }
 
-      // Pie con número de página
-      let str = `Página ${data.pageNumber} de ${totalPagesExp}`;
+      const str = `Página ${data.pageNumber} de ${totalPagesExp}`;
       doc.setFontSize(9);
-      let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+      const pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
       doc.text(str, data.settings.margin.left, pageHeight - 10);
-    }
+    },
   });
 
-  // Reemplaza marcador con número total de páginas
   if (typeof doc.putTotalPages === "function") {
     doc.putTotalPages(totalPagesExp);
   }
 
+  window.open(doc.output("bloburl"), "_blank");
+};
 
-    window.open(doc.output("bloburl"), "_blank");
-  };
 
   const generarExcel = () => {
   const columnas = Object.keys(columnasSeleccionadas).filter(col => columnasSeleccionadas[col]);
@@ -157,14 +217,17 @@ useEffect(() => {
     .map((item) => {
       const fila = {};
       columnas.forEach((col) => {
-        if (col === "Num") fila["Num"] = item.NumDVSC;
-        else if (col === "Oficio") fila["Oficio"] = item.Oficio;
-        else if (col === "Expediente") fila["Expediente"] = item.Expediente;
-        else if (col === "Asunto") fila["Asunto"] = item.Asunto;
-        else if (col === "Direccion") fila["Direccion"] = item.Direccion;
-        else if (col === "Denominacion") fila["Denominacion"] = item.Denominacion;
-        else if (col === "Fecha") fila["Fecha"] = item.FechaDocumento;
-        else if (col === "TurnadoA") fila["TurnadoA"] = item.TurnadoA;
+        const header = col === "Nombre" ? "Denominación" : col; // 👈 encabezado visible
+        if (col === "Num") fila[header] = item.NumDVSC;
+        else if (col === "Oficio") fila[header] = item.Oficio;
+        else if (col === "Expediente") fila[header] = item.Expediente;
+        else if (col === "Asunto") fila[header] = item.Asunto;
+        else if (col === "Direccion") fila[header] = item.Direccion;
+        else if (col === "Tipo") fila[header] = item.Tipo;
+        else if (col === "Nombre") fila[header] = item.Nombre;
+        else if (col === "Giro") fila[header] = item.Giro;
+        else if (col === "Fecha") fila[header] = item.FechaDocumento;
+        else if (col === "TurnadoA") fila[header] = item.TurnadoA;
       });
       return fila;
     });
@@ -265,7 +328,9 @@ useEffect(() => {
                 {Object.keys(columnasSeleccionadas)
                   .filter(col => columnasSeleccionadas[col])
                   .map(col => (
-                    <th key={col}>{col}</th>
+                    <th key={col}>
+                    {col === "Nombre" ? "Denominación" : col}
+                    </th>
                 ))}
               </tr>
             </thead>
@@ -283,10 +348,12 @@ useEffect(() => {
                   {columnasSeleccionadas.Oficio && <td>{item.Oficio}</td>}
                   {columnasSeleccionadas.Expediente && <td>{item.Expediente}</td>}
                   {columnasSeleccionadas.Asunto && <td>{item.Asunto}</td>}
-                  {columnasSeleccionadas.Fecha && <td>{item.FechaDocumento}</td>}
-                  {columnasSeleccionadas.Asunto && <td>{item.Direccion}</td>}
-                  {columnasSeleccionadas.Asunto && <td>{item.Denominacion}</td>}
+                  {columnasSeleccionadas.Tipo && <td>{item.Tipo || 'S/T' }</td>}
+                  {columnasSeleccionadas.Nombre && <td>{item.Nombre || 'S/N'}</td>}
+                  {columnasSeleccionadas.Giro && <td>{item.Giro || 'S/G'}</td>}
+                  {columnasSeleccionadas.Direccion && <td>{item.Direccion}</td>}
                   {columnasSeleccionadas.TurnadoA && <td>{item.TurnadoA}</td>}
+                  {columnasSeleccionadas.Fecha && <td>{item.FechaDocumento}</td>}
 
                 </tr>
               ))}

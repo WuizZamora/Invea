@@ -22,7 +22,8 @@ export const handleFormSubmit = async (form, direccionID) => {
     TipoInmueble: form.TipoInmueble,
     Denominacion: form.Denominacion,
     Fk_Personal_Turnado: parseInt(form.Fk_Personal_Turnado),
-    Mario: form.Mario
+    Mario: form.Mario,
+    Giro: form.Giro
   };
 
   try {
