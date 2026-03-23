@@ -88,7 +88,7 @@ const Area = () => {
 
   return (
     <div className="table-card">
-
+      Correspondencia Turnada a:
       <Select
       options={opcionesFiltradas}
       value={seleccionado}
@@ -96,8 +96,6 @@ const Area = () => {
       placeholder={loading ? "Cargando..." : "Selecciona personal a turnar..."}
       isDisabled={loading}
       />
-
-      Pendientes {usuario && <span className="animated-text">{usuario.username}</span>}
       <div className="row">
         <div className="col-md-7">
           <FiltroCorrespondencia 
