@@ -74,4 +74,21 @@ router.post('/lcp-turnar', async (req, res) => {
   }
 });
 
+
+router.get('/area-id_sub/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    
+    const [rows] = await devaPool.query(
+      'CALL U_SELECT_SubPorUsuario(?)', 
+      [id]
+    );
+
+    res.json({ data: (rows as any[])[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error en la base de datos' });
+  }
+});
+
 export default router;
