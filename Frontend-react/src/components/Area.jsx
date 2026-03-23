@@ -8,15 +8,25 @@ import { useUsuario } from "../context/UserContext";
 import TurnarModal from "../Modals/SubTurnar";
 import CreateOficioComision from "../Modals/CreateOficioComision";
 import ModalGenerarReporte from "../Modals/ModalGenerarReporteSub";
+import useSelectSub from "../hooks/SelectSub";
+import useSelectLCP from "../hooks/SelectPersonalLCP";
+import Select from 'react-select'
 
-const Sub = () => {
+const Area = () => {
   const { usuario } = useUsuario();
+  const { idSalida: idSub } = useSelectSub(usuario?.id);
+  const { opcionesLCP } = useSelectLCP(idSub);
+  const bloqueados = [3, 4, 5, 6];
+  const opcionesFiltradas = opcionesLCP.filter(
+  op => !bloqueados.includes(op.value)
+  );
+  const [seleccionado, setSeleccionado] = useState(null);  
 
     const {
     datos: datosOriginales,
     loading,
     refetch
-    } = useCorrespondencia();
+    } = useCorrespondencia(seleccionado?.value);
   const [datosFiltrados, setDatosFiltrados] = useState(null);
   const [paginaActual, setPaginaActual] = useState(1);
   const [resultadosPorPagina, setResultadosPorPagina] = useState(10);
@@ -25,6 +35,7 @@ const Sub = () => {
   const [modalOficioAbierto, setModalOficioAbierto] = useState(false);
   const [idParaOficio, setIdParaOficio] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
+
 
   
   // Datos a mostrar - importante el orden de las condiciones
@@ -77,6 +88,15 @@ const Sub = () => {
 
   return (
     <div className="table-card">
+
+      <Select
+      options={opcionesFiltradas}
+      value={seleccionado}
+      onChange={setSeleccionado}
+      placeholder={loading ? "Cargando..." : "Selecciona personal a turnar..."}
+      isDisabled={loading}
+      />
+
       Pendientes {usuario && <span className="animated-text">{usuario.username}</span>}
       <div className="row">
         <div className="col-md-7">
@@ -309,4 +329,4 @@ const Sub = () => {
   );
 };
 
-export default Sub;
+export default Area;

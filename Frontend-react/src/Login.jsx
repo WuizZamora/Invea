@@ -48,7 +48,8 @@ const Login = () => {
           1: '/consulta',
           2: '/sub',
           3: '/captura',
-          4: '/turnado'
+          4: '/turnado',
+          6: '/area'
         };
         navigate(rutas[result.nivel] || '/1234');
       });

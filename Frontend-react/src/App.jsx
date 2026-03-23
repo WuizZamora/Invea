@@ -6,6 +6,7 @@ import Login from "./Login";
 import PrivateRoute from "./components/PrivateRoute";
 import Turnado from "./components/Turnado";
 import Sub from "./components/SubDireccion";
+import Area from "./components/Area";
 import ChatWidget from "./components/ChatWidget"; 
 import AdminChat from "./components/AdminChat";
 
@@ -60,6 +61,18 @@ function App() {
               <>
                 <Header />
                 <Sub />
+                {/* <ChatWidget/> */}
+              </>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/area"
+          element={
+            <PrivateRoute>
+              <>
+                <Header />
+                <Area />
                 {/* <ChatWidget/> */}
               </>
             </PrivateRoute>
