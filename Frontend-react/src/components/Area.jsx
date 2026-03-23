@@ -168,7 +168,6 @@ const Area = () => {
               <tr>
                 <th>Num</th>
                 <th>Oficio</th>
-                <th>Oficio de Comision</th>
                 <th>Fecha</th>
                 <th>Asunto</th>
                 <th>OP</th>
@@ -188,7 +187,7 @@ const Area = () => {
                   <td className={`estatus-${item.Estatus?.toLowerCase()}`}>
                     {item.NumDVSC}
                   </td>
-                    <td>
+                  <td>
                     <span
                         style={{ cursor: "pointer", color: "#1976d2", textDecoration: "underline" }}
                         onClick={() => obtenerDetalle(item.Pk_IDCorrespondenciaIn)}
@@ -202,24 +201,6 @@ const Area = () => {
                         </>
                     ) : null}
                     </td>
-                    <td>
-                    {item.OficioOut ? (
-                      <span>
-                        {item.OficioOut}
-                      </span>
-                    ) : (
-                      <span
-                        style={{ cursor: "pointer", textDecoration: "underline", color: "#9F2241" }}
-                        onClick={() => {
-                          setIdParaOficio(item.Pk_IDCorrespondenciaIn);
-                          setModalOficioAbierto(true);
-                        }}
-                        title="Click para Asignar Oficio"
-                      >
-                        Asignar Oficio
-                      </span>
-                    )}
-                  </td>
                   <td>{item.FechaDocumento}</td>
                   <td>{item.Asunto}</td>
                   <td>{item.OP ? (item.OP):("S/OP")}</td>
