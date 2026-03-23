@@ -172,7 +172,6 @@ const Area = () => {
                 <th>Fecha</th>
                 <th>Asunto</th>
                 <th>OP</th>
-                <th>Turnado</th>
               </tr>
             </thead>
             <tbody>
@@ -224,32 +223,6 @@ const Area = () => {
                   <td>{item.FechaDocumento}</td>
                   <td>{item.Asunto}</td>
                   <td>{item.OP ? (item.OP):("S/OP")}</td>
-
-                  <td>
-                    {item.TurnadoA ? (
-                      <span
-                        style={{ cursor: "pointer", textDecoration: "underline", color: "#007bff" }}
-                        onClick={() => {
-                          setFilaSeleccionada(item);
-                          setMostrarModal(true);
-                        }}
-                        title="Click para returnar"
-                      >
-                        🔁 {item.TurnadoA}
-                      </span>
-                    ) : (
-                      <span
-                        style={{ cursor: "pointer", textDecoration: "underline", color: "#28a745" }}
-                        onClick={() => {
-                          setFilaSeleccionada(item);
-                          setMostrarModal(true);
-                        }}
-                        title="Click para turnar"
-                      >
-                        Turnar
-                      </span>
-                    )}
-                  </td>
                 </tr>
               ))}
             </tbody>
