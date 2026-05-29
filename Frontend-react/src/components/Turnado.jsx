@@ -139,6 +139,7 @@ const Turnado = () => {
                 <th>Oficio</th>
                 <th>Fecha</th>
                 <th>Asunto</th>
+                <th>Dirección</th>
                 <th>OP</th>
               </tr>
             </thead>
@@ -172,6 +173,7 @@ const Turnado = () => {
                   </td>
                   <td>{item.FechaDocumento}</td>
                   <td>{item.Asunto}</td>
+                  <td>{item.Direccion}</td>
                   <td>{item.OP ? (item.OP):("S/OP")}</td>
                 </tr>
               ))}

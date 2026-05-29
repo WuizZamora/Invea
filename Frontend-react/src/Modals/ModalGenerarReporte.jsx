@@ -11,6 +11,7 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
   const [asunto, setAsunto] = useState("");
   const [seguimientoFiltro, setSeguimientoFiltro] = useState("");
   const [numTipo, setNumTipo] = useState("TODA");
+  const [turnadoFiltro, setTurnadoFiltro] = useState("");
 
   //Ordenar Columnas
   const [ordenColumna, setOrdenColumna] = useState("Num"); // columna a ordenar
@@ -41,6 +42,13 @@ const ModalGenerarReporte = ({ isOpen, onClose, datos }) => {
     { value: "", label: "Todos" },
     ...Array.from(new Set(datos.map(item => item.Remitente).filter(Boolean)))
       .map(rem => ({ value: rem, label: rem }))
+  ];
+
+  // Opciones únicas de Turnado
+  const opcionesTurnado = [
+    { value: "", label: "Todos" },
+    ...Array.from(new Set(datos.map(item => item.TurnadoSub).filter(Boolean)))
+      .map(turnado => ({ value: turnado, label: turnado }))
   ];
 
   // Opciones de asunto desde Catalogo
@@ -123,11 +131,17 @@ useEffect(() => {
     filtrados = filtrados.filter(item => item.Seguimiento === 0);
   }
 
+  if (turnadoFiltro) {
+    filtrados = filtrados.filter(
+      (item) => item.TurnadoSub === turnadoFiltro
+    );
+  }
+
   filtrados = ordenarDatos(filtrados);
 
   setDatosFiltrados(filtrados);
   setFilasSeleccionadas(filtrados.map(() => true));
-}, [fechaInicial, fechaFinal, asunto, remitente, numTipo, seguimientoFiltro, datos, ordenAscendente, ordenColumna]);
+}, [fechaInicial, fechaFinal, asunto, remitente, numTipo, seguimientoFiltro, turnadoFiltro, datos, ordenAscendente, ordenColumna]);
 
 
   const toggleColumna = (col) => {
@@ -319,8 +333,21 @@ const generarPDF = () => {
               isClearable
             />
           </div>
-
           <div className="col-md-2">
+            <label>Turnado:</label>
+            <Select
+              className="select-remitente"
+              options={opcionesTurnado}
+              value={
+                opcionesTurnado.find(opt => opt.value === turnadoFiltro) || 
+                { value: "", label: "Todos" }
+              }
+              onChange={(selected) => setTurnadoFiltro(selected?.value || "")}
+              isClearable
+            />
+          </div>
+
+          <div className="col-md-1">
             <label>Num:</label>
             <Select
               className="select-remitente"

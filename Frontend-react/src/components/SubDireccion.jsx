@@ -151,6 +151,7 @@ const Sub = () => {
                 <th>Oficio de Comision</th>
                 <th>Fecha</th>
                 <th>Asunto</th>
+                <th>Direccion</th>
                 <th>OP</th>
                 <th>Turnado</th>
               </tr>
@@ -203,6 +204,7 @@ const Sub = () => {
                   </td>
                   <td>{item.FechaDocumento}</td>
                   <td>{item.Asunto}</td>
+                  <td>{item.Direccion}</td>
                   <td>{item.OP ? (item.OP):("S/OP")}</td>
 
                   <td>
