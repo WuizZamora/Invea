@@ -145,7 +145,8 @@ router.post('/guardar-correspondencia', async (req, res) => {
       TipoInmueble,
       Denominacion,
       Mario,
-      Giro
+      Giro,
+      CapId
     } = req.body;
 
     // Si viene como "true" => true (1)
@@ -187,9 +188,29 @@ router.post('/guardar-correspondencia', async (req, res) => {
       Giro
     ];
 
-    await devaPool.query(query, values);
+    const [result]: any = await devaPool.query(query, values);
 
-    res.status(201).json({ message: 'Correspondencia guardada correctamente' });
+    const idCorrespondencia = result[0][0].IdCorrespondencia;
+
+    await devaPool.query(
+      `
+      INSERT INTO Registro_Captura
+      (
+        Fk_id_correspondencia_in,
+        Fk_id_cap
+      )
+      VALUES (?, ?)
+      `,
+      [
+        idCorrespondencia,
+        CapId
+      ]
+    );
+
+    res.status(201).json({ 
+      message: 'Correspondencia guardada correctamente',
+      IdCorrespondencia: idCorrespondencia
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al guardar la correspondencia' });

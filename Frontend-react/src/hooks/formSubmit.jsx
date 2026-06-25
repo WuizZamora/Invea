@@ -1,6 +1,4 @@
-
-
-export const handleFormSubmit = async (form, direccionID) => {
+export const handleFormSubmit = async (form, direccionID, usuario) => {
   const payload = {
     NumDVSC: parseInt(form.NumDVSC),
     Num: parseInt(form.Num),
@@ -23,7 +21,8 @@ export const handleFormSubmit = async (form, direccionID) => {
     Denominacion: form.Denominacion,
     Fk_Personal_Turnado: parseInt(form.Fk_Personal_Turnado),
     Mario: form.Mario,
-    Giro: form.Giro
+    Giro: form.Giro,
+    CapId: usuario.id
   };
 
   try {
