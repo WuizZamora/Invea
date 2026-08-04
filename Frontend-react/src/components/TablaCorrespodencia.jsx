@@ -7,6 +7,7 @@ import "../css/Tabla.css";
 import ModalDetalle from "../Modals/ModalDetalle";
 import useDetalleOficio from "../hooks/useDetalleOficio";
 import ModalGenerarReporte from "../Modals/ModalGenerarReporte";
+import * as XLSX from "xlsx";
 
 const Tabla = () => {
   const { datos: datosOriginales, loading, refetch } = useCorrespondencia();
@@ -31,6 +32,35 @@ const Tabla = () => {
     },
     { pendiente: 0, enProceso: 0, terminado: 0 }
   );
+
+  const generarExcelPorEstado = (estado) => {
+    const filas = datosMostrar
+      .filter(
+        (item) => item.Estatus?.toLowerCase() === estado.toLowerCase()
+      )
+      .map((item) => ({
+        Num: item.NumDVSC,
+        Oficio: item.Oficio,
+        Fecha: item.FechaDocumento,
+        Remitente: item.Remitente,
+        Asunto: item.Asunto,
+        Denominación: item.Denominacion || "S/D",
+        Dirección: item.Direccion,
+        OP: item.OP || "S/OP",
+        Expediente: item.Expediente || "",
+        "Soporte Documental": item.SoporteDocumental ? "Sí" : "No",
+      }));
+
+    const worksheet = XLSX.utils.json_to_sheet(filas);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, estado);
+
+    XLSX.writeFile(
+      workbook,
+      `Correspondencia_${estado.replace(/\s+/g, "_")}.xlsx`
+    );
+  };
   
   // Cálculos de paginación
   const totalPaginas = Math.ceil(datosMostrar.length / resultadosPorPagina);
@@ -93,15 +123,50 @@ const Tabla = () => {
         <div className="items-estatus">
           <span>
             <span className="color-circulo pendiente"></span>
-            Pendiente: {conteoEstatus.pendiente}
+            Pendiente:{" "}
+            <span
+              style={{
+                cursor: "pointer",
+                color: "#1976d2",
+                textDecoration: "underline",
+                fontWeight: "bold",
+              }}
+              onClick={() => generarExcelPorEstado("Pendiente")}
+            >
+              {conteoEstatus.pendiente}
+            </span>
           </span>
+
           <span>
             <span className="color-circulo en-proceso"></span>
-            En proceso: {conteoEstatus.enProceso}
+            En proceso:{" "}
+            <span
+              style={{
+                cursor: "pointer",
+                color: "#1976d2",
+                textDecoration: "underline",
+                fontWeight: "bold",
+              }}
+              onClick={() => generarExcelPorEstado("En proceso")}
+            >
+              {conteoEstatus.enProceso}
+            </span>
           </span>
+
           <span>
             <span className="color-circulo terminado"></span>
-            Terminado: {conteoEstatus.terminado}
+            Terminado:{" "}
+            <span
+              style={{
+                cursor: "pointer",
+                color: "#1976d2",
+                textDecoration: "underline",
+                fontWeight: "bold",
+              }}
+              onClick={() => generarExcelPorEstado("Terminado")}
+            >
+              {conteoEstatus.terminado}
+            </span>
           </span>
           <span>
             <span className="color-circulo cancelado"></span>
